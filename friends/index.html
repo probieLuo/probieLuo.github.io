@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   
   
-  <title>分类 | probie</title>
+  <title>好伙伴们 | probie</title>
   
   <meta name="author" content="probieMott" />
   <meta http-equiv="Cache-Control" content="no-transform" />
@@ -17,13 +17,17 @@
   
     <meta name="keywords" content="" />
   
-  <meta property="og:type" content="website">
-<meta property="og:title" content="分类">
-<meta property="og:url" content="https://probieluo.github.io/categories/index.html">
+  <meta name="description" content="好伙伴们在哪里~">
+<meta property="og:type" content="website">
+<meta property="og:title" content="好伙伴们">
+<meta property="og:url" content="https://probieluo.github.io/friends/index.html">
 <meta property="og:site_name" content="probie">
+<meta property="og:description" content="好伙伴们在哪里~">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://probieluo.github.io/images/avatar.webp">
 <meta property="article:author" content="probieMott">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://probieluo.github.io/images/avatar.webp">
   
   <!-- 站点验证相关 -->
   
@@ -180,75 +184,38 @@
 
         
 
-            <style>
-  .categories ul {
-    list-style: none;
-  }
+            <article itemscope itemtype="https://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <div class="kratos-post-content">
+            <h2 class="title-h2 text-center" itemprop="name headline">好伙伴们</h2>
+            <div itemprop="articleBody"><div class="linkpage">
+    <ul id="friendsList"></ul>
+</div>
 
-  .categories .category-list-item {
-    position: relative;
-    padding-top: 20px;
-  }
-
-  .categories .category-list-item .category-list-link::before {
-    content: " ";
-    position: absolute;
-    left: -30px;
-    top: 50%;
-    margin-left: -4px;
-    margin-top: -4px;
-    width: 8px;
-    height: 8px;
-    background: #bbb;
-    border-radius: 50%;
-    transition: all .3s ease-in-out;
-  }
-
-  .categories .category-list-item .category-list-link:hover::before {
-    background: #222;
-  }
-
-  a {
-    color:#666;
-  }
-
-  .categories .category-list-item .category-list-link {
-    position: relative;
-    margin-left: 24px;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: inherit;
-  }
-
-  .categories .category-list-item .category-list-link::after {
-    font-family: fontawesome;
-    opacity: 0;
-    content: "\f138";
-    margin-left: 12px;
-    color: #00a7e0;
-    transition: opacity .3s ease-in-out;
-  }
-
-  .categories .category-list-item .category-list-link:hover::after {
-    opacity: 100%;
-  }
-</style>
-<article>
-  <div class="kratos-hentry kratos-post-inner clearfix">
-    <div class="kratos-post-content">
-      <h2 class="title-h2 text-center">
-        分类目录
-      </h2>
-      <div style="margin-left: 2em;">
-        <h3 class="archive-page-counter">
-          当前共有 0 种分类 (゜-゜)つロ 干杯~
-        </h3>
-        <div class="categories">
-          
+<script type="text/javascript">
+{
+    const flist = [{"name":"stillwarter","link":"https://stillwarter.github.io/","avatar":"https://file.fishpi.cn/2022/07/MOSHED2022621164630-1b1ec532.gif?imageView2/1/w/210/h/210/interlace/0/q/100","bio":"林深时见猫"}];
+    let friendNodes = '';
+    while (flist.length > 0) {
+        const rndNum = Math.floor(Math.random()*flist.length);
+        friendNodes += `<li><a target="_blank" href="${flist[rndNum].link}"><img src="${flist[rndNum].avatar}" onerror="this.src='/images/avatar.webp';this.onerror=null;"><h4>${flist[rndNum].name}</h4><p>${flist[rndNum].bio}</p></a></li>`;
+        flist.splice(rndNum, 1);
+    }
+    document.getElementById("friendsList").innerHTML = friendNodes;
+}
+</script></div>
         </div>
-      </div>
+        <footer class="kratos-entry-footer clearfix">
+            <div class="footer-tag clearfix">
+                <div class="pull-date">
+                    <time datetime="2021-01-18T00:00:00.000Z" itemprop="dateModified">最后编辑：2021-01-18</time>
+                </div>
+            </div>
+        </footer>
     </div>
-  </div>
+    
+    
 </article>
 
         
