@@ -334,8 +334,8 @@
         const init = () => {
             console.log('Gitalk loading...');
             const gitalk = new Gitalk(Object.assign({
-                id: '/2023/07/04/C-%E5%85%B3%E9%94%AE%E5%AD%97partial/',
-                path: '/2023/07/04/C-%E5%85%B3%E9%94%AE%E5%AD%97partial/'
+                id: decodeURIComponent('/2023/07/04/C-%E5%85%B3%E9%94%AE%E5%AD%97partial/'),
+                path: decodeURIComponent('/2023/07/04/C-%E5%85%B3%E9%94%AE%E5%AD%97partial/')
             }, JSON.parse('{"clientID":"57082f29a237525e1743","clientSecret":"3f2c087af02debc98fb1d9a17127f7b061663a7a","repo":"probieluo.github.io","owner":"probieluo","admin":["probieluo"],"distractionFreeMode":true}')));
 
             gitalk.render('gitalk-container');
