@@ -26,7 +26,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://probieluo.github.io/pic/j1.jpg">
 <meta property="article:published_time" content="2023-07-04T06:50:02.000Z">
-<meta property="article:modified_time" content="2023-07-04T08:16:26.316Z">
+<meta property="article:modified_time" content="2023-07-04T08:22:38.243Z">
 <meta property="article:author" content="probieMott">
 <meta property="article:tag" content="hexo">
 <meta property="article:tag" content="gitalk">
@@ -208,7 +208,7 @@
                         <i class="fa fa-edit"></i> 
                         
                         
-                            ~1.97K
+                            ~2.01K
                         
                         字
                     </li>
@@ -220,7 +220,7 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>本文最后编辑于 <time datetime="1688458586316"></time> 前，其中的内容可能需要更新。</p></div>
+                <div class="text"><p>本文最后编辑于 <time datetime="1688458958243"></time> 前，其中的内容可能需要更新。</p></div>
             </div>
             
             
@@ -234,6 +234,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;%- css_npm_cdn(&#x27;gitalk&#x27;, &#x27;dist/gitalk.css&#x27;) %&gt;</span><br><span class="line">&lt;div id=&quot;gitalk-container&quot; class=&quot;post-comments lazy-load&lt;% if (theme.posts.comments?.enableBGImage) &#123; %&gt; bg-image&lt;% &#125; %&gt;&quot; style=&quot;padding-left:2rem; padding-right:2rem;&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    var load_comm = () =&gt; &#123;</span><br><span class="line">        const init = () =&gt; &#123;</span><br><span class="line">            console.log(&#x27;Gitalk loading...&#x27;);</span><br><span class="line">            const gitalk = new Gitalk(Object.assign(&#123;</span><br><span class="line">                id: decodeURIComponent(&#x27;&lt;%- url_for(page.path) %&gt;&#x27;),</span><br><span class="line">                path: decodeURIComponent(&#x27;&lt;%- url_for(page.path) %&gt;&#x27;)</span><br><span class="line">            &#125;, JSON.parse(&#x27;&lt;%- JSON.stringify(theme.gitalk) %&gt;&#x27;)));</span><br><span class="line"></span><br><span class="line">            gitalk.render(&#x27;gitalk-container&#x27;);</span><br><span class="line">        &#125;</span><br><span class="line">        if (typeof Gitalk === &#x27;undefined&#x27;) &#123;</span><br><span class="line">            const src = &#x27;&lt;%- url_npm_cdn(&quot;gitalk&quot;, &quot;dist/gitalk.min.js&quot;) %&gt;&#x27;;</span><br><span class="line">            $.getScript(src, init);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            init();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;noscript&gt;Please enable JavaScript to view the &lt;a href=&quot;https://github.com/gitalk/gitalk&quot;&gt;comments powered by Gitalk.&lt;/a&gt;&lt;/noscript&gt;</span><br></pre></td></tr></table></figure>
 
 <p>总之，核心就是把url编码解码就行了:decodeURIComponent() 这个函数js内置的直接用就可以了。</p>
+<p>要是想了解如何搭建个人博客或者搭建博客过程中遇到什么问题，欢迎下面留言交流。</p>
 </div>
         </div>
         
@@ -319,7 +320,7 @@
                     <a class="tag-none-link" href="/tags/gitalk/" rel="tag">gitalk</a>, <a class="tag-none-link" href="/tags/hexo/" rel="tag">hexo</a>, <a class="tag-none-link" href="/tags/url%E8%A7%A3%E7%A0%81%E7%BC%96%E7%A0%81/" rel="tag">url解码编码</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2023-07-04T08:16:26.316Z" itemprop="dateModified">最后编辑：2023-07-04</time>
+                    <time datetime="2023-07-04T08:22:38.243Z" itemprop="dateModified">最后编辑：2023-07-04</time>
                 </div>
             </div>
         </footer>
