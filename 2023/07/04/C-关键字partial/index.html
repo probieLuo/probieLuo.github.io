@@ -225,10 +225,6 @@
             <div itemprop="articleBody"></div>
         </div>
         
-            <div class="kratos-copyright text-center clearfix">
-                <h5 itemprop="copyrightNotice">use_cc4_license</h5>
-            </div>
-        
         <footer class="kratos-entry-footer clearfix">
             
                 <div class="post-like-donate text-center clearfix" id="post-like-donate">
@@ -326,6 +322,29 @@
             
         </nav>
     
+    
+        <link rel="stylesheet" href="/vendors/gitalk@1.7.2/dist/gitalk.css"></script>
+<div id="gitalk-container" class="post-comments lazy-load" style="padding-left:2rem; padding-right:2rem;"></div>
+<script>
+    var load_comm = () => {
+        const init = () => {
+            console.log('Gitalk loading...');
+            const gitalk = new Gitalk(Object.assign({
+                id: '/2023/07/04/C-%E5%85%B3%E9%94%AE%E5%AD%97partial/',
+                path: '/2023/07/04/C-%E5%85%B3%E9%94%AE%E5%AD%97partial/'
+            }, JSON.parse('{"clientID":"57082f29a237525e1743","clientSecret":"3f2c087af02debc98fb1d9a17127f7b061663a7a","repo":"probieluo.github.io","owner":"probieluo","admin":["probieluo"],"distractionFreeMode":true}')));
+
+            gitalk.render('gitalk-container');
+        }
+        if (typeof Gitalk === 'undefined') {
+            const src = '/vendors/gitalk@1.7.2/dist/gitalk.min.js';
+            $.getScript(src, init);
+        } else {
+            init();
+        }
+    };
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://github.com/gitalk/gitalk">comments powered by Gitalk.</a></noscript>
     
 </article>
 
