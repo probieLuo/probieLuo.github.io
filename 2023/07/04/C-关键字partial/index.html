@@ -15,19 +15,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <meta name="format-detection" content="telphone=no, email=no" />
   
-    <meta name="keywords" content=".net, C#" />
+    <meta name="keywords" content="C#" />
   
-  <meta property="og:type" content="article">
+  <meta name="description" content="前言partial是分部类型，可以将一个类、接口或结构、方法分成多个部分，便于管理。在编译时会将所有部分组合起来，与普通类并无多大区别，但需要注意累加效应。 分部类以下情况需要拆分类定义  处理大型项目时，使一个类分布于多个独立文件中可以让多位程序员同时对该类进行处理。  当使用自动生成的源文件时，你可以添加代码而不需要重新创建源文件。 Visual Studio 在创建Windows 窗体、We">
+<meta property="og:type" content="article">
 <meta property="og:title" content="C#关键字partial">
 <meta property="og:url" content="https://probieluo.github.io/2023/07/04/C-%E5%85%B3%E9%94%AE%E5%AD%97partial/index.html">
 <meta property="og:site_name" content="probie">
+<meta property="og:description" content="前言partial是分部类型，可以将一个类、接口或结构、方法分成多个部分，便于管理。在编译时会将所有部分组合起来，与普通类并无多大区别，但需要注意累加效应。 分部类以下情况需要拆分类定义  处理大型项目时，使一个类分布于多个独立文件中可以让多位程序员同时对该类进行处理。  当使用自动生成的源文件时，你可以添加代码而不需要重新创建源文件。 Visual Studio 在创建Windows 窗体、We">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://probieluo.github.io/pic/j1.jpg">
 <meta property="article:published_time" content="2023-07-04T05:23:58.000Z">
-<meta property="article:modified_time" content="2023-07-04T07:16:39.742Z">
+<meta property="article:modified_time" content="2023-07-05T07:28:18.389Z">
 <meta property="article:author" content="probieMott">
 <meta property="article:tag" content="C#">
-<meta property="article:tag" content=".net">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://probieluo.github.io/pic/j1.jpg">
   
@@ -203,7 +204,7 @@
                         <i class="fa fa-edit"></i> 
                         
                         
-                            0
+                            ~1.65K
                         
                         字
                     </li>
@@ -215,13 +216,41 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>本文最后编辑于 <time datetime="1688454999742"></time> 前，其中的内容可能需要更新。</p></div>
+                <div class="text"><p>本文最后编辑于 <time datetime="1688542098389"></time> 前，其中的内容可能需要更新。</p></div>
             </div>
             
             
             
             <hr />
-            <div itemprop="articleBody"></div>
+            <div itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>partial是分部类型，可以将一个类、接口或结构、方法分成多个部分，便于管理。在编译时会将所有部分组合起来，与普通类并无多大区别，但需要注意累加效应。</p>
+<h2 id="分部类"><a href="#分部类" class="headerlink" title="分部类"></a>分部类</h2><p>以下情况需要拆分类定义</p>
+<ul>
+<li><p>处理大型项目时，使一个类分布于多个独立文件中可以让多位程序员同时对该类进行处理。</p>
+</li>
+<li><p>当使用自动生成的源文件时，你可以添加代码而不需要重新创建源文件。 Visual Studio 在创建Windows 窗体、Web 服务包装器代码等时会使用这种方法。 你可以创建使用这些类的代码，这样就不需要修改由Visual Studio生成的文件。</p>
+  <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">Employee</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DoWork</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">Employee</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GoToLunch</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="累加效应"><a href="#累加效应" class="headerlink" title="累加效应"></a>累加效应</h2><ol>
+<li><p>分部类各个部分可以指定不同的基接口，最终类型将实现所有分部声明所列出的全部接口。</p>
+ <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">Earth</span> : <span class="title">Planet</span>, <span class="title">IRotate</span> &#123; &#125;</span><br><span class="line"><span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">Earth</span> : <span class="title">IRevolve</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line">等同于</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Earth</span> : <span class="title">Planet</span>, <span class="title">IRotate</span>, <span class="title">IRevolve</span> &#123; &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分部类编译时会对分部类型定义的属性进行合并</p>
+ <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">SerializableAttribute</span>]</span><br><span class="line"><span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">Moon</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line">[<span class="meta">ObsoleteAttribute</span>]</span><br><span class="line"><span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">Moon</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line">等同于</span><br><span class="line"></span><br><span class="line">[<span class="meta">SerializableAttribute</span>]</span><br><span class="line">[<span class="meta">ObsoleteAttribute</span>]</span><br><span class="line"><span class="keyword">class</span> <span class="title">Moon</span> &#123; &#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="分部方法"><a href="#分部方法" class="headerlink" title="分部方法"></a>分部方法</h2><p>分部类或结构可以包含分部方法。 类的一个部分包含方法的签名。 可以在同一部分或另一部分中定义实现。 如果未提供该实现，则会在编译时删除方法以及对方法的所有调用。<br>分部方法允许类的某个部分的实现者声明方法。 类的另一部分的实现者可以定义该方法。 在以下两个情形中，此方法很有用：生成样板代码的模板和源生成器。</p>
+<ul>
+<li>模板代码：模板保留方法名称和签名，以使生成的代码可以调用方法。 这些方法遵循允许开发人员决定是否实现方法的限制。 如果未实现该方法，编译器会删除方法签名以及对该方法的所有调用。 调用该方法（包括调用中的任何参数计算结果）在运行时没有任何影响。 因此，分部类中的任何代码都可以随意地使用分部方法，即使未提供实现也是如此。 调用但不实现该方法不会导致编译时错误或运行时错误。</li>
+<li>源生成器：源生成器提供方法的实现。 开发人员可以添加方法声明（通常由源生成器读取属性）。 开发人员可以编写调用这些方法的代码。 源生成器在编译过程中运行并提供实现。 在这种情况下，不会遵循不经常实现的分部方法的限制。</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Definition in file1.cs</span></span><br><span class="line"><span class="function"><span class="keyword">partial</span> <span class="keyword">void</span> <span class="title">OnNameChanged</span>()</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Implementation in file2.cs</span></span><br><span class="line"><span class="function"><span class="keyword">partial</span> <span class="keyword">void</span> <span class="title">OnNameChanged</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// method body</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用限制"><a href="#使用限制" class="headerlink" title="使用限制"></a>使用限制</h2><ol>
+<li>partial 修饰符不可用于委托或枚举声明中。</li>
+<li>同一个类型的各个部分必须有修饰符partial。</li>
+<li>要成为同一类型的各个部分的所有分部类型定义都必须在同一程序集和同一模块（.exe 或 .dll 文件）中进行定义。 分部定义不能跨越多个模块。</li>
+<li>你可以为已定义并实现的分部方法生成委托，但不能为已经定义但未实现的分部方法生成委托。</li>
+</ol>
+</div>
         </div>
         
         <footer class="kratos-entry-footer clearfix">
@@ -284,7 +313,10 @@
             const twitterBase   = "https://twitter.com/intent/tweet?";
             const hostUrl       = "https://probieluo.github.io/2023/07/04/C-%E5%85%B3%E9%94%AE%E5%AD%97partial/";
             const title         = "「C#关键字partial」";
-            const excerpt       = ``;
+            const excerpt       = `前言partial是分部类型，可以将一个类、接口或结构、方法分成多个部分，便于管理。在编译时会将所有部分组合起来，与普通类并无多大区别，但需要注意累加效应。
+分部类以下情况需要拆分类定义
+
+处理大型项目时，使一个类分布于多个独立文件中...`;
             let _URL;
             switch (dest) {
                 case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
@@ -303,10 +335,10 @@
             <div class="footer-tag clearfix">
                 <div class="pull-left">
                 <i class="fa fa-tags"></i>
-                    <a class="tag-none-link" href="/tags/net/" rel="tag">.net</a>, <a class="tag-none-link" href="/tags/C/" rel="tag">C#</a>
+                    <a class="tag-none-link" href="/tags/C/" rel="tag">C#</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2023-07-04T07:16:39.742Z" itemprop="dateModified">最后编辑：2023-07-04</time>
+                    <time datetime="2023-07-05T07:28:18.389Z" itemprop="dateModified">最后编辑：2023-07-05</time>
                 </div>
             </div>
         </footer>
@@ -368,7 +400,7 @@
     <div class="photo-background"></div>
     <div class="photo-wrapper clearfix">
         <div class="photo-wrapper-tip text-center">
-            <img class="about-photo" src="/images/百鬼丸.webp" loading="lazy" decoding="auto" />
+            <img class="about-photo" src="/images/thumb/thumb_18.webp" loading="lazy" decoding="auto" />
         </div>
     </div>
     <div class="textwidget">
@@ -388,7 +420,7 @@
                 分类
             </span>
             <span class="count">
-                0
+                1
             </span>
         </a>
         <a class="meta-item" href="/tags/">
@@ -396,7 +428,7 @@
                 标签
             </span>
             <span class="count">
-                7
+                6
             </span>
         </a>
     </div>
@@ -405,13 +437,18 @@
                     <div class="sticky-area">
                 
                 
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>分类目录</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C#</a><span class="category-list-count">1</span></li></ul>
+  </aside>
+
 
             
                 
   <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
     <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
       <div class="tag-clouds">
-        <a href="/tags/net/" style="font-size: 0.6em;">.net</a> <a href="/tags/C/" style="font-size: 0.6em;">C#</a> <a href="/tags/git/" style="font-size: 0.6em;">git</a> <a href="/tags/gitalk/" style="font-size: 0.6em;">gitalk</a> <a href="/tags/hexo/" style="font-size: 0.6em;">hexo</a> <a href="/tags/images/" style="font-size: 0.6em;">images</a> <a href="/tags/url%E8%A7%A3%E7%A0%81%E7%BC%96%E7%A0%81/" style="font-size: 0.6em;">url解码编码</a>
+        <a href="/tags/C/" style="font-size: 0.6em;">C#</a> <a href="/tags/git/" style="font-size: 0.6em;">git</a> <a href="/tags/gitalk/" style="font-size: 0.6em;">gitalk</a> <a href="/tags/hexo/" style="font-size: 0.6em;">hexo</a> <a href="/tags/images/" style="font-size: 0.6em;">images</a> <a href="/tags/url%E8%A7%A3%E7%A0%81%E7%BC%96%E7%A0%81/" style="font-size: 0.6em;">url解码编码</a>
       </div>
   </aside>
 
@@ -494,7 +531,7 @@
                         </div>
                         <div>
                             <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-                            <li><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次  |</span></li>
+                            <li><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次|</span></li>
                             <li><span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span></li>
                         </div>
                         <div>
@@ -570,5 +607,5 @@
 <!-- Extra support for third-party plguins  -->
 
 
-    <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":1},"dialog":{"enable":false,"hitokoto":false},"log":false});</script></body>
+    <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"superSample":2,"width":200,"height":400,"position":"left","hOffset":-30,"vOffset":-20},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":false,"hitokoto":false},"log":false});</script></body>
 </html>
