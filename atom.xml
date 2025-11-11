@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Probie&#39;s Blog</title>
+  
+  <subtitle>一个可爱而现代的 Hexo 主题</subtitle>
+  <link href="https://krt.moe/atom.xml" rel="self"/>
+  
+  <link href="https://krt.moe/"/>
+  <updated>2025-11-11T14:03:04.784Z</updated>
+  <id>https://krt.moe/</id>
+  
+  <author>
+    <name>All contributors</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Git常用命令</title>
+    <link href="https://krt.moe/posts/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+    <id>https://krt.moe/posts/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</id>
+    <published>2025-11-11T12:00:00.000Z</published>
+    <updated>2025-11-11T14:03:04.784Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p><strong>Git</strong> 是一个免费且开源的分布式版本控制系统，旨在以速度和效率处理从小型到大型项目的所有内容。<br>它易于学习，体积小巧、性能极快。<br>通过诸如低成本本地分支、方便的暂存区域和多种工作流程等特性，Git 超越了 Subversion、CVS、Perforce 和 ClearCase 等传统 SCM 工具。</p></blockquote><span id="more"></span><hr><h2 id="🧭-什么是版本控制系统？"><a href="#🧭-什么是版本控制系统？" class="headerlink" title="🧭 什么是版本控制系统？"></a>🧭 什么是版本控制系统？</h2><p>版本控制系统（<strong>Version Control System</strong>, 简称 <strong>VCS</strong>）是一种用于记录文件内容变化的软件工具。<br>它能够让多人协作开发同一个项目，跟踪每一次更改，随时恢复历史状态，比较不同版本差异，并有效防止数据丢失。  </p><blockquote><p>✅ <strong>简单理解</strong>：它是“代码的时间机器”。</p></blockquote><hr><h2 id="⚙️-一、安装与配置"><a href="#⚙️-一、安装与配置" class="headerlink" title="⚙️ 一、安装与配置"></a>⚙️ 一、安装与配置</h2><h3 id="下载与安装"><a href="#下载与安装" class="headerlink" title="下载与安装"></a>下载与安装</h3><p>Git 下载地址：<a href="https://git-scm.com/downloads">git-scm.com&#x2F;downloads</a><br>下载安装包后，一路点击“下一步”完成安装。</p><hr><h3 id="配置用户信息"><a href="#配置用户信息" class="headerlink" title="配置用户信息"></a>配置用户信息</h3><p>打开 <strong>Git Bash</strong>，执行以下命令设置用户名与邮箱（全局配置）：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;your name&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;your email&quot;</span></span><br></pre></td></tr></table></figure><p>验证是否配置成功：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name</span><br><span class="line">&gt; your name</span><br><span class="line">$ git config --global user.email</span><br><span class="line">&gt; your email</span><br></pre></td></tr></table></figure><p>若只为当前仓库配置，则去掉 –global 参数：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config user.name <span class="string">&quot;your name&quot;</span></span><br><span class="line">$ git config user.email <span class="string">&quot;your email&quot;</span></span><br></pre></td></tr></table></figure><p>检查单个仓库config</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git config user.name</span><br><span class="line">&gt; your name</span><br><span class="line">$ git config user.email</span><br><span class="line">&gt; your email</span><br></pre></td></tr></table></figure><p>检查配置信息：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git config --list</span><br></pre></td></tr></table></figure><h3 id="关联GitHub（SSH-方式）"><a href="#关联GitHub（SSH-方式）" class="headerlink" title="关联GitHub（SSH 方式）"></a>关联GitHub（SSH 方式）</h3><ol><li><p>生成 SSH 密钥</p><p> 在命令行执行：</p> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C <span class="string">&quot;your email&quot;</span></span><br></pre></td></tr></table></figure><p> 生成完成后，在路径：</p> <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">C:\Users\&lt;你的用户名&gt;\.ssh\</span></span><br></pre></td></tr></table></figure><p> 可以看到</p><ul><li><code>id_rsa</code>（私钥）</li><li><code>id_rsa.pub</code>（公钥）</li></ul></li><li><p>添加到 GitHub</p><p> 进入：</p><p> <code>GitHub → Settings → SSH and GPG Keys → New SSH Key</code></p><p> 把 id_rsa.pub 文件内容复制到 Key 中，Title 可随意填写。</p></li><li><p>测试是否成功</p> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br><span class="line">&gt; Hi probieLuo! You<span class="string">&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span></span><br></pre></td></tr></table></figure></li></ol><h2 id="⚙️-二、GIT基本操作"><a href="#⚙️-二、GIT基本操作" class="headerlink" title="⚙️ 二、GIT基本操作"></a>⚙️ 二、GIT基本操作</h2><table><thead><tr><th>命令</th><th>说明</th></tr></thead><tbody><tr><td><code>git init</code></td><td>初始化 Git 仓库</td></tr><tr><td><code>git add README.md</code></td><td>添加文件到暂存区</td></tr><tr><td><code>git add .</code></td><td>添加当前目录所有文件到暂存区</td></tr><tr><td><code>git commit -m &quot;first commit&quot;</code></td><td>提交更改并记录说明</td></tr><tr><td><code>git branch -M master</code></td><td>强制重命名当前分支为 master</td></tr><tr><td><code>git remote add origin git@github.com:probieLuo/xxx.git</code></td><td>添加远程仓库</td></tr><tr><td><code>git push -u origin master</code></td><td>推送代码到远程仓库并建立关联</td></tr><tr><td><code>git checkout main</code></td><td>切换分支main</td></tr></tbody></table>]]></content>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Git&lt;/strong&gt; 是一个免费且开源的分布式版本控制系统，旨在以速度和效率处理从小型到大型项目的所有内容。&lt;br&gt;它易于学习，体积小巧、性能极快。&lt;br&gt;通过诸如低成本本地分支、方便的暂存区域和多种工作流程等特性，Git 超越了 Subversion、CVS、Perforce 和 ClearCase 等传统 SCM 工具。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="开发工具" scheme="https://krt.moe/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="Git" scheme="https://krt.moe/tags/Git/"/>
+    
+    <category term="版本控制" scheme="https://krt.moe/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>你好，世界！</title>
+    <link href="https://krt.moe/posts/hello-world/"/>
+    <id>https://krt.moe/posts/hello-world/</id>
+    <published>2018-05-06T09:03:12.000Z</published>
+    <updated>2025-11-11T13:58:10.993Z</updated>
+    
+    <content type="html"><![CDATA[<p>欢迎使用 <code>Kratos : Rebirth</code> 这个我们精心打造的 Hexo 主题！希望能在接下来的旅途中与您相伴，共同创造出更多难以忘怀的美好体验。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;欢迎使用 &lt;code&gt;Kratos : Rebirth&lt;/code&gt; 这个我们精心打造的 Hexo 主题！希望能在接下来的旅途中与您相伴，共同创造出更多难以忘怀的美好体验。&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    <category term="全新体验" scheme="https://krt.moe/categories/%E5%85%A8%E6%96%B0%E4%BD%93%E9%AA%8C/"/>
+    
+    
+    <category term="欢迎" scheme="https://krt.moe/tags/%E6%AC%A2%E8%BF%8E/"/>
+    
+  </entry>
+  
+</feed>
