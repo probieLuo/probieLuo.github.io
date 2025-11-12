@@ -16,7 +16,7 @@
         clientID: 'Ov23liFUj181jDUjzD1m',
         clientSecret: '522293826421581db14fd8559170e53514be6cb0',
         repo: "ProbieBlog",
-        owner: "ProbieBlog",
+        owner: "Probieluo",
         admin: ["probieluo"],
         distractionFreeMode: false,
       }));
