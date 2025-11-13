@@ -15,9 +15,9 @@
       }, {
         clientID: 'Ov23liFUj181jDUjzD1m',
         clientSecret: '522293826421581db14fd8559170e53514be6cb0',
-        repo: "ProbieBlog",
-        owner: "Probieluo",
-        admin: ["probieluo"],
+        repo: "probieLuo.github.io",
+        owner: "probieLuo",
+        admin: ["probieLuo"],
         distractionFreeMode: false,
       }));
 
