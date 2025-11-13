@@ -17,7 +17,7 @@
         clientSecret: '13276cc4af619b42758e3a92c2719d309b241b79',
         repo: "probieLuo.github.io",
         owner: "probieLuo",
-        admin: ["probieLuo"],
+        admin: ["probieLuo","sla-gal"],
         distractionFreeMode: false,
       }));
 
