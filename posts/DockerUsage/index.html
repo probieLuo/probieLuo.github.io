@@ -28,7 +28,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="https://krt.moe/posts/DockerUsage/assets/wallhaven-d6e7wo.jpg">
 <meta property="article:published_time" content="2025-11-12T10:30:46.000Z">
-<meta property="article:modified_time" content="2025-11-13T11:07:50.674Z">
+<meta property="article:modified_time" content="2025-11-13T11:27:30.006Z">
 <meta property="article:author" content="Probie">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary">
@@ -258,7 +258,7 @@
 <p>这里由于我们新安装Docker，还没有ubuntu15.10 镜像，这个命令会去镜像仓库 Docker Hub 下载公共镜像。这时一般会出现</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; dock: error response from daemon ...</span><br></pre></td></tr></table></figure>
 
-<p><img src="/probieLuo/probieluo.github.io/../assets/runUbuntuError.jpg" alt="runUbuntu:15.10Error"></p>
+<p><img src="/../images/runUbuntuError.jpg" alt="runUbuntu:15.10Error"></p>
 <p>出现这种情况需要更换Docker镜像源<br>修改或者新增<code>/etc/docker/daemon.json</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
 
@@ -309,7 +309,7 @@
 </li>
 <li><p>访问Docker仓库 <a target="_blank" rel="noopener" href="https://download.docker.com/linux/ubuntu/dists/">https://download.docker.com/linux/ubuntu/dists/</a> 下载三个核心包</p>
 <p> 这里选择版本号，我这里是22.04也就是jammy，上面查看版本时会输出一个Codename。</p>
-<p> 再进入&#x2F;pool&#x2F;stable&#x2F;，选择架构，我这里是x86_64选amd64<br> <img src="/probieLuo/probieluo.github.io/../assets/Docker%E4%BB%93%E5%BA%93.jpg" alt="Docker仓库"></p>
+<p> 再进入&#x2F;pool&#x2F;stable&#x2F;，选择架构，我这里是x86_64选amd64<br> <img src="/../images/Docker%E4%BB%93%E5%BA%93.jpg" alt="Docker仓库"></p>
 <p> 下载三个核心包 <code>containerd.io</code>、 <code>docker-ce-cli</code>、 <code>docker-ce</code>。</p>
 <p> 下载时三个核心包时，<code>docker-ce-cli</code>和<code>docker-ce</code>版本号需一致，如下面组合：</p>
 <ul>
@@ -373,7 +373,7 @@
                     <a class="tag-none-link" href="/tags/Docker/" rel="tag">Docker</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2025-11-13T11:07:50.674Z" itemprop="dateModified">最后编辑：2025-11-13</time>
+                    <time datetime="2025-11-13T11:27:30.006Z" itemprop="dateModified">最后编辑：2025-11-13</time>
                 </div>
             </div>
         </footer>
