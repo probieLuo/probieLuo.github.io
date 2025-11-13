@@ -13,8 +13,8 @@
           // id: container.getAttribute("data-path-hash"), // 使用 hash 作为 ID
           path: path,
       }, {
-        clientID: 'Ov23liFUj181jDUjzD1m',
-        clientSecret: '522293826421581db14fd8559170e53514be6cb0',
+        clientID: '57082f29a237525e1743',
+        clientSecret: '13276cc4af619b42758e3a92c2719d309b241b79',
         repo: "probieLuo.github.io",
         owner: "probieLuo",
         admin: ["probieLuo"],
