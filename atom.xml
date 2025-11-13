@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Probie&#39;s blog</title>
+  <title>大彩笔的破站</title>
   
-  <subtitle>一个可爱而现代的 Hexo 主题</subtitle>
+  <subtitle>会一点.NET, 这里记录一些学习笔记和生活琐事</subtitle>
   <link href="https://krt.moe/atom.xml" rel="self"/>
   
   <link href="https://krt.moe/"/>
@@ -10,7 +10,7 @@
   <id>https://krt.moe/</id>
   
   <author>
-    <name>Probie</name>
+    <name>probie</name>
     
   </author>
   
