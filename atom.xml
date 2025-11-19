@@ -3,11 +3,11 @@
   <title>probie&#39;s blog</title>
   
   <subtitle>会一点.NET, 这里记录一些学习笔记和生活琐事</subtitle>
-  <link href="https://krt.moe/atom.xml" rel="self"/>
+  <link href="https://probieluo.github.io/atom.xml" rel="self"/>
   
-  <link href="https://krt.moe/"/>
-  <updated>2025-11-19T10:52:04.236Z</updated>
-  <id>https://krt.moe/</id>
+  <link href="https://probieluo.github.io/"/>
+  <updated>2025-11-19T13:00:19.252Z</updated>
+  <id>https://probieluo.github.io/</id>
   
   <author>
     <name>probie</name>
@@ -17,9 +17,36 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>如何让搜索引擎收录你的站点</title>
+    <link href="https://probieluo.github.io/posts/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/"/>
+    <id>https://probieluo.github.io/posts/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/</id>
+    <published>2025-11-19T12:39:54.000Z</published>
+    <updated>2025-11-19T13:00:19.252Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文介绍我们的hexo博客怎么被Google和Bing搜录。</p><p>一般来说，我们刚开始构建的hexo博客只能url访问，无法通过Google搜索引擎通过搜索提示词找到到相应文章。这是因为搜索引擎没有爬取过我们的网站，虽然说搜索引擎一般来说会自动爬取网络上所有链接并建立索引入库，但通常很慢。所以我们需要主动一点，告诉搜索引擎我们的网站。</p><h3 id="确认Google是否发现了你的页面"><a href="#确认Google是否发现了你的页面" class="headerlink" title="确认Google是否发现了你的页面"></a>确认Google是否发现了你的页面</h3><p>首先判断 Google 是否知道你的博客存在，这是收录的前提：</p><p>在 Google 搜索框输入 site:你的域名（例如 site:yourname.github.io），如果没有任何结果，说明 Google 尚未发现你的页面；如果有部分结果，说明仅部分页面未被收录。</p><p><img src="/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/image.png"></p><p>如图内容就说明网站已经被搜索引擎收录。不过为了更好收录，还是需要提交站点地图。</p><h3 id="生成站点地图"><a href="#生成站点地图" class="headerlink" title="生成站点地图"></a>生成站点地图</h3><p>安装 <code>hexo-generator-sitemap</code> 插件：在 Hexo 根目录执行</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure><p>配置插件：打开 Hexo 配置文件 _config.yml，添加（或修改）</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">sitemap.xml</span>  <span class="comment"># 生成的sitemap路径</span></span><br></pre></td></tr></table></figure><p>重新生成并部署博客</p><p>确认 Sitemap 生效：访问 https:&#x2F;&#x2F;你的域名&#x2F;sitemap.xml，应能看到所有文章的链接列表</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本文介绍我们的hexo博客怎么被Google和Bing搜录。&lt;/p&gt;
+&lt;p&gt;一般来说，我们刚开始构建的hexo博客只能url访问，无法通过Google搜索引擎通过搜索提示词找到到相应文章。这是因为搜索引擎没有爬取过我们的网站，虽然说搜索引擎一般来说会自动爬取网络上所有链接并</summary>
+      
+    
+    
+    
+    <category term="hexo" scheme="https://probieluo.github.io/categories/hexo/"/>
+    
+    
+    <category term="hexo" scheme="https://probieluo.github.io/tags/hexo/"/>
+    
+    <category term="seo" scheme="https://probieluo.github.io/tags/seo/"/>
+    
+  </entry>
+  
+  <entry>
     <title>领域驱动设计(DDD)基本概念</title>
-    <link href="https://krt.moe/posts/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-DDD-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"/>
-    <id>https://krt.moe/posts/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-DDD-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/</id>
+    <link href="https://probieluo.github.io/posts/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-DDD-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"/>
+    <id>https://probieluo.github.io/posts/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-DDD-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/</id>
     <published>2025-11-18T15:51:53.000Z</published>
     <updated>2025-11-19T10:52:04.236Z</updated>
     
@@ -34,21 +61,21 @@
     
     
     
-    <category term="DDD" scheme="https://krt.moe/categories/DDD/"/>
+    <category term="DDD" scheme="https://probieluo.github.io/categories/DDD/"/>
     
     
-    <category term="DDD" scheme="https://krt.moe/tags/DDD/"/>
+    <category term="DDD" scheme="https://probieluo.github.io/tags/DDD/"/>
     
-    <category term="微服务架构" scheme="https://krt.moe/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/"/>
+    <category term="微服务架构" scheme="https://probieluo.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/"/>
     
-    <category term="架构设计" scheme="https://krt.moe/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
+    <category term="架构设计" scheme="https://probieluo.github.io/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
     
   </entry>
   
   <entry>
     <title>HexoUsage</title>
-    <link href="https://krt.moe/posts/HexoUsage/"/>
-    <id>https://krt.moe/posts/HexoUsage/</id>
+    <link href="https://probieluo.github.io/posts/HexoUsage/"/>
+    <id>https://probieluo.github.io/posts/HexoUsage/</id>
     <published>2025-11-14T11:52:41.000Z</published>
     <updated>2025-11-17T12:17:15.153Z</updated>
     
@@ -62,17 +89,17 @@
     
     
     
-    <category term="开发工具" scheme="https://krt.moe/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    <category term="开发工具" scheme="https://probieluo.github.io/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
     
     
-    <category term="hexo" scheme="https://krt.moe/tags/hexo/"/>
+    <category term="hexo" scheme="https://probieluo.github.io/tags/hexo/"/>
     
   </entry>
   
   <entry>
     <title>WPF弹窗限流</title>
-    <link href="https://krt.moe/posts/WPF%E5%BC%B9%E7%AA%97%E9%99%90%E6%B5%81/"/>
-    <id>https://krt.moe/posts/WPF%E5%BC%B9%E7%AA%97%E9%99%90%E6%B5%81/</id>
+    <link href="https://probieluo.github.io/posts/WPF%E5%BC%B9%E7%AA%97%E9%99%90%E6%B5%81/"/>
+    <id>https://probieluo.github.io/posts/WPF%E5%BC%B9%E7%AA%97%E9%99%90%E6%B5%81/</id>
     <published>2025-11-13T13:45:34.000Z</published>
     <updated>2025-11-14T13:22:14.804Z</updated>
     
@@ -88,21 +115,21 @@
     
     
     
-    <category term="开发技术" scheme="https://krt.moe/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/"/>
+    <category term="开发技术" scheme="https://probieluo.github.io/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/"/>
     
     
-    <category term="C#" scheme="https://krt.moe/tags/C/"/>
+    <category term="C#" scheme="https://probieluo.github.io/tags/C/"/>
     
-    <category term="WPF" scheme="https://krt.moe/tags/WPF/"/>
+    <category term="WPF" scheme="https://probieluo.github.io/tags/WPF/"/>
     
-    <category term="WPF消息弹窗" scheme="https://krt.moe/tags/WPF%E6%B6%88%E6%81%AF%E5%BC%B9%E7%AA%97/"/>
+    <category term="WPF消息弹窗" scheme="https://probieluo.github.io/tags/WPF%E6%B6%88%E6%81%AF%E5%BC%B9%E7%AA%97/"/>
     
   </entry>
   
   <entry>
     <title>Docker基本使用</title>
-    <link href="https://krt.moe/posts/DockerUsage/"/>
-    <id>https://krt.moe/posts/DockerUsage/</id>
+    <link href="https://probieluo.github.io/posts/DockerUsage/"/>
+    <id>https://probieluo.github.io/posts/DockerUsage/</id>
     <published>2025-11-12T10:30:46.000Z</published>
     <updated>2025-11-13T13:03:47.544Z</updated>
     
@@ -116,17 +143,17 @@
     
     
     
-    <category term="开发工具" scheme="https://krt.moe/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    <category term="开发工具" scheme="https://probieluo.github.io/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
     
     
-    <category term="Docker" scheme="https://krt.moe/tags/Docker/"/>
+    <category term="Docker" scheme="https://probieluo.github.io/tags/Docker/"/>
     
   </entry>
   
   <entry>
     <title>C#面试核心知识点详解</title>
-    <link href="https://krt.moe/posts/CSharp%E9%9D%A2%E8%AF%95%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9%E8%AF%A6%E8%A7%A3/"/>
-    <id>https://krt.moe/posts/CSharp%E9%9D%A2%E8%AF%95%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9%E8%AF%A6%E8%A7%A3/</id>
+    <link href="https://probieluo.github.io/posts/CSharp%E9%9D%A2%E8%AF%95%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9%E8%AF%A6%E8%A7%A3/"/>
+    <id>https://probieluo.github.io/posts/CSharp%E9%9D%A2%E8%AF%95%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9%E8%AF%A6%E8%A7%A3/</id>
     <published>2025-11-11T14:00:00.000Z</published>
     <updated>2025-11-12T15:08:36.052Z</updated>
     
@@ -137,21 +164,21 @@
     
     
     
-    <category term="开发技术" scheme="https://krt.moe/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/"/>
+    <category term="开发技术" scheme="https://probieluo.github.io/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/"/>
     
     
-    <category term="C#" scheme="https://krt.moe/tags/C/"/>
+    <category term="C#" scheme="https://probieluo.github.io/tags/C/"/>
     
-    <category term="面试" scheme="https://krt.moe/tags/%E9%9D%A2%E8%AF%95/"/>
+    <category term="面试" scheme="https://probieluo.github.io/tags/%E9%9D%A2%E8%AF%95/"/>
     
-    <category term="编程语言" scheme="https://krt.moe/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+    <category term="编程语言" scheme="https://probieluo.github.io/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
   </entry>
   
   <entry>
     <title>Git常用命令</title>
-    <link href="https://krt.moe/posts/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
-    <id>https://krt.moe/posts/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</id>
+    <link href="https://probieluo.github.io/posts/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+    <id>https://probieluo.github.io/posts/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</id>
     <published>2025-11-11T12:00:00.000Z</published>
     <updated>2025-11-12T15:10:02.688Z</updated>
     
@@ -164,19 +191,19 @@
     
     
     
-    <category term="开发工具" scheme="https://krt.moe/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    <category term="开发工具" scheme="https://probieluo.github.io/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
     
     
-    <category term="Git" scheme="https://krt.moe/tags/Git/"/>
+    <category term="Git" scheme="https://probieluo.github.io/tags/Git/"/>
     
-    <category term="版本控制" scheme="https://krt.moe/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/"/>
+    <category term="版本控制" scheme="https://probieluo.github.io/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/"/>
     
   </entry>
   
   <entry>
     <title>你好，世界！</title>
-    <link href="https://krt.moe/posts/hello-world/"/>
-    <id>https://krt.moe/posts/hello-world/</id>
+    <link href="https://probieluo.github.io/posts/hello-world/"/>
+    <id>https://probieluo.github.io/posts/hello-world/</id>
     <published>2018-05-06T09:03:12.000Z</published>
     <updated>2025-11-12T12:20:41.586Z</updated>
     
@@ -191,10 +218,10 @@
     
     
     
-    <category term="全新体验" scheme="https://krt.moe/categories/%E5%85%A8%E6%96%B0%E4%BD%93%E9%AA%8C/"/>
+    <category term="全新体验" scheme="https://probieluo.github.io/categories/%E5%85%A8%E6%96%B0%E4%BD%93%E9%AA%8C/"/>
     
     
-    <category term="欢迎" scheme="https://krt.moe/tags/%E6%AC%A2%E8%BF%8E/"/>
+    <category term="欢迎" scheme="https://probieluo.github.io/tags/%E6%AC%A2%E8%BF%8E/"/>
     
   </entry>
   
