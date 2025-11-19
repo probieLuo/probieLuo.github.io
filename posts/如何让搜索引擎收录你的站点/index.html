@@ -26,16 +26,16 @@
 <meta property="og:site_name" content="probie&#39;s blog">
 <meta property="og:description" content="本文介绍我们的hexo博客怎么被Google和Bing搜录。 一般来说，我们刚开始构建的hexo博客只能url访问，无法通过Google搜索引擎通过搜索提示词找到到相应文章。这是因为搜索引擎没有爬取过我们的网站，虽然说搜索引擎一般来说会自动爬取网络上所有链接并建立索引入库，但通常很慢。所以我们需要主动一点，告诉搜索引擎我们的网站。 确认Google是否发现了你的页面首先判断 Google 是否知道">
 <meta property="og:locale">
-<meta property="og:image" content="https://probieluo.github.io/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/image.png">
-<meta property="og:image" content="https://probieluo.github.io/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/image01.png">
-<meta property="og:image" content="https://probieluo.github.io/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/image02.png">
+<meta property="og:image" content="https://probieluo.github.io/images/image.png">
+<meta property="og:image" content="https://probieluo.github.io/images/image01.png">
+<meta property="og:image" content="https://probieluo.github.io/images/image02.png">
 <meta property="article:published_time" content="2025-11-19T12:39:54.000Z">
-<meta property="article:modified_time" content="2025-11-19T13:26:15.529Z">
+<meta property="article:modified_time" content="2025-11-19T13:29:20.673Z">
 <meta property="article:author" content="probie">
 <meta property="article:tag" content="hexo">
 <meta property="article:tag" content="seo">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://probieluo.github.io/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/image.png">
+<meta name="twitter:image" content="https://probieluo.github.io/images/image.png">
   
     <link rel="alternate" href="/atom.xml" title="probie's blog" type="application/atom+xml">
   
@@ -266,7 +266,7 @@
 <p>一般来说，我们刚开始构建的hexo博客只能url访问，无法通过Google搜索引擎通过搜索提示词找到到相应文章。这是因为搜索引擎没有爬取过我们的网站，虽然说搜索引擎一般来说会自动爬取网络上所有链接并建立索引入库，但通常很慢。所以我们需要主动一点，告诉搜索引擎我们的网站。</p>
 <h3 id="确认Google是否发现了你的页面"><a href="#确认Google是否发现了你的页面" class="headerlink" title="确认Google是否发现了你的页面"></a>确认Google是否发现了你的页面</h3><p>首先判断 Google 是否知道你的博客存在，这是收录的前提：</p>
 <p>在 Google 搜索框输入 site:你的域名（例如 site:yourname.github.io），如果没有任何结果，说明 Google 尚未发现你的页面；如果有部分结果，说明仅部分页面未被收录。</p>
-<p><img src="/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/image.png"></p>
+<p><img src="/../images/image.png"></p>
 <p>如图内容就说明网站已经被搜索引擎收录。不过为了更好收录，还是需要提交站点地图。</p>
 <h3 id="生成站点地图"><a href="#生成站点地图" class="headerlink" title="生成站点地图"></a>生成站点地图</h3><p>安装 <code>hexo-generator-sitemap</code> 插件：在 Hexo 根目录执行</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
@@ -278,9 +278,9 @@
 <p>确认 Sitemap 生效：访问 <code>https://你的域名/sitemap.xml</code>，应能看到所有文章的链接列表</p>
 <p>不过这里我是用hexo主题 <code>Kratos:Rebirth</code> 的自带有配置的，上述生成站点地图没有验证过。</p>
 <p>我这里只需要配置_config.yml文件下url项就行了</p>
-<p><img src="/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/image01.png"></p>
+<p><img src="/../images/image01.png"></p>
 <p>然后执行<code>hexo c</code> &amp;&amp; <code>hexo g</code> 会生成一个xml文件<code>public/sitemap.xml</code> 部署GitHub后访问 <code>https://你的域名/sitemap.xml</code> 可以看到所有文章的链接列表。</p>
-<p><img src="/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/image02.png"></p>
+<p><img src="/../images/image02.png"></p>
 <h3 id="Google-提交你的站点地图"><a href="#Google-提交你的站点地图" class="headerlink" title="Google 提交你的站点地图"></a>Google 提交你的站点地图</h3><ol>
 <li><p>访问 <a target="_blank" rel="noopener" href="https://search.google.com/search-console">Google Search Console</a>，用 Google 账号登录</p>
 </li>
@@ -310,7 +310,7 @@
                     <a class="tag-none-link" href="/tags/hexo/" rel="tag">hexo</a>, <a class="tag-none-link" href="/tags/seo/" rel="tag">seo</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2025-11-19T13:26:15.529Z" itemprop="dateModified">最后编辑：2025-11-19</time>
+                    <time datetime="2025-11-19T13:29:20.673Z" itemprop="dateModified">最后编辑：2025-11-19</time>
                 </div>
             </div>
         </footer>
