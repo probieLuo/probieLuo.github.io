@@ -7,8 +7,8 @@
     <link rel="icon" href="/assets/github-mark.svg">
   
   
-  <title>如何让搜索引擎收录你的站点 | probie&#39;s blog</title>
-  <link rel="canonical" href="https://probieluo.github.io/posts/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/">
+  <title>Git常用命令 | probie&#39;s blog</title>
+  <link rel="canonical" href="https://probieluo.github.io/posts/Common-Git-Commands/">
   <meta name="author" content="probie" />
   <meta http-equiv="Cache-Control" content="no-transform" />
   <meta http-equiv="Cache-Control" content="no-siteapp" />
@@ -17,25 +17,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <meta name="format-detection" content="telphone=no, email=no" />
   
-    <meta name="keywords" content="hexo, seo" />
+    <meta name="keywords" content="Git, 版本控制" />
   
-  <meta name="description" content="本文介绍我们的hexo博客怎么被Google和Bing搜录。 一般来说，我们刚开始构建的hexo博客只能url访问，无法通过Google搜索引擎通过搜索提示词找到到相应文章。这是因为搜索引擎没有爬取过我们的网站，虽然说搜索引擎一般来说会自动爬取网络上所有链接并建立索引入库，但通常很慢。所以我们需要主动一点，告诉搜索引擎我们的网站。 确认Google是否发现了你的页面首先判断 Google 是否知道">
+  <meta name="description" content="Git 是一个免费且开源的分布式版本控制系统，旨在以速度和效率处理从小型到大型项目的所有内容。它易于学习，体积小巧、性能极快。通过诸如低成本本地分支、方便的暂存区域和多种工作流程等特性，Git 超越了 Subversion、CVS、Perforce 和 ClearCase 等传统 SCM 工具。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何让搜索引擎收录你的站点">
-<meta property="og:url" content="https://probieluo.github.io/posts/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/index.html">
+<meta property="og:title" content="Git常用命令">
+<meta property="og:url" content="https://probieluo.github.io/posts/Common-Git-Commands/index.html">
 <meta property="og:site_name" content="probie&#39;s blog">
-<meta property="og:description" content="本文介绍我们的hexo博客怎么被Google和Bing搜录。 一般来说，我们刚开始构建的hexo博客只能url访问，无法通过Google搜索引擎通过搜索提示词找到到相应文章。这是因为搜索引擎没有爬取过我们的网站，虽然说搜索引擎一般来说会自动爬取网络上所有链接并建立索引入库，但通常很慢。所以我们需要主动一点，告诉搜索引擎我们的网站。 确认Google是否发现了你的页面首先判断 Google 是否知道">
+<meta property="og:description" content="Git 是一个免费且开源的分布式版本控制系统，旨在以速度和效率处理从小型到大型项目的所有内容。它易于学习，体积小巧、性能极快。通过诸如低成本本地分支、方便的暂存区域和多种工作流程等特性，Git 超越了 Subversion、CVS、Perforce 和 ClearCase 等传统 SCM 工具。">
 <meta property="og:locale">
-<meta property="og:image" content="https://probieluo.github.io/images/image.png">
-<meta property="og:image" content="https://probieluo.github.io/images/image01.png">
-<meta property="og:image" content="https://probieluo.github.io/images/image02.png">
-<meta property="article:published_time" content="2025-11-19T12:39:54.000Z">
-<meta property="article:modified_time" content="2025-11-19T13:29:20.673Z">
+<meta property="og:image" content="https://probieluo.github.io/posts/Common-Git-Commands/assets/%E7%BB%AB%E4%B9%8302.png">
+<meta property="article:published_time" content="2025-11-11T12:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-12T15:10:02.688Z">
 <meta property="article:author" content="probie">
-<meta property="article:tag" content="hexo">
-<meta property="article:tag" content="seo">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="版本控制">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://probieluo.github.io/images/image.png">
+<meta name="twitter:image" content="https://probieluo.github.io/posts/Common-Git-Commands/assets/%E7%BB%AB%E4%B9%8302.png">
   
     <link rel="alternate" href="/atom.xml" title="probie's blog" type="application/atom+xml">
   
@@ -228,14 +226,14 @@
         
 
             <article itemscope itemtype="https://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/">
+    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/Common-Git-Commands/">
     <div class="kratos-hentry kratos-page-inner clearfix">
         <header class="kratos-page-header">
             
-                <h1 class="kratos-page-title text-center" itemprop="name headline">如何让搜索引擎收录你的站点</h1>
+                <h1 class="kratos-page-title text-center" itemprop="name headline">Git常用命令</h1>
             
             <ul class="kratos-page-meta text-center">
-                <li><time datetime="2025-11-19T12:39:54.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2025-11-19</time></li>
+                <li><time datetime="2025-11-11T12:00:00.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2025-11-11</time></li>
                 <li itemprop="author" itemscope itemtype="https://schema.org/Person">
                     <i class="fa fa-user"></i> 作者 <span itemprop="name">probie</span>
                 </li>
@@ -244,7 +242,7 @@
                         <i class="fa fa-edit"></i> 
                         
                         
-                            1080
+                            ~1.61K
                         
                         字
                     </li>
@@ -258,41 +256,99 @@
             
             
                 <div class="kratos-post-inner-toc toc-div-class" >
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4Google%E6%98%AF%E5%90%A6%E5%8F%91%E7%8E%B0%E4%BA%86%E4%BD%A0%E7%9A%84%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.</span> <span class="toc-text">确认Google是否发现了你的页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="toc-number">2.</span> <span class="toc-text">生成站点地图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Google-%E6%8F%90%E4%BA%A4%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="toc-number">3.</span> <span class="toc-text">Google 提交你的站点地图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bing-%E6%8F%90%E4%BA%A4%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="toc-number">4.</span> <span class="toc-text">Bing 提交你的站点地图</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%AD-%E4%BB%80%E4%B9%88%E6%98%AF%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">🧭 什么是版本控制系统？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">⚙️ 一、安装与配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-number">2.1.</span> <span class="toc-text">下载与安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-number">2.2.</span> <span class="toc-text">配置用户信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E8%81%94GitHub%EF%BC%88SSH-%E6%96%B9%E5%BC%8F%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">关联GitHub（SSH 方式）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E4%BA%8C%E3%80%81GIT%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">⚙️ 二、GIT基本操作</span></a></li></ol>
                 </div>
             
             <hr />
-            <div itemprop="articleBody"><p>本文介绍我们的hexo博客怎么被Google和Bing搜录。</p>
-<p>一般来说，我们刚开始构建的hexo博客只能url访问，无法通过Google搜索引擎通过搜索提示词找到到相应文章。这是因为搜索引擎没有爬取过我们的网站，虽然说搜索引擎一般来说会自动爬取网络上所有链接并建立索引入库，但通常很慢。所以我们需要主动一点，告诉搜索引擎我们的网站。</p>
-<h3 id="确认Google是否发现了你的页面"><a href="#确认Google是否发现了你的页面" class="headerlink" title="确认Google是否发现了你的页面"></a>确认Google是否发现了你的页面</h3><p>首先判断 Google 是否知道你的博客存在，这是收录的前提：</p>
-<p>在 Google 搜索框输入 site:你的域名（例如 site:yourname.github.io），如果没有任何结果，说明 Google 尚未发现你的页面；如果有部分结果，说明仅部分页面未被收录。</p>
-<p><img src="/../images/image.png"></p>
-<p>如图内容就说明网站已经被搜索引擎收录。不过为了更好收录，还是需要提交站点地图。</p>
-<h3 id="生成站点地图"><a href="#生成站点地图" class="headerlink" title="生成站点地图"></a>生成站点地图</h3><p>安装 <code>hexo-generator-sitemap</code> 插件：在 Hexo 根目录执行</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+            <div itemprop="articleBody"><blockquote>
+<p><strong>Git</strong> 是一个免费且开源的分布式版本控制系统，旨在以速度和效率处理从小型到大型项目的所有内容。<br>它易于学习，体积小巧、性能极快。<br>通过诸如低成本本地分支、方便的暂存区域和多种工作流程等特性，Git 超越了 Subversion、CVS、Perforce 和 ClearCase 等传统 SCM 工具。</p>
+</blockquote>
+<span id="more"></span>
+<hr>
+<h2 id="🧭-什么是版本控制系统？"><a href="#🧭-什么是版本控制系统？" class="headerlink" title="🧭 什么是版本控制系统？"></a>🧭 什么是版本控制系统？</h2><p>版本控制系统（<strong>Version Control System</strong>, 简称 <strong>VCS</strong>）是一种用于记录文件内容变化的软件工具。<br>它能够让多人协作开发同一个项目，跟踪每一次更改，随时恢复历史状态，比较不同版本差异，并有效防止数据丢失。  </p>
+<blockquote>
+<p>✅ <strong>简单理解</strong>：它是“代码的时间机器”。</p>
+</blockquote>
+<hr>
+<h2 id="⚙️-一、安装与配置"><a href="#⚙️-一、安装与配置" class="headerlink" title="⚙️ 一、安装与配置"></a>⚙️ 一、安装与配置</h2><h3 id="下载与安装"><a href="#下载与安装" class="headerlink" title="下载与安装"></a>下载与安装</h3><p>Git 下载地址：<a target="_blank" rel="noopener" href="https://git-scm.com/downloads">git-scm.com&#x2F;downloads</a><br>下载安装包后，一路点击“下一步”完成安装。</p>
+<hr>
+<h3 id="配置用户信息"><a href="#配置用户信息" class="headerlink" title="配置用户信息"></a>配置用户信息</h3><p>打开 <strong>Git Bash</strong>，执行以下命令设置用户名与邮箱（全局配置）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;your name&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;your email&quot;</span></span><br></pre></td></tr></table></figure>
 
-<p>配置插件：打开 Hexo 配置文件 _config.yml，添加（或修改）</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">sitemap.xml</span>  <span class="comment"># 生成的sitemap路径</span></span><br></pre></td></tr></table></figure>
+<p>验证是否配置成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name</span><br><span class="line">&gt; your name</span><br><span class="line">$ git config --global user.email</span><br><span class="line">&gt; your email</span><br></pre></td></tr></table></figure>
 
-<p>重新生成并部署博客</p>
-<p>确认 Sitemap 生效：访问 <code>https://你的域名/sitemap.xml</code>，应能看到所有文章的链接列表</p>
-<p>不过这里我是用hexo主题 <code>Kratos:Rebirth</code> 的自带有配置的，上述生成站点地图没有验证过。</p>
-<p>我这里只需要配置_config.yml文件下url项就行了</p>
-<p><img src="/../images/image01.png"></p>
-<p>然后执行<code>hexo c</code> &amp;&amp; <code>hexo g</code> 会生成一个xml文件<code>public/sitemap.xml</code> 部署GitHub后访问 <code>https://你的域名/sitemap.xml</code> 可以看到所有文章的链接列表。</p>
-<p><img src="/../images/image02.png"></p>
-<h3 id="Google-提交你的站点地图"><a href="#Google-提交你的站点地图" class="headerlink" title="Google 提交你的站点地图"></a>Google 提交你的站点地图</h3><ol>
-<li><p>访问 <a target="_blank" rel="noopener" href="https://search.google.com/search-console">Google Search Console</a>，用 Google 账号登录</p>
+<p>若只为当前仓库配置，则去掉 –global 参数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config user.name <span class="string">&quot;your name&quot;</span></span><br><span class="line">$ git config user.email <span class="string">&quot;your email&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>检查单个仓库config</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git config user.name</span><br><span class="line">&gt; your name</span><br><span class="line">$ git config user.email</span><br><span class="line">&gt; your email</span><br></pre></td></tr></table></figure>
+
+<p>检查配置信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git config --list</span><br></pre></td></tr></table></figure>
+
+<h3 id="关联GitHub（SSH-方式）"><a href="#关联GitHub（SSH-方式）" class="headerlink" title="关联GitHub（SSH 方式）"></a>关联GitHub（SSH 方式）</h3><ol>
+<li><p>生成 SSH 密钥</p>
+<p> 在命令行执行：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C <span class="string">&quot;your email&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p> 生成完成后，在路径：</p>
+ <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">C:\Users\&lt;你的用户名&gt;\.ssh\</span></span><br></pre></td></tr></table></figure>
+
+<p> 可以看到</p>
+<ul>
+<li><code>id_rsa</code>（私钥）</li>
+<li><code>id_rsa.pub</code>（公钥）</li>
+</ul>
 </li>
-<li><p>添加网站：选择 “网址前缀”，输入你的博客完整域名（例如 <a target="_blank" rel="noopener" href="https://yourname.github.io)/">https://yourname.github.io）</a></p>
+<li><p>添加到 GitHub</p>
+<p> 进入：</p>
+<p> <code>GitHub → Settings → SSH and GPG Keys → New SSH Key</code></p>
+<p> 把 id_rsa.pub 文件内容复制到 Key 中，Title 可随意填写。</p>
 </li>
-<li><p>验证所有权，这里直接按它推荐的 <code>HTML文件验证</code> 就好了，复制到你的public然后重新部署到GitHub就行了</p>
-</li>
-<li><p>提交 Sitemap ，左侧菜单找到站点地图，输入sitemap提交就行了，注意这里<code>https://你的域名/sitemap.xml</code>要能访问的</p>
-</li>
+<li><p>测试是否成功</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br><span class="line">&gt; Hi probieLuo! You<span class="string">&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span></span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="Bing-提交你的站点地图"><a href="#Bing-提交你的站点地图" class="headerlink" title="Bing 提交你的站点地图"></a>Bing 提交你的站点地图</h3><p>直接从GSC进行导入就行了</p>
-<p>与GSC提交一样的。</p>
+<h2 id="⚙️-二、GIT基本操作"><a href="#⚙️-二、GIT基本操作" class="headerlink" title="⚙️ 二、GIT基本操作"></a>⚙️ 二、GIT基本操作</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>git init</code></td>
+<td>初始化 Git 仓库</td>
+</tr>
+<tr>
+<td><code>git add README.md</code></td>
+<td>添加文件到暂存区</td>
+</tr>
+<tr>
+<td><code>git add .</code></td>
+<td>添加当前目录所有文件到暂存区</td>
+</tr>
+<tr>
+<td><code>git commit -m &quot;first commit&quot;</code></td>
+<td>提交更改并记录说明</td>
+</tr>
+<tr>
+<td><code>git branch -M master</code></td>
+<td>强制重命名当前分支为 master</td>
+</tr>
+<tr>
+<td><code>git remote add origin git@github.com:probieLuo/xxx.git</code></td>
+<td>添加远程仓库</td>
+</tr>
+<tr>
+<td><code>git push -u origin master</code></td>
+<td>推送代码到远程仓库并建立关联</td>
+</tr>
+<tr>
+<td><code>git checkout main</code></td>
+<td>切换分支main</td>
+</tr>
+</tbody></table>
 </div>
         </div>
         
@@ -307,10 +363,10 @@
             <div class="footer-tag clearfix">
                 <div class="pull-left">
                 <i class="fa fa-tags"></i>
-                    <a class="tag-none-link" href="/tags/hexo/" rel="tag">hexo</a>, <a class="tag-none-link" href="/tags/seo/" rel="tag">seo</a>
+                    <a class="tag-none-link" href="/tags/Git/" rel="tag">Git</a>, <a class="tag-none-link" href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" rel="tag">版本控制</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2025-11-19T13:29:20.673Z" itemprop="dateModified">最后编辑：2025-11-19</time>
+                    <time datetime="2025-11-12T15:10:02.688Z" itemprop="dateModified">最后编辑：2025-11-12</time>
                 </div>
             </div>
         </footer>
@@ -319,15 +375,19 @@
         <nav class="navigation post-navigation clearfix" role="navigation">
             
             <div class="nav-previous clearfix">
-                <a title=" 领域驱动设计(DDD)基本概念" href="/posts/领域驱动设计-DDD-基本概念/"><i class="fa fa-angle-left"></i> 上一篇</a>
+                <a title=" 你好，世界！" href="/posts/hello-world/"><i class="fa fa-angle-left"></i> 上一篇</a>
             </div>
             
+            
+            <div class="nav-next clearfix">
+                <a title=" C#面试核心知识点详解" href="/posts/CSharp-Interview-Essentials/">下一篇 <i class="fa fa-angle-right"></i></a>
+            </div>
             
         </nav>
     
     
         <div class="comment-post">
-            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/" data-path-hash="b57c2bb1933870f366bf7722dfa22087"></div>
+            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/Common-Git-Commands/" data-path-hash="5ee5570121b69388d2542f5218d4be22"></div>
         </div>
     
 </article>
@@ -391,7 +451,7 @@
         <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
     </h4>
     <div class="textwidget">
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4Google%E6%98%AF%E5%90%A6%E5%8F%91%E7%8E%B0%E4%BA%86%E4%BD%A0%E7%9A%84%E9%A1%B5%E9%9D%A2"><span class="toc-text">确认Google是否发现了你的页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="toc-text">生成站点地图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Google-%E6%8F%90%E4%BA%A4%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="toc-text">Google 提交你的站点地图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bing-%E6%8F%90%E4%BA%A4%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="toc-text">Bing 提交你的站点地图</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%AD-%E4%BB%80%E4%B9%88%E6%98%AF%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%EF%BC%9F"><span class="toc-text">🧭 什么是版本控制系统？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-text">⚙️ 一、安装与配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-text">下载与安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-text">配置用户信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E8%81%94GitHub%EF%BC%88SSH-%E6%96%B9%E5%BC%8F%EF%BC%89"><span class="toc-text">关联GitHub（SSH 方式）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E4%BA%8C%E3%80%81GIT%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-text">⚙️ 二、GIT基本操作</span></a></li></ol>
     </div>
 </aside>
                 
@@ -421,13 +481,13 @@
         
           
           
-            <a class="list-group-item" href="/posts/%E5%A6%82%E4%BD%95%E8%AE%A9%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95%E4%BD%A0%E7%9A%84%E7%AB%99%E7%82%B9/"><i class="fa fa-book"></i> 如何让搜索引擎收录你的站点</a>
+            <a class="list-group-item" href="/posts/SEO-Submit-YourSite/"><i class="fa fa-book"></i> SEO：向搜索引擎提交你的网站</a>
             
           
         
           
           
-            <a class="list-group-item" href="/posts/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-DDD-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><i class="fa fa-book"></i> 领域驱动设计(DDD)基本概念</a>
+            <a class="list-group-item" href="/posts/DDD-Core-Concepts/"><i class="fa fa-book"></i> 领域驱动设计(DDD)基本概念</a>
             
           
         
@@ -439,13 +499,13 @@
         
           
           
-            <a class="list-group-item" href="/posts/WPF%E5%BC%B9%E7%AA%97%E9%99%90%E6%B5%81/"><i class="fa fa-book"></i> WPF弹窗限流</a>
+            <a class="list-group-item" href="/posts/Throttling-WPF-Notifications/"><i class="fa fa-book"></i> WPF弹窗限流</a>
             
           
         
           
           
-            <a class="list-group-item" href="/posts/DockerUsage/"><i class="fa fa-book"></i> Docker基本使用</a>
+            <a class="list-group-item" href="/posts/Docker-Usage/"><i class="fa fa-book"></i> Docker基本使用</a>
             
           
         
