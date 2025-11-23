@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  
+    <link rel="icon" href="/assets/github-mark.svg">
+  
+  
+  <title>表达式树（Expression Trees） | probie&#39;s blog</title>
+  <link rel="canonical" href="https://probieluo.github.io/posts/Expression-trees/">
+  <meta name="author" content="probie" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="C#, LINQ, 编程语言" />
+  
+  <meta name="description" content="在 .NET 开发中，表达式树是一个强大但容易被忽视的特性。如果你使用过 Entity Framework 或 LINQ to SQL，其实你已经在间接使用表达式树了。本文将从零开始，帮助你理解表达式树的概念、用法和实际应用场景。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="表达式树（Expression Trees）">
+<meta property="og:url" content="https://probieluo.github.io/posts/Expression-trees/index.html">
+<meta property="og:site_name" content="probie&#39;s blog">
+<meta property="og:description" content="在 .NET 开发中，表达式树是一个强大但容易被忽视的特性。如果你使用过 Entity Framework 或 LINQ to SQL，其实你已经在间接使用表达式树了。本文将从零开始，帮助你理解表达式树的概念、用法和实际应用场景。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-11-23T14:45:42.000Z">
+<meta property="article:modified_time" content="2025-11-23T14:56:25.674Z">
+<meta property="article:author" content="probie">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="LINQ">
+<meta property="article:tag" content="编程语言">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="probie's blog" type="application/atom+xml">
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kr-core.min.css" media="all"></link>
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/highlight.js/night-blue.min.css" media="all"></link>
+  
+  <link rel="stylesheet" id="theme-light-css" href="/css/kr-theme/light.min.css" media="all"></link>
+  <link rel="stylesheet" id="theme-dark-css" href="/css/kr-theme/dark.min.css" media="(prefers-color-scheme: dark)"></link>
+  <script src="/js/kr-theme.min.js"></script>
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></link>
+  
+    <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></link>
+  
+  
+    <link rel="stylesheet" href="/vendors/viewerjs@1.11.6/dist/viewer.min.css"></link>
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  
+  <!-- 自定义站点横幅和背景 -->
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('https://dev.krt.moe/demo-assets/banner.webp');
+      }
+      html[data-theme="dark"] .kratos-cover.kratos-cover-2 {
+        background-image: url('https://dev.krt.moe/demo-assets/banner_dark.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('https://dev.krt.moe/demo-assets/bg.webp');
+        }
+        html[data-theme="dark"] body.custom-background {
+          background-image: url('https://dev.krt.moe/demo-assets/bg.webp');
+        }
+      }
+    
+    
+      .widget-kratos-about .photo-background {
+        background-image: url('/images/default.webp');
+      }
+      html[data-theme="dark"] .widget-kratos-about .photo-background {
+        background-image: url('/images/default.webp');
+      }
+    
+  </style>
+
+  <!-- 额外的追加注入项 -->
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<link rel="stylesheet" href="/comments/gitalk.css" />
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    <li>
+                                        
+                                            <a href="/">
+                                        
+                                            
+                                                <i class="fa fa-home"></i>
+                                            
+                                            首页
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/archives/">
+                                        
+                                            
+                                                <i class="fa fa-file"></i>
+                                            
+                                            档案馆
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a>
+                                        
+                                            
+                                                <i class="fa fa-link"></i>
+                                            
+                                            链接
+                                        </a>
+                                        
+                                            <ul class="sub-menu">
+                                                
+                                                    <li>
+                                                        <a target="_blank" rel="noopener" href="https://github.com/probieLuo/probieLuo.github.io">
+                                                            
+                                                                <i class="fa fa-code"></i>
+                                                            
+                                                            代码仓库
+                                                        </a>
+                                                    </li>
+                                                
+                                                    <li>
+                                                        <a target="_blank" rel="noopener" href="https://wiki.krt.moe">
+                                                            
+                                                                <i class="fa fa-book"></i>
+                                                            
+                                                            主题文档
+                                                        </a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/linklist-example/">
+                                        
+                                            
+                                                <i class="fa fa-list"></i>
+                                            
+                                            链接列表
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/aboutme/">
+                                        
+                                            
+                                                <i class="fa fa-heart"></i>
+                                            
+                                            About
+                                        </a>
+                                        
+                                    </li>
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">probie&#39;s blog</a></div>
+                    <div id="kratos-nav-toggle-wrapper" class="nav-toggle">
+                        <a id="kratos-nav-toggle" class="kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>probie&#39;s blog</h2> <br />
+                        <span>会一点.NET, 这里记录一些学习笔记和生活琐事</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+
+
+        
+
+            
+
+            <section class="kr-main-col col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/Expression-trees/">
+    <div class="kratos-hentry kratos-page-inner clearfix">
+        <header class="kratos-page-header">
+            
+                <h1 class="kratos-page-title text-center" itemprop="name headline">表达式树（Expression Trees）</h1>
+            
+            <ul class="kratos-page-meta text-center">
+                <li><time datetime="2025-11-23T14:45:42.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2025-11-23</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">probie</span>
+                </li>
+                
+                    <li>
+                        <i class="fa fa-edit"></i> 
+                        
+                        
+                            ~8.51K
+                        
+                        字
+                    </li>
+                
+                
+                
+            </ul>
+        </header>
+        <div class="kratos-page-content kr-post">
+            
+            
+            
+                <div class="kratos-post-inner-toc toc-div-class" >
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是表达式树？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E4%BF%97%E7%90%86%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">通俗理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="toc-number">1.2.</span> <span class="toc-text">一个简单的例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">为什么需要表达式树？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Expression-%E5%92%8C-Func-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.</span> <span class="toc-text">Expression 和 Func 的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Func-%E5%A7%94%E6%89%98"><span class="toc-number">2.1.</span> <span class="toc-text">Func - 委托</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expression-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-number">2.2.</span> <span class="toc-text">Expression&lt;Func&gt; - 表达式树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94%E8%A1%A8%E6%A0%BC"><span class="toc-number">2.3.</span> <span class="toc-text">对比表格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E5%AF%B9%E6%AF%94"><span class="toc-number">2.4.</span> <span class="toc-text">实际应用场景对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">查看表达式树的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">3.1.</span> <span class="toc-text">基本结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-number">3.2.</span> <span class="toc-text">深入分析表达式树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%EF%BC%88%E4%BD%BF%E7%94%A8%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">可视化表达式树（使用递归遍历）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-number">4.</span> <span class="toc-text">构建表达式树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E9%80%9A%E8%BF%87-Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%88%9B%E5%BB%BA%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">方式一：通过 Lambda 表达式创建（推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%9E%84%E5%BB%BA%EF%BC%88%E7%94%A8%E4%BA%8E%E5%8A%A8%E6%80%81%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">方式二：手动构建（用于动态场景）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">4.3.</span> <span class="toc-text">动态构建复杂表达式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">5.</span> <span class="toc-text">实际应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2%EF%BC%88%E6%9C%80%E5%B8%B8%E8%A7%81%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">1. 动态查询（最常见）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%B1%9E%E6%80%A7%E8%AE%BF%E9%97%AE%E5%99%A8%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90"><span class="toc-number">5.2.</span> <span class="toc-text">2. 属性访问器自动生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-LINQ-%E6%9F%A5%E8%AF%A2%E7%BF%BB%E8%AF%91"><span class="toc-number">5.3.</span> <span class="toc-text">3. LINQ 查询翻译</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%BF%E5%85%8D%E8%BF%87%E5%BA%A6%E4%BD%BF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-number">6.</span> <span class="toc-text">避免过度使用表达式树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9D%8C-%E4%B8%8D%E6%8E%A8%E8%8D%90%E7%9A%84%E5%81%9A%E6%B3%95"><span class="toc-number">6.1.</span> <span class="toc-text">❌ 不推荐的做法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-%E6%8E%A8%E8%8D%90%E7%9A%84%E5%81%9A%E6%B3%95"><span class="toc-number">6.2.</span> <span class="toc-text">✅ 推荐的做法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%BB%BA%E8%AE%AE"><span class="toc-number">6.3.</span> <span class="toc-text">使用建议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%A6%81%E7%82%B9"><span class="toc-number">7.1.</span> <span class="toc-text">关键要点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="toc-number">7.2.</span> <span class="toc-text">推荐阅读</span></a></li></ol></li></ol>
+                </div>
+            
+            <hr />
+            <div itemprop="articleBody"><p>在 .NET 开发中，表达式树是一个强大但容易被忽视的特性。如果你使用过 Entity Framework 或 LINQ to SQL，其实你已经在间接使用表达式树了。本文将从零开始，帮助你理解表达式树的概念、用法和实际应用场景。</p>
+<span id="more"></span>
+
+<hr>
+<h2 id="什么是表达式树？"><a href="#什么是表达式树？" class="headerlink" title="什么是表达式树？"></a>什么是表达式树？</h2><p><strong>表达式树（Expression Tree）</strong> 是将代码表示为树状数据结构的一种方式。它不是直接执行的代码，而是代码的”描述”或”元数据”。</p>
+<h3 id="通俗理解"><a href="#通俗理解" class="headerlink" title="通俗理解"></a>通俗理解</h3><ul>
+<li><strong>普通委托</strong>：是一段可执行的代码</li>
+<li><strong>表达式树</strong>：是描述代码结构的数据，可以被分析、修改、翻译成其他形式（如 SQL）</li>
+</ul>
+<h3 id="一个简单的例子"><a href="#一个简单的例子" class="headerlink" title="一个简单的例子"></a>一个简单的例子</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通委托：直接执行</span></span><br><span class="line">Func&lt;<span class="built_in">int</span>, <span class="built_in">bool</span>&gt; func = x =&gt; x &gt; <span class="number">5</span>;</span><br><span class="line"><span class="built_in">bool</span> result = func(<span class="number">10</span>); <span class="comment">// 直接执行，返回 true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 表达式树：代码的数据表示</span></span><br><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">bool</span>&gt;&gt; expr = x =&gt; x &gt; <span class="number">5</span>;</span><br><span class="line"><span class="comment">// expr 不是可执行代码，而是一个树形结构，描述了&quot;x &gt; 5&quot;这个表达式</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="为什么需要表达式树？"><a href="#为什么需要表达式树？" class="headerlink" title="为什么需要表达式树？"></a>为什么需要表达式树？</h3><p>表达式树的主要用途是<strong>将 C# 代码翻译成其他形式</strong>：</p>
+<ol>
+<li><strong>LINQ to SQL &#x2F; Entity Framework</strong>：将 C# 查询翻译成 SQL 语句</li>
+<li><strong>动态查询构建</strong>：根据用户输入动态生成查询条件</li>
+<li><strong>代码分析</strong>：检查代码结构、提取元数据</li>
+<li><strong>序列化&#x2F;反序列化</strong>：将代码逻辑保存或传输</li>
+</ol>
+<hr>
+<h2 id="Expression-和-Func-的区别"><a href="#Expression-和-Func-的区别" class="headerlink" title="Expression 和 Func 的区别"></a>Expression 和 Func 的区别</h2><h3 id="Func-委托"><a href="#Func-委托" class="headerlink" title="Func - 委托"></a>Func<T> - 委托</h3><p><code>Func&lt;T&gt;</code> 是一个委托类型，代表<strong>可执行的代码</strong>。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>, <span class="built_in">int</span>&gt; <span class="keyword">add</span> = (a, b) =&gt; a + b;</span><br><span class="line"><span class="built_in">int</span> result = <span class="keyword">add</span>(<span class="number">3</span>, <span class="number">5</span>); <span class="comment">// 执行代码，返回 8</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>特点</strong>：</p>
+<ul>
+<li>编译后直接生成 IL 代码</li>
+<li>可以直接调用执行</li>
+<li>无法查看内部结构</li>
+</ul>
+<h3 id="Expression-表达式树"><a href="#Expression-表达式树" class="headerlink" title="Expression&lt;Func&gt; - 表达式树"></a>Expression&lt;Func<T>&gt; - 表达式树</h3><p><code>Expression&lt;Func&lt;T&gt;&gt;</code> 是一个表达式树类型，代表<strong>代码的数据结构</strong>。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>, <span class="built_in">int</span>&gt;&gt; addExpr = (a, b) =&gt; a + b;</span><br><span class="line"><span class="comment">// addExpr 是一个树形结构，不能直接执行</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>特点</strong>：</p>
+<ul>
+<li>编译后生成表达式树对象（包含 Body、Parameters 等属性）</li>
+<li>不能直接调用，需要先编译成委托</li>
+<li>可以分析、修改、翻译</li>
+</ul>
+<h3 id="对比表格"><a href="#对比表格" class="headerlink" title="对比表格"></a>对比表格</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Func<T></th>
+<th>Expression&lt;Func<T>&gt;</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本质</td>
+<td>委托（可执行代码）</td>
+<td>表达式树（代码的数据结构）</td>
+</tr>
+<tr>
+<td>是否可执行</td>
+<td>✅ 直接执行</td>
+<td>❌ 需要先编译成委托</td>
+</tr>
+<tr>
+<td>是否可分析</td>
+<td>❌ 无法查看内部结构</td>
+<td>✅ 可以访问树形结构</td>
+</tr>
+<tr>
+<td>典型用途</td>
+<td>LINQ to Objects、回调函数</td>
+<td>LINQ to SQL、动态查询</td>
+</tr>
+</tbody></table>
+<h3 id="实际应用场景对比"><a href="#实际应用场景对比" class="headerlink" title="实际应用场景对比"></a>实际应用场景对比</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LINQ to Objects：使用 Func（在内存中执行）</span></span><br><span class="line">List&lt;<span class="built_in">int</span>&gt; numbers = <span class="keyword">new</span> List&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> result1 = numbers.Where(x =&gt; x &gt; <span class="number">3</span>); <span class="comment">// 直接在内存中过滤</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// LINQ to Entities：使用 Expression（翻译成 SQL）</span></span><br><span class="line">DbSet&lt;User&gt; users = dbContext.Users;</span><br><span class="line"><span class="keyword">var</span> result2 = users.Where(x =&gt; x.Age &gt; <span class="number">18</span>); <span class="comment">// 翻译成 SQL: SELECT * FROM Users WHERE Age &gt; 18</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="查看表达式树的结构"><a href="#查看表达式树的结构" class="headerlink" title="查看表达式树的结构"></a>查看表达式树的结构</h2><p>表达式树是一个树形结构，可以通过其属性查看内部组成。</p>
+<h3 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">bool</span>&gt;&gt; expr = x =&gt; x &gt; <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查看表达式树的各个部分</span></span><br><span class="line">Console.WriteLine(<span class="string">$&quot;表达式类型: <span class="subst">&#123;expr.NodeType&#125;</span>&quot;</span>); <span class="comment">// Lambda</span></span><br><span class="line">Console.WriteLine(<span class="string">$&quot;参数: <span class="subst">&#123;expr.Parameters[<span class="number">0</span>].Name&#125;</span>&quot;</span>); <span class="comment">// x</span></span><br><span class="line">Console.WriteLine(<span class="string">$&quot;Body 类型: <span class="subst">&#123;expr.Body.NodeType&#125;</span>&quot;</span>); <span class="comment">// GreaterThan</span></span><br><span class="line">Console.WriteLine(<span class="string">$&quot;完整表达式: <span class="subst">&#123;expr&#125;</span>&quot;</span>); <span class="comment">// x =&gt; (x &gt; 5)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="深入分析表达式树"><a href="#深入分析表达式树" class="headerlink" title="深入分析表达式树"></a>深入分析表达式树</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>, <span class="built_in">int</span>&gt;&gt; addExpr = (a, b) =&gt; a + b;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问 Body（方法体）</span></span><br><span class="line">BinaryExpression body = (BinaryExpression)addExpr.Body;</span><br><span class="line">Console.WriteLine(<span class="string">$&quot;操作类型: <span class="subst">&#123;body.NodeType&#125;</span>&quot;</span>); <span class="comment">// Add</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问左右操作数</span></span><br><span class="line">ParameterExpression left = (ParameterExpression)body.Left;</span><br><span class="line">ParameterExpression right = (ParameterExpression)body.Right;</span><br><span class="line">Console.WriteLine(<span class="string">$&quot;左操作数: <span class="subst">&#123;left.Name&#125;</span>&quot;</span>); <span class="comment">// a</span></span><br><span class="line">Console.WriteLine(<span class="string">$&quot;右操作数: <span class="subst">&#123;right.Name&#125;</span>&quot;</span>); <span class="comment">// b</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="可视化表达式树（使用递归遍历）"><a href="#可视化表达式树（使用递归遍历）" class="headerlink" title="可视化表达式树（使用递归遍历）"></a>可视化表达式树（使用递归遍历）</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">PrintExpressionTree</span>(<span class="params">Expression expr, <span class="built_in">int</span> depth = <span class="number">0</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">string</span> indent = <span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">&#x27; &#x27;</span>, depth * <span class="number">2</span>);</span><br><span class="line">    Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;indent&#125;</span><span class="subst">&#123;expr.NodeType&#125;</span>: <span class="subst">&#123;expr&#125;</span>&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果是二元表达式（如 a + b）</span></span><br><span class="line">    <span class="keyword">if</span> (expr <span class="keyword">is</span> BinaryExpression binary)</span><br><span class="line">    &#123;</span><br><span class="line">        PrintExpressionTree(binary.Left, depth + <span class="number">1</span>);</span><br><span class="line">        PrintExpressionTree(binary.Right, depth + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果是 Lambda 表达式</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (expr <span class="keyword">is</span> LambdaExpression lambda)</span><br><span class="line">    &#123;</span><br><span class="line">        PrintExpressionTree(lambda.Body, depth + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt;&gt; expr = x =&gt; x * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">PrintExpressionTree(expr);</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Lambda: x =&gt; ((x * 2) + 1)</span><br><span class="line">  Add: ((x * 2) + 1)</span><br><span class="line">    Multiply: (x * 2)</span><br><span class="line">      Parameter: x</span><br><span class="line">      Constant: 2</span><br><span class="line">    Constant: 1</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="构建表达式树"><a href="#构建表达式树" class="headerlink" title="构建表达式树"></a>构建表达式树</h2><p>除了通过 Lambda 表达式创建，还可以通过 <code>Expression</code> 类的静态方法手动构建表达式树。</p>
+<h3 id="方式一：通过-Lambda-表达式创建（推荐）"><a href="#方式一：通过-Lambda-表达式创建（推荐）" class="headerlink" title="方式一：通过 Lambda 表达式创建（推荐）"></a>方式一：通过 Lambda 表达式创建（推荐）</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简单直观</span></span><br><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">bool</span>&gt;&gt; expr = x =&gt; x &gt; <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方式二：手动构建（用于动态场景）"><a href="#方式二：手动构建（用于动态场景）" class="headerlink" title="方式二：手动构建（用于动态场景）"></a>方式二：手动构建（用于动态场景）</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 创建参数：x</span></span><br><span class="line">ParameterExpression param = Expression.Parameter(<span class="keyword">typeof</span>(<span class="built_in">int</span>), <span class="string">&quot;x&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 创建常量：5</span></span><br><span class="line">ConstantExpression constant = Expression.Constant(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 创建比较操作：x &gt; 5</span></span><br><span class="line">BinaryExpression body = Expression.GreaterThan(param, constant);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 创建 Lambda 表达式</span></span><br><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">bool</span>&gt;&gt; expr = Expression.Lambda&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">bool</span>&gt;&gt;(body, param);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 5. 编译并执行</span></span><br><span class="line">Func&lt;<span class="built_in">int</span>, <span class="built_in">bool</span>&gt; func = expr.Compile();</span><br><span class="line">Console.WriteLine(func(<span class="number">10</span>)); <span class="comment">// True</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="动态构建复杂表达式"><a href="#动态构建复杂表达式" class="headerlink" title="动态构建复杂表达式"></a>动态构建复杂表达式</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 动态构建：x =&gt; x.Name == &quot;Alice&quot; &amp;&amp; x.Age &gt; 18</span></span><br><span class="line">ParameterExpression param = Expression.Parameter(<span class="keyword">typeof</span>(User), <span class="string">&quot;x&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// x.Name</span></span><br><span class="line">MemberExpression nameProp = Expression.Property(param, <span class="string">&quot;Name&quot;</span>);</span><br><span class="line"><span class="comment">// x.Name == &quot;Alice&quot;</span></span><br><span class="line">BinaryExpression nameCondition = Expression.Equal(nameProp, Expression.Constant(<span class="string">&quot;Alice&quot;</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// x.Age</span></span><br><span class="line">MemberExpression ageProp = Expression.Property(param, <span class="string">&quot;Age&quot;</span>);</span><br><span class="line"><span class="comment">// x.Age &gt; 18</span></span><br><span class="line">BinaryExpression ageCondition = Expression.GreaterThan(ageProp, Expression.Constant(<span class="number">18</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组合条件：nameCondition &amp;&amp; ageCondition</span></span><br><span class="line">BinaryExpression combined = Expression.AndAlso(nameCondition, ageCondition);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建 Lambda</span></span><br><span class="line">Expression&lt;Func&lt;User, <span class="built_in">bool</span>&gt;&gt; expr = Expression.Lambda&lt;Func&lt;User, <span class="built_in">bool</span>&gt;&gt;(combined, param);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">var</span> users = dbContext.Users.Where(expr); <span class="comment">// 翻译成 SQL</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="实际应用场景"><a href="#实际应用场景" class="headerlink" title="实际应用场景"></a>实际应用场景</h2><h3 id="1-动态查询（最常见）"><a href="#1-动态查询（最常见）" class="headerlink" title="1. 动态查询（最常见）"></a>1. 动态查询（最常见）</h3><p>根据用户输入的条件，动态构建查询表达式。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Expression&lt;Func&lt;User, <span class="built_in">bool</span>&gt;&gt; BuildDynamicQuery(<span class="built_in">string</span> name, <span class="built_in">int</span>? minAge)</span><br><span class="line">&#123;</span><br><span class="line">    ParameterExpression param = Expression.Parameter(<span class="keyword">typeof</span>(User), <span class="string">&quot;x&quot;</span>);</span><br><span class="line">    Expression body = Expression.Constant(<span class="literal">true</span>); <span class="comment">// 初始条件：true</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果提供了姓名，添加条件：x.Name == name</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">string</span>.IsNullOrEmpty(name))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> nameCondition = Expression.Equal(</span><br><span class="line">            Expression.Property(param, <span class="string">&quot;Name&quot;</span>),</span><br><span class="line">            Expression.Constant(name)</span><br><span class="line">        );</span><br><span class="line">        body = Expression.AndAlso(body, nameCondition);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果提供了最小年龄，添加条件：x.Age &gt;= minAge</span></span><br><span class="line">    <span class="keyword">if</span> (minAge.HasValue)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> ageCondition = Expression.GreaterThanOrEqual(</span><br><span class="line">            Expression.Property(param, <span class="string">&quot;Age&quot;</span>),</span><br><span class="line">            Expression.Constant(minAge.Value)</span><br><span class="line">        );</span><br><span class="line">        body = Expression.AndAlso(body, ageCondition);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Expression.Lambda&lt;Func&lt;User, <span class="built_in">bool</span>&gt;&gt;(body, param);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">var</span> query = BuildDynamicQuery(<span class="string">&quot;Alice&quot;</span>, <span class="number">18</span>);</span><br><span class="line"><span class="keyword">var</span> users = dbContext.Users.Where(query); <span class="comment">// 生成对应的 SQL</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-属性访问器自动生成"><a href="#2-属性访问器自动生成" class="headerlink" title="2. 属性访问器自动生成"></a>2. 属性访问器自动生成</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过表达式树避免反射的性能开销</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="title">Func</span>&lt;<span class="title">T</span>, <span class="title">object</span>&gt; <span class="title">CreatePropertyGetter</span>&lt;<span class="title">T</span>&gt;(<span class="params"><span class="built_in">string</span> propertyName</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    ParameterExpression param = Expression.Parameter(<span class="keyword">typeof</span>(T), <span class="string">&quot;x&quot;</span>);</span><br><span class="line">    MemberExpression property = Expression.Property(param, propertyName);</span><br><span class="line">    UnaryExpression convert = Expression.Convert(property, <span class="keyword">typeof</span>(<span class="built_in">object</span>));</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> Expression.Lambda&lt;Func&lt;T, <span class="built_in">object</span>&gt;&gt;(convert, param).Compile();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">var</span> getter = CreatePropertyGetter&lt;User&gt;(<span class="string">&quot;Name&quot;</span>);</span><br><span class="line"><span class="built_in">string</span> name = (<span class="built_in">string</span>)getter(user); <span class="comment">// 比反射快很多</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-LINQ-查询翻译"><a href="#3-LINQ-查询翻译" class="headerlink" title="3. LINQ 查询翻译"></a>3. LINQ 查询翻译</h3><p>Entity Framework 内部使用表达式树将 LINQ 查询翻译成 SQL。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这个查询会被 EF 翻译成 SQL</span></span><br><span class="line"><span class="keyword">var</span> query = dbContext.Users</span><br><span class="line">    .Where(x =&gt; x.Age &gt; <span class="number">18</span>)</span><br><span class="line">    .OrderBy(x =&gt; x.Name)</span><br><span class="line">    .Select(x =&gt; <span class="keyword">new</span> &#123; x.Name, x.Age &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成的 SQL 类似于：</span></span><br><span class="line"><span class="comment">// SELECT Name, Age FROM Users WHERE Age &gt; 18 ORDER BY Name</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="避免过度使用表达式树"><a href="#避免过度使用表达式树" class="headerlink" title="避免过度使用表达式树"></a>避免过度使用表达式树</h2><p>虽然表达式树很强大，但<strong>不应该滥用</strong>。</p>
+<h3 id="❌-不推荐的做法"><a href="#❌-不推荐的做法" class="headerlink" title="❌ 不推荐的做法"></a>❌ 不推荐的做法</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 过度复杂的动态构建，难以阅读和维护</span></span><br><span class="line"><span class="keyword">var</span> expr = Expression.Lambda&lt;Func&lt;User, <span class="built_in">bool</span>&gt;&gt;(</span><br><span class="line">    Expression.AndAlso(</span><br><span class="line">        Expression.GreaterThan(</span><br><span class="line">            Expression.Property(Expression.Parameter(<span class="keyword">typeof</span>(User)), <span class="string">&quot;Age&quot;</span>),</span><br><span class="line">            Expression.Constant(<span class="number">18</span>)</span><br><span class="line">        ),</span><br><span class="line">        Expression.Equal(</span><br><span class="line">            Expression.Property(Expression.Parameter(<span class="keyword">typeof</span>(User)), <span class="string">&quot;IsActive&quot;</span>),</span><br><span class="line">            Expression.Constant(<span class="literal">true</span>)</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="✅-推荐的做法"><a href="#✅-推荐的做法" class="headerlink" title="✅ 推荐的做法"></a>✅ 推荐的做法</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简单场景直接用 Lambda</span></span><br><span class="line">Expression&lt;Func&lt;User, <span class="built_in">bool</span>&gt;&gt; expr = x =&gt; x.Age &gt; <span class="number">18</span> &amp;&amp; x.IsActive;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复杂场景封装成可读的方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">QueryBuilder</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Expression&lt;Func&lt;User, <span class="built_in">bool</span>&gt;&gt; IsAdultAndActive()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> x =&gt; x.Age &gt; <span class="number">18</span> &amp;&amp; x.IsActive;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Expression&lt;Func&lt;User, <span class="built_in">bool</span>&gt;&gt; HasName(<span class="built_in">string</span> name)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> x =&gt; x.Name == name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用建议"><a href="#使用建议" class="headerlink" title="使用建议"></a>使用建议</h3><ol>
+<li><strong>优先使用 Lambda 表达式</strong>：代码简洁、易读</li>
+<li><strong>只在必要时手动构建</strong>：如动态查询、代码生成等场景</li>
+<li><strong>封装复杂逻辑</strong>：避免在业务代码中直接写大量 <code>Expression.XXX</code> 调用</li>
+<li><strong>性能考虑</strong>：表达式树的构建和编译有开销，避免在循环中重复构建</li>
+</ol>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>表达式树</strong></td>
+<td>代码的树形数据结构，可以被分析和翻译</td>
+</tr>
+<tr>
+<td><strong>Func<T></strong></td>
+<td>可执行的委托，用于 LINQ to Objects</td>
+</tr>
+<tr>
+<td><strong>Expression&lt;Func<T>&gt;</strong></td>
+<td>表达式树，用于 LINQ to SQL&#x2F;EF</td>
+</tr>
+<tr>
+<td><strong>手动构建</strong></td>
+<td>通过 <code>Expression</code> 类的静态方法构建复杂表达式</td>
+</tr>
+<tr>
+<td><strong>使用场景</strong></td>
+<td>动态查询、LINQ 提供程序、代码生成、属性访问</td>
+</tr>
+</tbody></table>
+<h3 id="关键要点"><a href="#关键要点" class="headerlink" title="关键要点"></a>关键要点</h3><ol>
+<li>表达式树是”代码的数据”，不是”可执行代码”</li>
+<li><code>Expression&lt;Func&lt;T&gt;&gt;</code> 可以被翻译成 SQL 或其他语言</li>
+<li>手动构建表达式树适用于动态场景，但不要过度使用</li>
+<li>优先使用 Lambda 表达式，保持代码简洁</li>
+</ol>
+<h3 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/dotnet/csharp/programming-guide/concepts/expression-trees/">Microsoft 官方文档：表达式树</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/ef/core/">Entity Framework 如何工作</a></li>
+</ul>
+<hr>
+<p>掌握表达式树后，你将能够更深入地理解 Entity Framework 的工作原理，并构建更灵活的动态查询系统！</p>
+</div>
+        </div>
+        
+            <div class="kratos-copyright text-center clearfix">
+                <span itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</span>
+            </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+            
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/C/" rel="tag">C#</a>, <a class="tag-none-link" href="/tags/LINQ/" rel="tag">LINQ</a>, <a class="tag-none-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2025-11-23T14:56:25.674Z" itemprop="dateModified">最后编辑：2025-11-23</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" 贫血模型和充血模型" href="/posts/Anemic-vs-Rich/"><i class="fa fa-angle-left"></i> 上一篇</a>
+            </div>
+            
+            
+        </nav>
+    
+    
+        <div class="comment-post">
+            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/Expression-trees/" data-path-hash="1b33ac4d0653a3a6aaaf82296c8585f1"></div>
+        </div>
+    
+</article>
+
+        
+
+            </section>
+
+            
+                
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/assets/OIP (8).jpg" alt="probie" loading="lazy" decoding="auto" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">probie</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                文章
+            </span>
+            <span class="count">
+                10
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                分类
+            </span>
+            <span class="count">
+                5
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                标签
+            </span>
+            <span class="count">
+                15
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        文章目录
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%EF%BC%9F"><span class="toc-text">什么是表达式树？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E4%BF%97%E7%90%86%E8%A7%A3"><span class="toc-text">通俗理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="toc-text">一个简单的例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%EF%BC%9F"><span class="toc-text">为什么需要表达式树？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Expression-%E5%92%8C-Func-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">Expression 和 Func 的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Func-%E5%A7%94%E6%89%98"><span class="toc-text">Func - 委托</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expression-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-text">Expression&lt;Func&gt; - 表达式树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94%E8%A1%A8%E6%A0%BC"><span class="toc-text">对比表格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E5%AF%B9%E6%AF%94"><span class="toc-text">实际应用场景对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">查看表达式树的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-text">基本结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-text">深入分析表达式树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%EF%BC%88%E4%BD%BF%E7%94%A8%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%EF%BC%89"><span class="toc-text">可视化表达式树（使用递归遍历）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-text">构建表达式树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E9%80%9A%E8%BF%87-Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%88%9B%E5%BB%BA%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-text">方式一：通过 Lambda 表达式创建（推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%9E%84%E5%BB%BA%EF%BC%88%E7%94%A8%E4%BA%8E%E5%8A%A8%E6%80%81%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-text">方式二：手动构建（用于动态场景）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">动态构建复杂表达式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">实际应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2%EF%BC%88%E6%9C%80%E5%B8%B8%E8%A7%81%EF%BC%89"><span class="toc-text">1. 动态查询（最常见）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%B1%9E%E6%80%A7%E8%AE%BF%E9%97%AE%E5%99%A8%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90"><span class="toc-text">2. 属性访问器自动生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-LINQ-%E6%9F%A5%E8%AF%A2%E7%BF%BB%E8%AF%91"><span class="toc-text">3. LINQ 查询翻译</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%BF%E5%85%8D%E8%BF%87%E5%BA%A6%E4%BD%BF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-text">避免过度使用表达式树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9D%8C-%E4%B8%8D%E6%8E%A8%E8%8D%90%E7%9A%84%E5%81%9A%E6%B3%95"><span class="toc-text">❌ 不推荐的做法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-%E6%8E%A8%E8%8D%90%E7%9A%84%E5%81%9A%E6%B3%95"><span class="toc-text">✅ 推荐的做法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%BB%BA%E8%AE%AE"><span class="toc-text">使用建议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%A6%81%E7%82%B9"><span class="toc-text">关键要点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="toc-text">推荐阅读</span></a></li></ol></li></ol>
+    </div>
+</aside>
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>分类列表</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DDD/">DDD</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%B0%E4%BD%93%E9%AA%8C/">全新体验</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/">开发技术</a><span class="category-list-count">3</span></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
+      <div class="tag-clouds">
+        <a href="/tags/C/" style="font-size: 0.8em;">C#</a> <a href="/tags/DDD/" style="font-size: 0.7em;">DDD</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/Git/" style="font-size: 0.6em;">Git</a> <a href="/tags/LINQ/" style="font-size: 0.6em;">LINQ</a> <a href="/tags/WPF/" style="font-size: 0.6em;">WPF</a> <a href="/tags/WPF%E6%B6%88%E6%81%AF%E5%BC%B9%E7%AA%97/" style="font-size: 0.6em;">WPF消息弹窗</a> <a href="/tags/hexo/" style="font-size: 0.7em;">hexo</a> <a href="/tags/seo/" style="font-size: 0.6em;">seo</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/" style="font-size: 0.6em;">微服务架构</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 0.6em;">架构设计</a> <a href="/tags/%E6%AC%A2%E8%BF%8E/" style="font-size: 0.6em;">欢迎</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 0.6em;">版本控制</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 0.7em;">编程语言</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 0.6em;">面试</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>最新文章</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/posts/Expression-trees/"><i class="fa fa-book"></i> 表达式树（Expression Trees）</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/Anemic-vs-Rich/"><i class="fa fa-book"></i> 贫血模型和充血模型</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/SEO-Submit-YourSite/"><i class="fa fa-book"></i> SEO：向搜索引擎提交你的网站</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/DDD-Core-Concepts/"><i class="fa fa-book"></i> 领域驱动设计(DDD)基本概念</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/HexoUsage/"><i class="fa fa-book"></i> HexoUsage</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+            
+
+        
+
+                </div>
+    </div>
+</div>
+
+<footer>
+    <div id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                            <li>
+                                <a href="https://github.com/probieLuo" target="_blank" rel="nofollow">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a href="/atom.xml" target="_blank" rel="nofollow">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2025 probie's blog 版权所有.</li>
+                            <li>本站已在风雨中飘摇<span id="kr-since">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>自豪地使用 <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a> 主题</li>
+                            <li>站点由 <a href="https://github.com/probieLuo" target="_blank">probie</a> 用 <i class="fa fa-heart" style="color:#d43f57"></i> 搭建</li>
+                        </div>
+                        <!-- 额外的追加注入项 -->
+                        
+                            <div>
+                                
+                                    <li>由 <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a> 强力驱动</li>
+                                
+                                    <li>在 <a href="https://github.io" target="_blank">Github Pages</a> 暖心托管</li>
+                                
+                            </div>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                <div class="box theme-box" id="theme-toggle">
+                    <span class="fa fa-adjust"></span>
+                </div>
+            </div>
+            <div id="gotop-box" class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+
+
+
+
+<!-- 额外的追加注入项 -->
+
+
+        <script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+
+  <script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+
+
+
+  <script defer src="/vendors/viewerjs@1.11.6/dist/viewer.min.js"></script>
+
+
+<script defer src="/js/kr-core.min.js"></script>
+
+
+  <script defer src="/js/kr-pjax.min.js"></script>
+
+
+<!-- 额外的追加注入项 -->
+
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/comments/gitalk.js"></script>
+<script src="/others/random-post-cover.js"></script>
+<script src="/effects/cursor-effects.js"></script>
+
+
+
+    </body>
+</html>
