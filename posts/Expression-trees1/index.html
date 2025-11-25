@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  
+    <link rel="icon" href="/assets/github-mark.svg">
+  
+  
+  <title>表达式树（Expression Trees）-动态构建表达式树 | probie&#39;s blog</title>
+  <link rel="canonical" href="https://probieluo.github.io/posts/Expression-trees1/">
+  <meta name="author" content="probie" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="C#, LINQ" />
+  
+  <meta name="description" content="上篇post介绍了表达式树，本节介绍如何动态构建表达式树。 代码动态构建表达式树在表达式树（Expression Trees）这一文章中我们编写的代码都是让C#编译器把Lambda表达式转换表达式树，这些表达式是硬编码的。 我们通过代码编写表达式：Expression&lt;Func&lt;Book,bool&gt;&gt; e &#x3D; b &#x3D;&gt;b.Price &gt; 5 1234567891">
+<meta property="og:type" content="article">
+<meta property="og:title" content="表达式树（Expression Trees）-动态构建表达式树">
+<meta property="og:url" content="https://probieluo.github.io/posts/Expression-trees1/index.html">
+<meta property="og:site_name" content="probie&#39;s blog">
+<meta property="og:description" content="上篇post介绍了表达式树，本节介绍如何动态构建表达式树。 代码动态构建表达式树在表达式树（Expression Trees）这一文章中我们编写的代码都是让C#编译器把Lambda表达式转换表达式树，这些表达式是硬编码的。 我们通过代码编写表达式：Expression&lt;Func&lt;Book,bool&gt;&gt; e &#x3D; b &#x3D;&gt;b.Price &gt; 5 1234567891">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-11-24T15:10:39.000Z">
+<meta property="article:modified_time" content="2025-11-25T15:03:27.468Z">
+<meta property="article:author" content="probie">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="LINQ">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="probie's blog" type="application/atom+xml">
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kr-core.min.css" media="all"></link>
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/highlight.js/night-blue.min.css" media="all"></link>
+  
+  <link rel="stylesheet" id="theme-light-css" href="/css/kr-theme/light.min.css" media="all"></link>
+  <link rel="stylesheet" id="theme-dark-css" href="/css/kr-theme/dark.min.css" media="(prefers-color-scheme: dark)"></link>
+  <script src="/js/kr-theme.min.js"></script>
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></link>
+  
+    <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></link>
+  
+  
+    <link rel="stylesheet" href="/vendors/viewerjs@1.11.6/dist/viewer.min.css"></link>
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  
+  <!-- 自定义站点横幅和背景 -->
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('https://dev.krt.moe/demo-assets/banner.webp');
+      }
+      html[data-theme="dark"] .kratos-cover.kratos-cover-2 {
+        background-image: url('https://dev.krt.moe/demo-assets/banner_dark.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('https://dev.krt.moe/demo-assets/bg.webp');
+        }
+        html[data-theme="dark"] body.custom-background {
+          background-image: url('https://dev.krt.moe/demo-assets/bg.webp');
+        }
+      }
+    
+    
+      .widget-kratos-about .photo-background {
+        background-image: url('/images/default.webp');
+      }
+      html[data-theme="dark"] .widget-kratos-about .photo-background {
+        background-image: url('/images/default.webp');
+      }
+    
+  </style>
+
+  <!-- 额外的追加注入项 -->
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<link rel="stylesheet" href="/comments/gitalk.css" />
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    <li>
+                                        
+                                            <a href="/">
+                                        
+                                            
+                                                <i class="fa fa-home"></i>
+                                            
+                                            首页
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/archives/">
+                                        
+                                            
+                                                <i class="fa fa-file"></i>
+                                            
+                                            档案馆
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a>
+                                        
+                                            
+                                                <i class="fa fa-link"></i>
+                                            
+                                            链接
+                                        </a>
+                                        
+                                            <ul class="sub-menu">
+                                                
+                                                    <li>
+                                                        <a target="_blank" rel="noopener" href="https://github.com/probieLuo/probieLuo.github.io">
+                                                            
+                                                                <i class="fa fa-code"></i>
+                                                            
+                                                            代码仓库
+                                                        </a>
+                                                    </li>
+                                                
+                                                    <li>
+                                                        <a target="_blank" rel="noopener" href="https://wiki.krt.moe">
+                                                            
+                                                                <i class="fa fa-book"></i>
+                                                            
+                                                            主题文档
+                                                        </a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/linklist-example/">
+                                        
+                                            
+                                                <i class="fa fa-list"></i>
+                                            
+                                            链接列表
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/aboutme/">
+                                        
+                                            
+                                                <i class="fa fa-heart"></i>
+                                            
+                                            About
+                                        </a>
+                                        
+                                    </li>
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">probie&#39;s blog</a></div>
+                    <div id="kratos-nav-toggle-wrapper" class="nav-toggle">
+                        <a id="kratos-nav-toggle" class="kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>probie&#39;s blog</h2> <br />
+                        <span>会一点.NET, 这里记录一些学习笔记和生活琐事</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+
+
+        
+
+            
+
+            <section class="kr-main-col col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/Expression-trees1/">
+    <div class="kratos-hentry kratos-page-inner clearfix">
+        <header class="kratos-page-header">
+            
+                <h1 class="kratos-page-title text-center" itemprop="name headline">表达式树（Expression Trees）-动态构建表达式树</h1>
+            
+            <ul class="kratos-page-meta text-center">
+                <li><time datetime="2025-11-24T15:10:39.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2025-11-24</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">probie</span>
+                </li>
+                
+                    <li>
+                        <i class="fa fa-edit"></i> 
+                        
+                        
+                            ~17.01K
+                        
+                        字
+                    </li>
+                
+                
+                
+            </ul>
+        </header>
+        <div class="kratos-page-content kr-post">
+            
+            
+            
+                <div class="kratos-post-inner-toc toc-div-class" >
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%8A%A8%E6%80%81%E6%9E%84%E5%BB%BA%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-number">1.</span> <span class="toc-text">代码动态构建表达式树</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">构建表达式树常用工厂方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8ExpressionTreeToString%E7%AE%80%E5%8C%96%E5%8A%A8%E6%80%81%E6%9E%84%E5%BB%BA%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-number">1.2.</span> <span class="toc-text">用ExpressionTreeToString简化动态构建表达式树</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9%E6%9E%84%E5%BB%BA%E2%80%9D%E5%8A%A8%E6%80%81%E2%80%9D%E8%B5%B7%E6%9D%A5"><span class="toc-number">2.</span> <span class="toc-text">让构建”动态”起来</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E7%A4%BA%E4%BE%8B%EF%BC%9A%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2%E6%9D%A1%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">场景示例：动态查询条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%9E%84%E5%BB%BA%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">实现动态表达式构建器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E6%9E%84%E5%BB%BA%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">使用动态构建的表达式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%EF%BC%9A%E7%A7%BB%E9%99%A4%E5%86%97%E4%BD%99%E7%9A%84-True-%E6%9D%A1%E4%BB%B6"><span class="toc-number">2.4.</span> <span class="toc-text">优化：移除冗余的 True 条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%EF%BC%9A%E4%B8%8E-Entity-Framework-%E9%9B%86%E6%88%90"><span class="toc-number">2.5.</span> <span class="toc-text">实战：与 Entity Framework 集成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2%E6%9E%84%E5%BB%BA%E5%99%A8"><span class="toc-number">2.6.</span> <span class="toc-text">通用动态查询构建器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E6%9E%84%E5%BB%BA%E7%9A%84%E4%BC%98%E5%8A%BF%E6%80%BB%E7%BB%93"><span class="toc-number">2.7.</span> <span class="toc-text">动态构建的优势总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">2.8.</span> <span class="toc-text">性能注意事项</span></a></li></ol></li></ol>
+                </div>
+            
+            <hr />
+            <div itemprop="articleBody"><p>上篇post介绍了表达式树，本节介绍如何动态构建表达式树。</p>
+<h3 id="代码动态构建表达式树"><a href="#代码动态构建表达式树" class="headerlink" title="代码动态构建表达式树"></a>代码动态构建表达式树</h3><p>在<code>表达式树（Expression Trees）</code>这一文章中我们编写的代码都是让C#编译器把Lambda表达式转换表达式树，这些表达式是硬编码的。</p>
+<p>我们通过代码编写表达式：<code>Expression&lt;Func&lt;Book,bool&gt;&gt; e = b =&gt;b.Price &gt; 5</code></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 手动构建：b =&gt; b.Price &gt; 5</span></span><br><span class="line"><span class="keyword">static</span> Expression&lt;Func&lt;Book, <span class="built_in">bool</span>&gt;&gt; BuildExpressionManually()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// 1. 创建参数节点：b（类型Book）</span></span><br><span class="line">	ParameterExpression paramB = Expression.Parameter(<span class="keyword">typeof</span>(Book), <span class="string">&quot;b&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2. 创建左子节点：b.Price</span></span><br><span class="line">	MemberExpression priceMember = Expression.MakeMemberAccess(paramB, <span class="keyword">typeof</span>(Book).GetProperty(<span class="string">&quot;Price&quot;</span>));</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 3. 创建右子节点：常量5</span></span><br><span class="line">	ConstantExpression constant5 = Expression.Constant(<span class="number">5</span>m, <span class="keyword">typeof</span>(<span class="built_in">decimal</span>));</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 4. 创建主体节点：b.Price &gt; 5（大于运算）</span></span><br><span class="line">	BinaryExpression greaterThanExpr = Expression.GreaterThan(</span><br><span class="line">		left: priceMember,    <span class="comment">// 左表达式：b.Price</span></span><br><span class="line">		right: constant5      <span class="comment">// 右表达式：5m</span></span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 5. 创建Lambda表达式：b =&gt; (b.Price &gt; 5)</span></span><br><span class="line">	Expression&lt;Func&lt;Book, <span class="built_in">bool</span>&gt;&gt; e = Expression.Lambda&lt;Func&lt;Book, <span class="built_in">bool</span>&gt;&gt;(</span><br><span class="line">		body: greaterThanExpr, <span class="comment">// Lambda的主体</span></span><br><span class="line">		parameters: paramB     <span class="comment">// Lambda的参数（b）</span></span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> e;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Book</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">string</span> Title &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">decimal</span> Price &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//验证1</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ConstructExpressions</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">var</span> e = BuildExpressionManually();</span><br><span class="line">	Console.WriteLine(<span class="string">$&quot;手动构建的表达式：<span class="subst">&#123;e&#125;</span>&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//验证2</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">UseBuildExpressionManually</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	List&lt;Book&gt; books = <span class="keyword">new</span> List&lt;Book&gt;()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">new</span> Book &#123; Title = <span class="string">&quot;C# 入门&quot;</span>, Price = <span class="number">6</span> &#125;,</span><br><span class="line">		<span class="keyword">new</span> Book &#123; Title = <span class="string">&quot;LINQ 实战&quot;</span>, Price = <span class="number">2</span> &#125;,</span><br><span class="line">		<span class="keyword">new</span> Book &#123; Title = <span class="string">&quot;数据结构与算法&quot;</span>, Price = <span class="number">8</span> &#125;,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> e = BuildExpressionManually();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 编译表达式树为委托</span></span><br><span class="line">	<span class="keyword">var</span> predicate = e.Compile();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> b = books.Where(predicate);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">foreach</span> (<span class="keyword">var</span> book <span class="keyword">in</span> b)</span><br><span class="line">	&#123;</span><br><span class="line">		Console.WriteLine(<span class="string">$&quot;符合条件的图书：<span class="subst">&#123;book.Title&#125;</span>，价格：<span class="subst">&#123;book.Price&#125;</span>&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="构建表达式树常用工厂方法"><a href="#构建表达式树常用工厂方法" class="headerlink" title="构建表达式树常用工厂方法"></a>构建表达式树常用工厂方法</h4><div class="collapse-box-control">
+    <div class="collapse-box-header"><div class="collapse-box-icon"><i class="fa fa-plus"></i></div><span>Expression工厂方法</span></div>
+    <div class="collapse-box-content"><div class="inner">
+        <ol>
+<li><p>基础节点构建（参数、常量、默认值）</p>
+<table>
+<thead>
+<tr>
+<th>工厂方法</th>
+<th>功能描述</th>
+<th>示例代码</th>
+<th>节点类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Expression.Parameter</code></td>
+<td>创建参数节点（Lambda 形参）</td>
+<td><code>var b = Expression.Parameter(typeof(Book), &quot;b&quot;);</code></td>
+<td><code>ParameterExpression</code></td>
+</tr>
+<tr>
+<td><code>Expression.Constant</code></td>
+<td>创建常量节点（值、字面量）</td>
+<td><code>var five = Expression.Constant(5m, typeof(decimal));</code></td>
+<td><code>ConstantExpression</code></td>
+</tr>
+<tr>
+<td><code>Expression.Default</code></td>
+<td>创建类型默认值</td>
+<td><code>var defaultBook = Expression.Default(typeof(Book));</code></td>
+<td><code>DefaultExpression</code></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>成员访问（属性 &#x2F; 字段）</p>
+<table>
+<thead>
+<tr>
+<th>工厂方法</th>
+<th>功能描述</th>
+<th>示例代码</th>
+<th>节点类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Expression.Property</code></td>
+<td>访问属性</td>
+<td><code>var priceProp = Expression.Property(b, nameof(Book.Price));</code></td>
+<td><code>MemberExpression</code></td>
+</tr>
+<tr>
+<td><code>Expression.PropertyOrField</code></td>
+<td>统一属性或字段访问</td>
+<td><code>var titleMember = Expression.PropertyOrField(b, &quot;Title&quot;);</code></td>
+<td><code>MemberExpression</code></td>
+</tr>
+<tr>
+<td><code>Expression.Field</code></td>
+<td>访问字段</td>
+<td><code>var authorField = Expression.Field(b, &quot;_author&quot;);</code></td>
+<td><code>MemberExpression</code></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>二元运算（算术 &#x2F; 比较 &#x2F; 逻辑）</p>
+<table>
+<thead>
+<tr>
+<th>工厂方法</th>
+<th>功能</th>
+<th>示例</th>
+<th>ExpressionType</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Expression.Add</code></td>
+<td>加法</td>
+<td><code>Expression.Add(priceProp, five)</code></td>
+<td>Add</td>
+</tr>
+<tr>
+<td><code>Expression.Subtract</code></td>
+<td>减法</td>
+<td><code>Expression.Subtract(priceProp, five)</code></td>
+<td>Subtract</td>
+</tr>
+<tr>
+<td><code>Expression.GreaterThan</code></td>
+<td>大于</td>
+<td><code>Expression.GreaterThan(priceProp, five)</code></td>
+<td>GreaterThan</td>
+</tr>
+<tr>
+<td><code>Expression.Equal</code></td>
+<td>等于</td>
+<td><code>Expression.Equal(Expression.Property(b,&quot;Title&quot;), Expression.Constant(&quot;C#入门&quot;))</code></td>
+<td>Equal</td>
+</tr>
+<tr>
+<td><code>Expression.AndAlso</code></td>
+<td>逻辑与（短路）</td>
+<td><code>Expression.AndAlso(cond1, cond2)</code></td>
+<td>AndAlso</td>
+</tr>
+<tr>
+<td><code>Expression.OrElse</code></td>
+<td>逻辑或（短路）</td>
+<td><code>Expression.OrElse(cond1, cond2)</code></td>
+<td>OrElse</td>
+</tr>
+<tr>
+<td><code>Expression.MakeBinary</code></td>
+<td>通用入口</td>
+<td><code>Expression.MakeBinary(ExpressionType.GreaterThanOrEqual, priceProp, five)</code></td>
+<td>任意二元</td>
+</tr>
+</tbody></table>
+<p> 组合示例：</p>
+ <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> b = Expression.Parameter(<span class="keyword">typeof</span>(Book), <span class="string">&quot;b&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> priceProp = Expression.Property(b, <span class="keyword">nameof</span>(Book.Price));</span><br><span class="line"><span class="keyword">var</span> five = Expression.Constant(<span class="number">5</span>m);</span><br><span class="line"><span class="keyword">var</span> cond1 = Expression.GreaterThan(priceProp, five);</span><br><span class="line"><span class="keyword">var</span> cond2 = Expression.Equal(Expression.Property(b, <span class="string">&quot;Title&quot;</span>), Expression.Constant(<span class="string">&quot;C#&quot;</span>));</span><br><span class="line"><span class="keyword">var</span> andExpr = Expression.AndAlso(cond1, cond2);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Lambda 表达式包装</p>
+<table>
+<thead>
+<tr>
+<th>工厂方法</th>
+<th>功能描述</th>
+<th>示例</th>
+<th>返回类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Expression.Lambda&lt;TDelegate&gt;</code></td>
+<td>推荐用法</td>
+<td><code>Expression&lt;Func&lt;Book,bool&gt;&gt; e = Expression.Lambda&lt;Func&lt;Book,bool&gt;&gt;(cond1, b);</code></td>
+<td><code>Expression&lt;Func&lt;Book,bool&gt;&gt;</code></td>
+</tr>
+<tr>
+<td><code>Expression.Lambda</code></td>
+<td>非泛型</td>
+<td><code>LambdaExpression raw = Expression.Lambda(cond1, b);</code></td>
+<td><code>LambdaExpression</code></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>方法调用（实例 &#x2F; 静态）</p>
+<table>
+<thead>
+<tr>
+<th>工厂方法</th>
+<th>功能</th>
+<th>示例（实例 &#x2F; 静态）</th>
+<th>节点类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Expression.Call</code></td>
+<td>调用方法</td>
+<td>见示例</td>
+<td><code>MethodCallExpression</code></td>
+</tr>
+</tbody></table>
+ <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> b = Expression.Parameter(<span class="keyword">typeof</span>(Book), <span class="string">&quot;b&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> titleProp = Expression.Property(b, <span class="keyword">nameof</span>(Book.Title));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例方法 b.Title.Contains(&quot;C#&quot;)</span></span><br><span class="line"><span class="keyword">var</span> containsMethod = <span class="keyword">typeof</span>(<span class="built_in">string</span>).GetMethod(<span class="keyword">nameof</span>(<span class="built_in">string</span>.Contains), <span class="keyword">new</span>[] &#123; <span class="keyword">typeof</span>(<span class="built_in">string</span>) &#125;);</span><br><span class="line"><span class="keyword">var</span> containsCall = Expression.Call(titleProp, containsMethod, Expression.Constant(<span class="string">&quot;C#&quot;</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态方法 string.IsNullOrEmpty(b.Title)</span></span><br><span class="line"><span class="keyword">var</span> isNullOrEmptyMethod = <span class="keyword">typeof</span>(<span class="built_in">string</span>).GetMethod(<span class="keyword">nameof</span>(<span class="built_in">string</span>.IsNullOrEmpty), <span class="keyword">new</span>[] &#123; <span class="keyword">typeof</span>(<span class="built_in">string</span>) &#125;);</span><br><span class="line"><span class="keyword">var</span> nullCheckCall = Expression.Call(isNullOrEmptyMethod, titleProp);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>一元运算与类型转换</p>
+<table>
+<thead>
+<tr>
+<th>工厂方法</th>
+<th>功能</th>
+<th>示例</th>
+<th>节点类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Expression.Convert</code></td>
+<td>强制转换</td>
+<td><code>Expression.Convert(Expression.Constant(5), typeof(decimal));</code></td>
+<td>UnaryExpression</td>
+</tr>
+<tr>
+<td><code>Expression.Not</code></td>
+<td>逻辑非</td>
+<td><code>Expression.Not(cond1)</code></td>
+<td>UnaryExpression</td>
+</tr>
+<tr>
+<td><code>Expression.TypeAs</code></td>
+<td>安全转换</td>
+<td><code>Expression.TypeAs(Expression.Parameter(typeof(object),&quot;obj&quot;), typeof(Book));</code></td>
+<td>UnaryExpression</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>对象与集合创建</p>
+<table>
+<thead>
+<tr>
+<th>工厂方法</th>
+<th>功能</th>
+<th>示例</th>
+<th>节点类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Expression.New</code></td>
+<td>构造对象</td>
+<td>有 &#x2F; 无参</td>
+<td><code>NewExpression</code></td>
+</tr>
+<tr>
+<td><code>Expression.NewArrayInit</code></td>
+<td>创建数组并初始化</td>
+<td><code>Expression.NewArrayInit(typeof(string), Expression.Constant(&quot;A&quot;), Expression.Constant(&quot;B&quot;));</code></td>
+<td><code>NewArrayExpression</code></td>
+</tr>
+<tr>
+<td><code>Expression.ArrayIndex</code></td>
+<td>数组索引访问</td>
+<td><code>Expression.ArrayIndex(arrParam, Expression.Constant(0));</code></td>
+<td><code>BinaryExpression</code></td>
+</tr>
+</tbody></table>
+<p> 有参构造示例：</p>
+ <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> titleConst = Expression.Constant(<span class="string">&quot;C#进阶&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> priceConst = Expression.Constant(<span class="number">79.9</span>m);</span><br><span class="line"><span class="keyword">var</span> ctor = <span class="keyword">typeof</span>(Book).GetConstructor(<span class="keyword">new</span>[] &#123; <span class="keyword">typeof</span>(<span class="built_in">string</span>), <span class="keyword">typeof</span>(<span class="built_in">decimal</span>) &#125;);</span><br><span class="line"><span class="keyword">var</span> newBookExpr = Expression.New(ctor, titleConst, priceConst);</span><br></pre></td></tr></table></figure>
+
+<p> 数组访问示例：</p>
+ <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arrParam = Expression.Parameter(<span class="keyword">typeof</span>(<span class="built_in">string</span>[]), <span class="string">&quot;arr&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> first = Expression.ArrayIndex(arrParam, Expression.Constant(<span class="number">0</span>));</span><br></pre></td></tr></table></figure></li>
+</ol>
+ 
+    </div></div>
+    </div>
+
+<hr>
+<h4 id="用ExpressionTreeToString简化动态构建表达式树"><a href="#用ExpressionTreeToString简化动态构建表达式树" class="headerlink" title="用ExpressionTreeToString简化动态构建表达式树"></a>用ExpressionTreeToString简化动态构建表达式树</h4><p>ExpressionTreeToString提供了ToString(“Factory methods”,”C#”)，执行会输出类似工厂方法生成表达式树的代码。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;Book, <span class="built_in">bool</span>&gt;&gt; e = b =&gt; b.Price &gt; <span class="number">5</span>;</span><br><span class="line">Console.WriteLine(e.ToString(<span class="string">&quot;Factory methods&quot;</span>, <span class="string">&quot;C#&quot;</span>));</span><br><span class="line"><span class="comment">/* 输出</span></span><br><span class="line"><span class="comment">// using static System.Linq.Expressions.Expression</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">var b = Parameter(</span></span><br><span class="line"><span class="comment">    typeof(Book),</span></span><br><span class="line"><span class="comment">    &quot;b&quot;</span></span><br><span class="line"><span class="comment">);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Lambda(</span></span><br><span class="line"><span class="comment">    MakeBinary(ExpressionType.GreaterThan,</span></span><br><span class="line"><span class="comment">        MakeMemberAccess(b,</span></span><br><span class="line"><span class="comment">            typeof(Book).GetProperty(&quot;Price&quot;)</span></span><br><span class="line"><span class="comment">        ),</span></span><br><span class="line"><span class="comment">        Constant(5), false,</span></span><br><span class="line"><span class="comment">        typeof(decimal).GetMethod(&quot;op_GreaterThan&quot;)</span></span><br><span class="line"><span class="comment">    ),</span></span><br><span class="line"><span class="comment">    b</span></span><br><span class="line"><span class="comment">)</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<p>通过<code>ToString(&quot;Factory methods&quot;,&quot;C#&quot;)</code>输出动态构建表达式树</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> ExpressionTreeToString;</span><br><span class="line"><span class="keyword">using</span> System.Linq.Expressions;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">static</span> System.Linq.Expressions.Expression;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b = Parameter(<span class="keyword">typeof</span>(Book),<span class="string">&quot;b&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> e = Lambda(</span><br><span class="line">	MakeBinary(ExpressionType.GreaterThan,</span><br><span class="line">		MakeMemberAccess(b,</span><br><span class="line">			<span class="keyword">typeof</span>(Book).GetProperty(<span class="string">&quot;Price&quot;</span>)</span><br><span class="line">		),</span><br><span class="line">		Constant(<span class="number">5</span>m), <span class="literal">false</span>,</span><br><span class="line">		<span class="keyword">typeof</span>(<span class="built_in">decimal</span>).GetMethod(<span class="string">&quot;op_GreaterThan&quot;</span>)</span><br><span class="line">	),</span><br><span class="line">	b</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">Console.WriteLine(e);<span class="comment">//b =&gt; (b.Price &gt; 5)</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="让构建”动态”起来"><a href="#让构建”动态”起来" class="headerlink" title="让构建”动态”起来"></a>让构建”动态”起来</h3><p>上面代码动态构建出了表达式树，但逻辑是固定的。既然逻辑是固定的，为什么不直接硬编码Lambda表达式？动态构建表达式树的价值就在于，运行时根据条件的不同生成不同的表达式树。</p>
+<h4 id="场景示例：动态查询条件"><a href="#场景示例：动态查询条件" class="headerlink" title="场景示例：动态查询条件"></a>场景示例：动态查询条件</h4><p>假设有一个图书检索系统，用户可以选择多个筛选条件：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">BookSearchCriteria</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">decimal</span>? MinPrice &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">decimal</span>? MaxPrice &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> TitleKeyword &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">bool</span>? OnlyInStock &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="实现动态表达式构建器"><a href="#实现动态表达式构建器" class="headerlink" title="实现动态表达式构建器"></a>实现动态表达式构建器</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> Expression&lt;Func&lt;Book, <span class="built_in">bool</span>&gt;&gt; BuildDynamicPredicate(BookSearchCriteria criteria)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> param = Expression.Parameter(<span class="keyword">typeof</span>(Book), <span class="string">&quot;b&quot;</span>);</span><br><span class="line">    Expression body = Expression.Constant(<span class="literal">true</span>); <span class="comment">// 初始条件：恒真</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 动态添加最低价格条件</span></span><br><span class="line">    <span class="keyword">if</span> (criteria.MinPrice.HasValue)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> priceProp = Expression.Property(param, <span class="keyword">nameof</span>(Book.Price));</span><br><span class="line">        <span class="keyword">var</span> minPriceConst = Expression.Constant(criteria.MinPrice.Value);</span><br><span class="line">        <span class="keyword">var</span> condition = Expression.GreaterThanOrEqual(priceProp, minPriceConst);</span><br><span class="line">        body = Expression.AndAlso(body, condition);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 动态添加最高价格条件</span></span><br><span class="line">    <span class="keyword">if</span> (criteria.MaxPrice.HasValue)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> priceProp = Expression.Property(param, <span class="keyword">nameof</span>(Book.Price));</span><br><span class="line">        <span class="keyword">var</span> maxPriceConst = Expression.Constant(criteria.MaxPrice.Value);</span><br><span class="line">        <span class="keyword">var</span> condition = Expression.LessThanOrEqual(priceProp, maxPriceConst);</span><br><span class="line">        body = Expression.AndAlso(body, condition);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 动态添加标题关键词条件</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">string</span>.IsNullOrEmpty(criteria.TitleKeyword))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> titleProp = Expression.Property(param, <span class="keyword">nameof</span>(Book.Title));</span><br><span class="line">        <span class="keyword">var</span> keywordConst = Expression.Constant(criteria.TitleKeyword);</span><br><span class="line">        <span class="keyword">var</span> containsMethod = <span class="keyword">typeof</span>(<span class="built_in">string</span>).GetMethod(<span class="keyword">nameof</span>(<span class="built_in">string</span>.Contains), <span class="keyword">new</span>[] &#123; <span class="keyword">typeof</span>(<span class="built_in">string</span>) &#125;);</span><br><span class="line">        <span class="keyword">var</span> condition = Expression.Call(titleProp, containsMethod, keywordConst);</span><br><span class="line">        body = Expression.AndAlso(body, condition);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 动态添加库存条件（假设 Book 有 InStock 属性）</span></span><br><span class="line">    <span class="keyword">if</span> (criteria.OnlyInStock.HasValue &amp;&amp; criteria.OnlyInStock.Value)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> inStockProp = Expression.Property(param, <span class="string">&quot;InStock&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> condition = Expression.Equal(inStockProp, Expression.Constant(<span class="literal">true</span>));</span><br><span class="line">        body = Expression.AndAlso(body, condition);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Expression.Lambda&lt;Func&lt;Book, <span class="built_in">bool</span>&gt;&gt;(body, param);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用动态构建的表达式"><a href="#使用动态构建的表达式" class="headerlink" title="使用动态构建的表达式"></a>使用动态构建的表达式</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 扩展 Book 类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">Book</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Title &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">decimal</span> Price &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">bool</span> InStock &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">DynamicQueryExample</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> books = <span class="keyword">new</span> List&lt;Book&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">new</span> Book &#123; Title = <span class="string">&quot;C# 入门&quot;</span>, Price = <span class="number">45</span>m, InStock = <span class="literal">true</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Book &#123; Title = <span class="string">&quot;LINQ 实战&quot;</span>, Price = <span class="number">55</span>m, InStock = <span class="literal">false</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Book &#123; Title = <span class="string">&quot;C# 高级编程&quot;</span>, Price = <span class="number">89</span>m, InStock = <span class="literal">true</span> &#125;,</span><br><span class="line">        <span class="keyword">new</span> Book &#123; Title = <span class="string">&quot;数据结构与算法&quot;</span>, Price = <span class="number">65</span>m, InStock = <span class="literal">true</span> &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 场景1：只查询价格在 50-100 之间的书</span></span><br><span class="line">    <span class="keyword">var</span> criteria1 = <span class="keyword">new</span> BookSearchCriteria</span><br><span class="line">    &#123;</span><br><span class="line">        MinPrice = <span class="number">50</span>m,</span><br><span class="line">        MaxPrice = <span class="number">100</span>m</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">var</span> predicate1 = BuildDynamicPredicate(criteria1);</span><br><span class="line">    <span class="keyword">var</span> result1 = books.Where(predicate1.Compile()).ToList();</span><br><span class="line">    Console.WriteLine(<span class="string">$&quot;场景1 生成的表达式：<span class="subst">&#123;predicate1&#125;</span>&quot;</span>);</span><br><span class="line">    Console.WriteLine(<span class="string">$&quot;结果数量：<span class="subst">&#123;result1.Count&#125;</span>&quot;</span>);</span><br><span class="line">    <span class="comment">// 输出：b =&gt; ((True AndAlso (b.Price &gt;= 50)) AndAlso (b.Price &lt;= 100))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 场景2：查询标题包含&quot;C#&quot;且有库存的书</span></span><br><span class="line">    <span class="keyword">var</span> criteria2 = <span class="keyword">new</span> BookSearchCriteria</span><br><span class="line">    &#123;</span><br><span class="line">        TitleKeyword = <span class="string">&quot;C#&quot;</span>,</span><br><span class="line">        OnlyInStock = <span class="literal">true</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">var</span> predicate2 = BuildDynamicPredicate(criteria2);</span><br><span class="line">    <span class="keyword">var</span> result2 = books.Where(predicate2.Compile()).ToList();</span><br><span class="line">    Console.WriteLine(<span class="string">$&quot;\n场景2 生成的表达式：<span class="subst">&#123;predicate2&#125;</span>&quot;</span>);</span><br><span class="line">    Console.WriteLine(<span class="string">$&quot;结果数量：<span class="subst">&#123;result2.Count&#125;</span>&quot;</span>);</span><br><span class="line">    <span class="comment">// 输出：b =&gt; ((True AndAlso b.Title.Contains(&quot;C#&quot;)) AndAlso (b.InStock == True))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 场景3：组合多个条件</span></span><br><span class="line">    <span class="keyword">var</span> criteria3 = <span class="keyword">new</span> BookSearchCriteria</span><br><span class="line">    &#123;</span><br><span class="line">        MinPrice = <span class="number">40</span>m,</span><br><span class="line">        TitleKeyword = <span class="string">&quot;C#&quot;</span>,</span><br><span class="line">        OnlyInStock = <span class="literal">true</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">var</span> predicate3 = BuildDynamicPredicate(criteria3);</span><br><span class="line">    <span class="keyword">var</span> result3 = books.Where(predicate3.Compile()).ToList();</span><br><span class="line">    Console.WriteLine(<span class="string">$&quot;\n场景3 生成的表达式：<span class="subst">&#123;predicate3&#125;</span>&quot;</span>);</span><br><span class="line">    Console.WriteLine(<span class="string">$&quot;结果数量：<span class="subst">&#123;result3.Count&#125;</span>&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="优化：移除冗余的-True-条件"><a href="#优化：移除冗余的-True-条件" class="headerlink" title="优化：移除冗余的 True 条件"></a>优化：移除冗余的 True 条件</h4><p>上面的实现会产生 <code>(True AndAlso ...)</code> 这样的冗余表达式。可以优化：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> Expression&lt;Func&lt;Book, <span class="built_in">bool</span>&gt;&gt; BuildDynamicPredicateOptimized(BookSearchCriteria criteria)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> param = Expression.Parameter(<span class="keyword">typeof</span>(Book), <span class="string">&quot;b&quot;</span>);</span><br><span class="line">    Expression body = <span class="literal">null</span>; <span class="comment">// 初始为 null</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 辅助方法：安全添加条件</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">AddCondition</span>(<span class="params">Expression condition</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        body = body == <span class="literal">null</span> ? condition : Expression.AndAlso(body, condition);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 动态添加条件</span></span><br><span class="line">    <span class="keyword">if</span> (criteria.MinPrice.HasValue)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> priceProp = Expression.Property(param, <span class="keyword">nameof</span>(Book.Price));</span><br><span class="line">        AddCondition(Expression.GreaterThanOrEqual(priceProp, Expression.Constant(criteria.MinPrice.Value)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (criteria.MaxPrice.HasValue)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> priceProp = Expression.Property(param, <span class="keyword">nameof</span>(Book.Price));</span><br><span class="line">        AddCondition(Expression.LessThanOrEqual(priceProp, Expression.Constant(criteria.MaxPrice.Value)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">string</span>.IsNullOrEmpty(criteria.TitleKeyword))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> titleProp = Expression.Property(param, <span class="keyword">nameof</span>(Book.Title));</span><br><span class="line">        <span class="keyword">var</span> containsMethod = <span class="keyword">typeof</span>(<span class="built_in">string</span>).GetMethod(<span class="keyword">nameof</span>(<span class="built_in">string</span>.Contains), <span class="keyword">new</span>[] &#123; <span class="keyword">typeof</span>(<span class="built_in">string</span>) &#125;);</span><br><span class="line">        AddCondition(Expression.Call(titleProp, containsMethod, Expression.Constant(criteria.TitleKeyword)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (criteria.OnlyInStock == <span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> inStockProp = Expression.Property(param, <span class="string">&quot;InStock&quot;</span>);</span><br><span class="line">        AddCondition(Expression.Equal(inStockProp, Expression.Constant(<span class="literal">true</span>)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果没有任何条件，返回恒真表达式</span></span><br><span class="line">    <span class="keyword">if</span> (body == <span class="literal">null</span>)</span><br><span class="line">        body = Expression.Constant(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Expression.Lambda&lt;Func&lt;Book, <span class="built_in">bool</span>&gt;&gt;(body, param);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>优化后的输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">场景1：b =&gt; ((b.Price &gt;= 50) AndAlso (b.Price &lt;= 100))</span><br><span class="line">场景2：b =&gt; (b.Title.Contains(&quot;C#&quot;) AndAlso (b.InStock == True))</span><br></pre></td></tr></table></figure>
+
+<h4 id="实战：与-Entity-Framework-集成"><a href="#实战：与-Entity-Framework-集成" class="headerlink" title="实战：与 Entity Framework 集成"></a>实战：与 Entity Framework 集成</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 EF Core 中使用</span></span><br><span class="line"><span class="keyword">using</span> (<span class="keyword">var</span> dbContext = <span class="keyword">new</span> BookDbContext())</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> criteria = <span class="keyword">new</span> BookSearchCriteria</span><br><span class="line">    &#123;</span><br><span class="line">        MinPrice = <span class="number">50</span>m,</span><br><span class="line">        TitleKeyword = <span class="string">&quot;C#&quot;</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> predicate = BuildDynamicPredicateOptimized(criteria);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 表达式树会被 EF Core 翻译成 SQL</span></span><br><span class="line">    <span class="keyword">var</span> books = dbContext.Books</span><br><span class="line">        .Where(predicate)</span><br><span class="line">        .OrderBy(b =&gt; b.Price)</span><br><span class="line">        .ToList();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 生成的 SQL 类似：</span></span><br><span class="line">    <span class="comment">// SELECT * FROM Books </span></span><br><span class="line">    <span class="comment">// WHERE Price &gt;= 50 AND Title LIKE &#x27;%C#%&#x27;</span></span><br><span class="line">    <span class="comment">// ORDER BY Price</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="通用动态查询构建器"><a href="#通用动态查询构建器" class="headerlink" title="通用动态查询构建器"></a>通用动态查询构建器</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DynamicQueryBuilder</span>&lt;<span class="title">T</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> ParameterExpression _parameter;</span><br><span class="line">    <span class="keyword">private</span> Expression _body;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DynamicQueryBuilder</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _parameter = Expression.Parameter(<span class="keyword">typeof</span>(T), <span class="string">&quot;x&quot;</span>);</span><br><span class="line">        _body = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DynamicQueryBuilder&lt;T&gt; <span class="title">AddCondition</span>(<span class="params">Expression&lt;Func&lt;T, <span class="built_in">bool</span>&gt;&gt; condition</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> visitor = <span class="keyword">new</span> ParameterReplacer(_parameter);</span><br><span class="line">        <span class="keyword">var</span> replacedBody = visitor.Visit(condition.Body);</span><br><span class="line">        _body = _body == <span class="literal">null</span> ? replacedBody : Expression.AndAlso(_body, replacedBody);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DynamicQueryBuilder&lt;T&gt; <span class="title">GreaterThan</span>(<span class="params"><span class="built_in">string</span> propertyName, <span class="built_in">object</span> <span class="keyword">value</span></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> property = Expression.Property(_parameter, propertyName);</span><br><span class="line">        <span class="keyword">var</span> constant = Expression.Constant(<span class="keyword">value</span>);</span><br><span class="line">        <span class="keyword">var</span> condition = Expression.GreaterThan(property, constant);</span><br><span class="line">        _body = _body == <span class="literal">null</span> ? condition : Expression.AndAlso(_body, condition);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DynamicQueryBuilder&lt;T&gt; <span class="title">Contains</span>(<span class="params"><span class="built_in">string</span> propertyName, <span class="built_in">string</span> <span class="keyword">value</span></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> property = Expression.Property(_parameter, propertyName);</span><br><span class="line">        <span class="keyword">var</span> containsMethod = <span class="keyword">typeof</span>(<span class="built_in">string</span>).GetMethod(<span class="keyword">nameof</span>(<span class="built_in">string</span>.Contains), <span class="keyword">new</span>[] &#123; <span class="keyword">typeof</span>(<span class="built_in">string</span>) &#125;);</span><br><span class="line">        <span class="keyword">var</span> condition = Expression.Call(property, containsMethod, Expression.Constant(<span class="keyword">value</span>));</span><br><span class="line">        _body = _body == <span class="literal">null</span> ? condition : Expression.AndAlso(_body, condition);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Expression&lt;Func&lt;T, <span class="built_in">bool</span>&gt;&gt; Build()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (_body == <span class="literal">null</span>)</span><br><span class="line">            _body = Expression.Constant(<span class="literal">true</span>);</span><br><span class="line">        <span class="keyword">return</span> Expression.Lambda&lt;Func&lt;T, <span class="built_in">bool</span>&gt;&gt;(_body, _parameter);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 参数替换访问器</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title">ParameterReplacer</span> : <span class="title">ExpressionVisitor</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">readonly</span> ParameterExpression _parameter;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">ParameterReplacer</span>(<span class="params">ParameterExpression parameter</span>)</span> =&gt; _parameter = parameter;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> Expression <span class="title">VisitParameter</span>(<span class="params">ParameterExpression node</span>)</span> =&gt; _parameter;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用通用构建器</span></span><br><span class="line"><span class="keyword">var</span> builder = <span class="keyword">new</span> DynamicQueryBuilder&lt;Book&gt;()</span><br><span class="line">    .GreaterThan(<span class="keyword">nameof</span>(Book.Price), <span class="number">50</span>m)</span><br><span class="line">    .Contains(<span class="keyword">nameof</span>(Book.Title), <span class="string">&quot;C#&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> predicate = builder.Build();</span><br><span class="line"><span class="keyword">var</span> results = books.Where(predicate.Compile()).ToList();</span><br><span class="line">Console.WriteLine(<span class="string">$&quot;通用构建器生成的表达式：<span class="subst">&#123;predicate&#125;</span>&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="动态构建的优势总结"><a href="#动态构建的优势总结" class="headerlink" title="动态构建的优势总结"></a>动态构建的优势总结</h4><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>传统方式</th>
+<th>动态表达式树</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>固定条件查询</td>
+<td><code>books.Where(b =&gt; b.Price &gt; 50)</code></td>
+<td>无需使用，直接 Lambda 即可</td>
+</tr>
+<tr>
+<td>用户可选条件</td>
+<td>需要写大量 if-else 拼接 SQL&#x2F;LINQ</td>
+<td>根据条件动态组合表达式</td>
+</tr>
+<tr>
+<td>规则引擎</td>
+<td>硬编码规则</td>
+<td>配置驱动，动态生成规则</td>
+</tr>
+<tr>
+<td>权限过滤</td>
+<td>在业务层手动过滤</td>
+<td>统一在查询层注入权限表达式</td>
+</tr>
+<tr>
+<td>低代码平台</td>
+<td>无法实现</td>
+<td>可视化拖拽转表达式树</td>
+</tr>
+</tbody></table>
+<h4 id="性能注意事项"><a href="#性能注意事项" class="headerlink" title="性能注意事项"></a>性能注意事项</h4><ol>
+<li><p><strong>缓存编译结果</strong>：表达式编译 (<code>Compile()</code>) 成本较高</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">readonly</span> Dictionary&lt;<span class="built_in">string</span>, Func&lt;Book, <span class="built_in">bool</span>&gt;&gt; _compiledCache = <span class="keyword">new</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> key = predicate.ToString();</span><br><span class="line"><span class="keyword">if</span> (!_compiledCache.ContainsKey(key))</span><br><span class="line">    _compiledCache[key] = predicate.Compile();</span><br><span class="line"><span class="keyword">var</span> func = _compiledCache[key];</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>避免过度使用</strong>：简单固定查询直接用 Lambda</p>
+</li>
+<li><p><strong>EF Core 翻译限制</strong>：确保表达式可以被翻译成 SQL（避免调用本地方法）</p>
+</li>
+</ol>
+<hr>
+</div>
+        </div>
+        
+            <div class="kratos-copyright text-center clearfix">
+                <span itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</span>
+            </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+            
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/C/" rel="tag">C#</a>, <a class="tag-none-link" href="/tags/LINQ/" rel="tag">LINQ</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2025-11-25T15:03:27.468Z" itemprop="dateModified">最后编辑：2025-11-25</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" 表达式树（Expression Trees）" href="/posts/Expression-trees0/"><i class="fa fa-angle-left"></i> 上一篇</a>
+            </div>
+            
+            
+        </nav>
+    
+    
+        <div class="comment-post">
+            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/Expression-trees1/" data-path-hash="1dcc4c03e80c95d69bfa31910805145b"></div>
+        </div>
+    
+</article>
+
+        
+
+            </section>
+
+            
+                
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/assets/OIP (8).jpg" alt="probie" loading="lazy" decoding="auto" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">probie</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                文章
+            </span>
+            <span class="count">
+                11
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                分类
+            </span>
+            <span class="count">
+                6
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                标签
+            </span>
+            <span class="count">
+                15
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        文章目录
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%8A%A8%E6%80%81%E6%9E%84%E5%BB%BA%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-text">代码动态构建表达式树</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95"><span class="toc-text">构建表达式树常用工厂方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8ExpressionTreeToString%E7%AE%80%E5%8C%96%E5%8A%A8%E6%80%81%E6%9E%84%E5%BB%BA%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-text">用ExpressionTreeToString简化动态构建表达式树</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9%E6%9E%84%E5%BB%BA%E2%80%9D%E5%8A%A8%E6%80%81%E2%80%9D%E8%B5%B7%E6%9D%A5"><span class="toc-text">让构建”动态”起来</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E7%A4%BA%E4%BE%8B%EF%BC%9A%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2%E6%9D%A1%E4%BB%B6"><span class="toc-text">场景示例：动态查询条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%9E%84%E5%BB%BA%E5%99%A8"><span class="toc-text">实现动态表达式构建器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E6%9E%84%E5%BB%BA%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">使用动态构建的表达式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%EF%BC%9A%E7%A7%BB%E9%99%A4%E5%86%97%E4%BD%99%E7%9A%84-True-%E6%9D%A1%E4%BB%B6"><span class="toc-text">优化：移除冗余的 True 条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%EF%BC%9A%E4%B8%8E-Entity-Framework-%E9%9B%86%E6%88%90"><span class="toc-text">实战：与 Entity Framework 集成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2%E6%9E%84%E5%BB%BA%E5%99%A8"><span class="toc-text">通用动态查询构建器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E6%9E%84%E5%BB%BA%E7%9A%84%E4%BC%98%E5%8A%BF%E6%80%BB%E7%BB%93"><span class="toc-text">动态构建的优势总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">性能注意事项</span></a></li></ol></li></ol>
+    </div>
+</aside>
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>分类列表</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DDD/">DDD</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Expression-Tree/">Expression Tree</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%B0%E4%BD%93%E9%AA%8C/">全新体验</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/">开发技术</a><span class="category-list-count">2</span></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
+      <div class="tag-clouds">
+        <a href="/tags/C/" style="font-size: 0.8em;">C#</a> <a href="/tags/DDD/" style="font-size: 0.7em;">DDD</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/Git/" style="font-size: 0.6em;">Git</a> <a href="/tags/LINQ/" style="font-size: 0.7em;">LINQ</a> <a href="/tags/WPF/" style="font-size: 0.6em;">WPF</a> <a href="/tags/WPF%E6%B6%88%E6%81%AF%E5%BC%B9%E7%AA%97/" style="font-size: 0.6em;">WPF消息弹窗</a> <a href="/tags/hexo/" style="font-size: 0.7em;">hexo</a> <a href="/tags/seo/" style="font-size: 0.6em;">seo</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/" style="font-size: 0.6em;">微服务架构</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 0.6em;">架构设计</a> <a href="/tags/%E6%AC%A2%E8%BF%8E/" style="font-size: 0.6em;">欢迎</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 0.6em;">版本控制</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="font-size: 0.6em;">编程语言</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 0.6em;">面试</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>最新文章</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/posts/Expression-trees1/"><i class="fa fa-book"></i> 表达式树（Expression Trees）-动态构建表达式树</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/Expression-trees0/"><i class="fa fa-book"></i> 表达式树（Expression Trees）</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/Anemic-vs-Rich/"><i class="fa fa-book"></i> 贫血模型和充血模型</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/SEO-Submit-YourSite/"><i class="fa fa-book"></i> SEO：向搜索引擎提交你的网站</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/DDD-Core-Concepts/"><i class="fa fa-book"></i> 领域驱动设计(DDD)基本概念</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+            
+
+        
+
+                </div>
+    </div>
+</div>
+
+<footer>
+    <div id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                            <li>
+                                <a href="https://github.com/probieLuo" target="_blank" rel="nofollow">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a href="/atom.xml" target="_blank" rel="nofollow">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2025 probie's blog 版权所有.</li>
+                            <li>本站已在风雨中飘摇<span id="kr-since">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>自豪地使用 <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a> 主题</li>
+                            <li>站点由 <a href="https://github.com/probieLuo" target="_blank">probie</a> 用 <i class="fa fa-heart" style="color:#d43f57"></i> 搭建</li>
+                        </div>
+                        <!-- 额外的追加注入项 -->
+                        
+                            <div>
+                                
+                                    <li>由 <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a> 强力驱动</li>
+                                
+                                    <li>在 <a href="https://github.io" target="_blank">Github Pages</a> 暖心托管</li>
+                                
+                            </div>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                <div class="box theme-box" id="theme-toggle">
+                    <span class="fa fa-adjust"></span>
+                </div>
+            </div>
+            <div id="gotop-box" class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+
+
+
+
+<!-- 额外的追加注入项 -->
+
+
+        <script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+
+  <script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+
+
+
+  <script defer src="/vendors/viewerjs@1.11.6/dist/viewer.min.js"></script>
+
+
+<script defer src="/js/kr-core.min.js"></script>
+
+
+  <script defer src="/js/kr-pjax.min.js"></script>
+
+
+<!-- 额外的追加注入项 -->
+
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/comments/gitalk.js"></script>
+<script src="/others/random-post-cover.js"></script>
+<script src="/effects/cursor-effects.js"></script>
+
+
+
+    </body>
+</html>

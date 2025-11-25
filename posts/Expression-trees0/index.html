@@ -8,7 +8,7 @@
   
   
   <title>表达式树（Expression Trees） | probie&#39;s blog</title>
-  <link rel="canonical" href="https://probieluo.github.io/posts/Expression-trees/">
+  <link rel="canonical" href="https://probieluo.github.io/posts/Expression-trees0/">
   <meta name="author" content="probie" />
   <meta http-equiv="Cache-Control" content="no-transform" />
   <meta http-equiv="Cache-Control" content="no-siteapp" />
@@ -22,7 +22,7 @@
   <meta name="description" content="在 .NET 开发中，表达式树是一个强大但容易被忽视的特性。如果你使用过 Entity Framework 或 LINQ to SQL，其实你已经在间接使用表达式树了。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="表达式树（Expression Trees）">
-<meta property="og:url" content="https://probieluo.github.io/posts/Expression-trees/index.html">
+<meta property="og:url" content="https://probieluo.github.io/posts/Expression-trees0/index.html">
 <meta property="og:site_name" content="probie&#39;s blog">
 <meta property="og:description" content="在 .NET 开发中，表达式树是一个强大但容易被忽视的特性。如果你使用过 Entity Framework 或 LINQ to SQL，其实你已经在间接使用表达式树了。">
 <meta property="og:locale">
@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://probieluo.github.io/images/image%20copy.png">
 <meta property="og:image" content="https://probieluo.github.io/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-11-24%20224959.png">
 <meta property="article:published_time" content="2025-11-23T14:45:42.000Z">
-<meta property="article:modified_time" content="2025-11-24T15:22:16.433Z">
+<meta property="article:modified_time" content="2025-11-25T14:00:31.446Z">
 <meta property="article:author" content="probie">
 <meta property="article:tag" content="C#">
 <meta property="article:tag" content="LINQ">
@@ -228,7 +228,7 @@
         
 
             <article itemscope itemtype="https://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/Expression-trees/">
+    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/Expression-trees0/">
     <div class="kratos-hentry kratos-page-inner clearfix">
         <header class="kratos-page-header">
             
@@ -244,7 +244,7 @@
                         <i class="fa fa-edit"></i> 
                         
                         
-                            ~19.20K
+                            ~19.44K
                         
                         字
                     </li>
@@ -341,7 +341,8 @@
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>,<span class="built_in">bool</span>&gt;&gt; expr = x =&gt; x &gt; <span class="number">5</span>;</span><br><span class="line">Console.WriteLine(expr);</span><br><span class="line">Console.WriteLine(expr.Body);</span><br><span class="line"></span><br><span class="line">Console.WriteLine(expr.ToString(<span class="string">&quot;Object notation&quot;</span>,<span class="string">&quot;C#&quot;</span>));</span><br></pre></td></tr></table></figure>
 
 <p><img src="/../images/image%20copy.png"></p>
-<p>可以看到，表达式树不同类型的节点对应不同类型，这些类型对应枚举System.Linq.Expressions.ExpressionType不同的值。</p>
+<p>可以看到，表达式树不同类型的节点对应不同类型，这些类型直接间接继承Expression。如上面Body就是二元运算符节点类型 BinaryExpression、Lambda 表达式 LambdaExpression（如 x &#x3D;&gt; x &gt; 10）、方法调用 MethodCallExpression（如 obj.ToString()）、成员访问 MemberExpression （如 obj.Name、x.Age）、常量 ConstantExpression 、参数 ParameterExpression。</p>
+<p>而NodeType表示标识当前表达式节点的类型，是ExpressionType枚举值。</p>
 <div class="collapse-box-control">
     <div class="collapse-box-header"><div class="collapse-box-icon"><i class="fa fa-plus"></i></div><span>ExpressionType</span></div>
     <div class="collapse-box-content"><div class="inner">
@@ -402,7 +403,7 @@
                     <a class="tag-none-link" href="/tags/C/" rel="tag">C#</a>, <a class="tag-none-link" href="/tags/LINQ/" rel="tag">LINQ</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2025-11-24T15:22:16.433Z" itemprop="dateModified">最后编辑：2025-11-24</time>
+                    <time datetime="2025-11-25T14:00:31.446Z" itemprop="dateModified">最后编辑：2025-11-25</time>
                 </div>
             </div>
         </footer>
@@ -416,14 +417,14 @@
             
             
             <div class="nav-next clearfix">
-                <a title=" 构建表达式树" href="/posts/Construct-Expressions/">下一篇 <i class="fa fa-angle-right"></i></a>
+                <a title=" 表达式树（Expression Trees）-动态构建表达式树" href="/posts/Expression-trees1/">下一篇 <i class="fa fa-angle-right"></i></a>
             </div>
             
         </nav>
     
     
         <div class="comment-post">
-            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/Expression-trees/" data-path-hash="1b33ac4d0653a3a6aaaf82296c8585f1"></div>
+            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/Expression-trees0/" data-path-hash="7fc193830ddb4ff0f15e782aa4c2e9ff"></div>
         </div>
     
 </article>
@@ -494,7 +495,7 @@
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
     <h4 class="widget-title"><i class="fa fa-folder"></i>分类列表</h4>
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DDD/">DDD</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Expression-Trees/">Expression Trees</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%B0%E4%BD%93%E9%AA%8C/">全新体验</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/">开发技术</a><span class="category-list-count">2</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DDD/">DDD</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Expression-Tree/">Expression Tree</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%B0%E4%BD%93%E9%AA%8C/">全新体验</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/">开发技术</a><span class="category-list-count">2</span></li></ul>
   </aside>
 
 
@@ -517,13 +518,13 @@
         
           
           
-            <a class="list-group-item" href="/posts/Construct-Expressions/"><i class="fa fa-book"></i> 构建表达式树</a>
+            <a class="list-group-item" href="/posts/Expression-trees1/"><i class="fa fa-book"></i> 表达式树（Expression Trees）-动态构建表达式树</a>
             
           
         
           
           
-            <a class="list-group-item" href="/posts/Expression-trees/"><i class="fa fa-book"></i> 表达式树（Expression Trees）</a>
+            <a class="list-group-item" href="/posts/Expression-trees0/"><i class="fa fa-book"></i> 表达式树（Expression Trees）</a>
             
           
         
