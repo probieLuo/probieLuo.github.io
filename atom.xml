@@ -6,7 +6,7 @@
   <link href="https://probieluo.github.io/atom.xml" rel="self"/>
   
   <link href="https://probieluo.github.io/"/>
-  <updated>2026-04-15T15:24:21.332Z</updated>
+  <updated>2026-04-16T13:13:30.879Z</updated>
   <id>https://probieluo.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>EldenRing通关全成就</title>
+    <link href="https://probieluo.github.io/posts/EldenRing-PassageSharing/"/>
+    <id>https://probieluo.github.io/posts/EldenRing-PassageSharing/</id>
+    <published>2026-04-16T00:52:19.000Z</published>
+    <updated>2026-04-16T13:13:30.879Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前趁着steam冬促入了艾尔登法环，一直没时间玩，放在库里吃灰<del>都花钱买了还要我花时间玩？</del>，最近也是肝了一个月全成就了，这游戏太上头了，之前刚开始玩不知道存档，唉，傻乎乎的玩了三个周目才全成就，我真是太强了🥲。</p><p><img src="/../assets/EldenRing01.png" alt="EldenRing01"></p><p><img src="/../assets/EldenRing02.jpg" alt="EldenRing02"></p><p><img src="/../assets/EldenRing03.jpg" alt="EldenRing03"></p><p><img src="/../assets/EldenRing04.jpg" alt="EldenRing04"></p><p><img src="/../assets/EldenRing05.jpg" alt="EldenRing05"></p><p><img src="/../assets/EldenRing06.jpg" alt="EldenRing06"></p><p><img src="/../assets/EldenRing07.jpg" alt="EldenRing07"></p><p><img src="/../assets/EldenRing08.jpg" alt="EldenRing08"></p><p><img src="/../assets/EldenRing09.jpg" alt="EldenRing09"></p><p><img src="/../assets/EldenRing10.jpg" alt="EldenRing10"></p><p><img src="/../assets/EldenRing11.jpg" alt="EldenRing11"></p><p><img src="/../assets/EldenRing12.jpg" alt="EldenRing12"></p><p><img src="/../assets/EldenRing13.jpg" alt="EldenRing13"></p><p><img src="/../assets/EldenRing14.jpg" alt="EldenRing14"></p><p><img src="/../assets/EldenRing15.jpg" alt="EldenRing15"></p><p><img src="/../assets/EldenRing16.jpg" alt="EldenRing16"></p><p><img src="/../assets/EldenRing17.jpg" alt="EldenRing17"></p><p>之前由于专心于全成就，其他结局忘记截屏了，可惜可惜。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;之前趁着steam冬促入了艾尔登法环，一直没时间玩，放在库里吃灰&lt;del&gt;都花钱买了还要我花时间玩？&lt;/del&gt;，最近也是肝了一个月全成就了，这游戏太上头了，之前刚开始玩不知道存档，唉，傻乎乎的玩了三个周目才全成就，我真是太强了🥲。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/.</summary>
+      
+    
+    
+    
+    <category term="随笔" scheme="https://probieluo.github.io/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+    <category term="游戏" scheme="https://probieluo.github.io/tags/%E6%B8%B8%E6%88%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>项目管理十大知识领域-03项目进度管理</title>
@@ -211,7 +236,7 @@
     <link href="https://probieluo.github.io/posts/SEO-Submit-YourSite/"/>
     <id>https://probieluo.github.io/posts/SEO-Submit-YourSite/</id>
     <published>2025-11-19T12:39:54.000Z</published>
-    <updated>2026-04-15T12:15:27.477Z</updated>
+    <updated>2026-04-16T13:13:30.881Z</updated>
     
     <content type="html"><![CDATA[<p>本文介绍我们的hexo博客怎么被Google和Bing搜录。</p><p>一般来说，我们刚开始构建的hexo博客只能url访问，无法通过Google搜索引擎通过搜索提示词找到到相应文章。这是因为搜索引擎没有爬取过我们的网站，虽然说搜索引擎一般来说会自动爬取网络上所有链接并建立索引入库，但通常很慢。所以我们需要主动一点，告诉搜索引擎我们的网站。</p><h3 id="确认Google是否发现了你的页面"><a href="#确认Google是否发现了你的页面" class="headerlink" title="确认Google是否发现了你的页面"></a>确认Google是否发现了你的页面</h3><p>首先判断 Google 是否知道你的博客存在，这是收录的前提：</p><p>在 Google 搜索框输入 site:你的域名（例如 site:yourname.github.io），如果没有任何结果，说明 Google 尚未发现你的页面；如果有部分结果，说明仅部分页面未被收录。</p><p><img src="/../images/image.png"></p><p>如图内容就说明网站已经被搜索引擎收录。不过为了更好收录，还是需要提交站点地图。</p><h3 id="生成站点地图"><a href="#生成站点地图" class="headerlink" title="生成站点地图"></a>生成站点地图</h3><p>安装 <code>hexo-generator-sitemap</code> 插件：在 Hexo 根目录执行</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure><p>配置插件：打开 Hexo 配置文件 _config.yml，添加（或修改）</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">sitemap.xml</span>  <span class="comment"># 生成的sitemap路径</span></span><br></pre></td></tr></table></figure><p>重新生成并部署博客</p><p>确认 Sitemap 生效：访问 <code>https://你的域名/sitemap.xml</code>，应能看到所有文章的链接列表</p><p>不过这里我是用hexo主题 <code>Kratos:Rebirth</code> 的自带有配置的，上述生成站点地图没有验证过。</p><p>我这里只需要配置_config.yml文件下url项就行了</p><p><img src="/../images/image01.png"></p><p>然后执行<code>hexo c</code> &amp;&amp; <code>hexo g</code> 会生成一个xml文件<code>public/sitemap.xml</code> 部署GitHub后访问 <code>https://你的域名/sitemap.xml</code> 可以看到所有文章的链接列表。</p><p><img src="/../images/image02.png"></p><h3 id="Google-提交你的站点地图"><a href="#Google-提交你的站点地图" class="headerlink" title="Google 提交你的站点地图"></a>Google 提交你的站点地图</h3><ol><li><p>访问 <a href="https://search.google.com/search-console">Google Search Console</a>，用 Google 账号登录</p></li><li><p>添加网站：选择 “网址前缀”，输入你的博客完整域名（例如 <a href="https://yourname.github.io)/">https://yourname.github.io）</a></p></li><li><p>验证所有权，这里直接按它推荐的 <code>HTML文件验证</code> 就好了，复制到你的public然后重新部署到GitHub就行了</p></li><li><p>提交 Sitemap ，左侧菜单找到站点地图，输入sitemap提交就行了，注意这里<code>https://你的域名/sitemap.xml</code>要能访问的</p></li></ol><h3 id="Bing-提交你的站点地图"><a href="#Bing-提交你的站点地图" class="headerlink" title="Bing 提交你的站点地图"></a>Bing 提交你的站点地图</h3><p>直接从GSC进行导入就行了</p><p>与GSC提交一样的。</p>]]></content>
     
@@ -227,9 +252,9 @@
     <category term="编程技术" scheme="https://probieluo.github.io/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/"/>
     
     
-    <category term="hexo" scheme="https://probieluo.github.io/tags/hexo/"/>
+    <category term="Hexo" scheme="https://probieluo.github.io/tags/Hexo/"/>
     
-    <category term="seo" scheme="https://probieluo.github.io/tags/seo/"/>
+    <category term="Seo" scheme="https://probieluo.github.io/tags/Seo/"/>
     
   </entry>
   
@@ -263,7 +288,7 @@
     <link href="https://probieluo.github.io/posts/HexoUsage/"/>
     <id>https://probieluo.github.io/posts/HexoUsage/</id>
     <published>2025-11-14T11:52:41.000Z</published>
-    <updated>2026-04-15T12:15:27.476Z</updated>
+    <updated>2026-04-16T13:13:30.879Z</updated>
     
     <content type="html"><![CDATA[<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">hexo init [folder]</span><br><span class="line"></span><br><span class="line"><span class="comment">#new </span></span><br><span class="line"><span class="comment"># 没有设置 layout 的话，默认使用 _config.yml 中的 default_layout 参数。</span></span><br><span class="line">hexo new [layout] &lt;title&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">#生成静态文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment">#发表草稿</span></span><br><span class="line">hexo publish [layout] &lt;filename&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">#启动服务器</span></span><br><span class="line">hexo server</span><br><span class="line"></span><br><span class="line"><span class="comment">#部署你的网站</span></span><br><span class="line">hexo deploy</span><br><span class="line"></span><br><span class="line"><span class="comment">#从其他博客系统 迁移内容</span></span><br><span class="line">hexo migrate &lt;<span class="built_in">type</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">#清除缓存文件 (db.json) 和已生成的静态文件 (public)</span></span><br><span class="line">hexo clean</span><br><span class="line"></span><br><span class="line"><span class="comment">#列出所有路由</span></span><br><span class="line">hexo list &lt;<span class="built_in">type</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">#显示草稿</span></span><br><span class="line">hexo --draft</span><br></pre></td></tr></table></figure>]]></content>
     
@@ -278,7 +303,7 @@
     <category term="编程技术" scheme="https://probieluo.github.io/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/"/>
     
     
-    <category term="hexo" scheme="https://probieluo.github.io/tags/hexo/"/>
+    <category term="Hexo" scheme="https://probieluo.github.io/tags/Hexo/"/>
     
   </entry>
   
