@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  
+    <link rel="icon" href="/assets/github-mark.svg">
+  
+  
+  <title>摸鱼派聊天室VisualStudio扩展 | probie&#39;s blog</title>
+  <link rel="canonical" href="https://probieluo.github.io/posts/fishpivsext/">
+  <meta name="author" content="probie" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="VisualStudio扩展" />
+  
+  <meta name="description" content="这是一个将摸鱼派聊天室集成到 Visual Studio 的扩展，在打代码的同时无缝摸鱼，目前只试过VS2026，不过2022应该也是可以的，其他的就不知道了。 后续可能会更新，完善了会打包到拓展市场。 市场已发布 鱼排聊天室VisualStudio拓展 项目主页与下载  Releases: https:&#x2F;&#x2F;github.com&#x2F;probieLuo&#x2F;FishpiVS2026Plugin&#x2F;relea">
+<meta property="og:type" content="article">
+<meta property="og:title" content="摸鱼派聊天室VisualStudio扩展">
+<meta property="og:url" content="https://probieluo.github.io/posts/fishpivsext/index.html">
+<meta property="og:site_name" content="probie&#39;s blog">
+<meta property="og:description" content="这是一个将摸鱼派聊天室集成到 Visual Studio 的扩展，在打代码的同时无缝摸鱼，目前只试过VS2026，不过2022应该也是可以的，其他的就不知道了。 后续可能会更新，完善了会打包到拓展市场。 市场已发布 鱼排聊天室VisualStudio拓展 项目主页与下载  Releases: https:&#x2F;&#x2F;github.com&#x2F;probieLuo&#x2F;FishpiVS2026Plugin&#x2F;relea">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/probieLuo/FishpiVS2026Plugin/blob/master/resources/image.png?raw=true">
+<meta property="og:image" content="https://github.com/probieLuo/FishpiVS2026Plugin/blob/master/resources/image-1.png?raw=true">
+<meta property="og:image" content="https://github.com/probieLuo/FishpiVS2026Plugin/blob/master/resources/image-2.png?raw=true">
+<meta property="og:image" content="https://github.com/probieLuo/FishpiVS2026Plugin/blob/master/resources/%E5%B1%8F%E5%B9%95%E5%BD%95%E5%88%B62026-03-09161012.gif?raw=true">
+<meta property="article:published_time" content="2026-04-17T01:16:38.000Z">
+<meta property="article:modified_time" content="2026-04-20T12:45:52.620Z">
+<meta property="article:author" content="probie">
+<meta property="article:tag" content="VisualStudio扩展">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/probieLuo/FishpiVS2026Plugin/blob/master/resources/image.png?raw=true">
+  
+    <link rel="alternate" href="/atom.xml" title="probie's blog" type="application/atom+xml">
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kr-core.min.css" media="all"></link>
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/highlight.js/night-blue.min.css" media="all"></link>
+  
+  <link rel="stylesheet" id="theme-light-css" href="/css/kr-theme/light.min.css" media="all"></link>
+  <link rel="stylesheet" id="theme-dark-css" href="/css/kr-theme/dark.min.css" media="(prefers-color-scheme: dark)"></link>
+  <script src="/js/kr-theme.min.js"></script>
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></link>
+  
+    <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></link>
+  
+  
+    <link rel="stylesheet" href="/vendors/viewerjs@1.11.6/dist/viewer.min.css"></link>
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  
+  <!-- 自定义站点横幅和背景 -->
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('https://dev.krt.moe/demo-assets/banner.webp');
+      }
+      html[data-theme="dark"] .kratos-cover.kratos-cover-2 {
+        background-image: url('https://dev.krt.moe/demo-assets/banner_dark.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('https://dev.krt.moe/demo-assets/bg.webp');
+        }
+        html[data-theme="dark"] body.custom-background {
+          background-image: url('https://dev.krt.moe/demo-assets/bg.webp');
+        }
+      }
+    
+    
+      .widget-kratos-about .photo-background {
+        background-image: url('/images/default.webp');
+      }
+      html[data-theme="dark"] .widget-kratos-about .photo-background {
+        background-image: url('/images/default.webp');
+      }
+    
+  </style>
+
+  <!-- 额外的追加注入项 -->
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<link rel="stylesheet" href="/comments/gitalk.css" />
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    <li>
+                                        
+                                            <a href="/">
+                                        
+                                            
+                                                <i class="fa fa-home"></i>
+                                            
+                                            首页
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/archives/">
+                                        
+                                            
+                                                <i class="fa fa-file"></i>
+                                            
+                                            归档
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a>
+                                        
+                                            
+                                                <i class="fa fa-link"></i>
+                                            
+                                            外链
+                                        </a>
+                                        
+                                            <ul class="sub-menu">
+                                                
+                                                    <li>
+                                                        <a target="_blank" rel="noopener" href="https://github.com/probieLuo/">
+                                                            
+                                                                <i class="fa fa-code"></i>
+                                                            
+                                                            GitHub
+                                                        </a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/aboutme/">
+                                        
+                                            
+                                                <i class="fa fa-heart"></i>
+                                            
+                                            About
+                                        </a>
+                                        
+                                    </li>
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">probie&#39;s blog</a></div>
+                    <div id="kratos-nav-toggle-wrapper" class="nav-toggle">
+                        <a id="kratos-nav-toggle" class="kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>probie&#39;s blog</h2> <br />
+                        <span>会一点.NET, 这里记录一些学习笔记和生活琐事</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+
+
+        
+
+            
+
+            <section class="kr-main-col col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/fishpivsext/">
+    <div class="kratos-hentry kratos-page-inner clearfix">
+        <header class="kratos-page-header">
+            
+                <h1 class="kratos-page-title text-center" itemprop="name headline">摸鱼派聊天室VisualStudio扩展</h1>
+            
+            <ul class="kratos-page-meta text-center">
+                <li><time datetime="2026-04-17T01:16:38.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2026-04-17</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">probie</span>
+                </li>
+                
+                    <li>
+                        <i class="fa fa-edit"></i> 
+                        
+                        
+                            586
+                        
+                        字
+                    </li>
+                
+                
+                
+            </ul>
+        </header>
+        <div class="kratos-page-content kr-post">
+            
+            
+            
+            <hr />
+            <div itemprop="articleBody"><p>这是一个将摸鱼派聊天室集成到 Visual Studio 的扩展，在打代码的同时无缝摸鱼，目前只试过VS2026，不过2022应该也是可以的，其他的就不知道了。</p>
+<p><del>后续可能会更新，完善了会打包到拓展市场。</del> 市场已发布 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=fishpi-csharp.fishpivs3a86116a59f44c3ea71adc161012381e2e">鱼排聊天室VisualStudio拓展</a></p>
+<p><strong>项目主页与下载</strong></p>
+<ul>
+<li>Releases: <a target="_blank" rel="noopener" href="https://github.com/probieLuo/FishpiVS2026Plugin/releases">https://github.com/probieLuo/FishpiVS2026Plugin/releases</a></li>
+</ul>
+<p><strong>安装</strong></p>
+<ol>
+<li>访问 Releases 页面下载最新的 <code>.vsix</code> 文件。</li>
+<li>安装前请先关闭 Visual Studio。</li>
+<li>执行 <code>FishpiVS2026Plugin.vsix</code> 进行安装。</li>
+</ol>
+<p><strong>配置</strong></p>
+<ol>
+<li>登录摸鱼派网页版（<a target="_blank" rel="noopener" href="https://fishpi.cn/">https://fishpi.cn</a>）。</li>
+<li>打开地址： <a target="_blank" rel="noopener" href="https://fishpi.cn/chat-room/node/get">https://fishpi.cn/chat-room/node/get</a> ，获取 <code>node</code> 与 <code>apikey</code>。</li>
+<li>在 Visual Studio 中打开扩展窗口：视图 &#x3D;&gt; 其他窗口 &#x3D;&gt; Fishpi。</li>
+<li>在扩展窗口中点击 <code>set</code>，填写 <code>node</code> 和 <code>apikey</code> 并保存。</li>
+</ol>
+<p><img src="https://github.com/probieLuo/FishpiVS2026Plugin/blob/master/resources/image.png?raw=true" alt="获取key"></p>
+<p><img src="https://github.com/probieLuo/FishpiVS2026Plugin/blob/master/resources/image-1.png?raw=true" alt="设置key"></p>
+<p><img src="https://github.com/probieLuo/FishpiVS2026Plugin/blob/master/resources/image-2.png?raw=true" alt="窗口位置"></p>
+<p>谢谢使用！</p>
+<hr>
+<p><strong>Todo</strong></p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 消息引用</li>
+<li><input checked="" disabled="" type="checkbox"> 撤回消息</li>
+<li><input checked="" disabled="" type="checkbox"> 领取活跃奖励</li>
+<li><input checked="" disabled="" type="checkbox"> 查看活跃度</li>
+<li><input checked="" disabled="" type="checkbox"> 清风明月</li>
+<li><input checked="" disabled="" type="checkbox"> 聊天室小尾巴</li>
+<li><input checked="" disabled="" type="checkbox"> 屏蔽机器人消息</li>
+<li><input checked="" disabled="" type="checkbox"> 屏蔽空消息</li>
+<li><input disabled="" type="checkbox"> 收发红包</li>
+<li><input disabled="" type="checkbox"> 其他摸鱼小功能…</li>
+</ul>
+<p>效果展示~</p>
+<p><img src="https://github.com/probieLuo/FishpiVS2026Plugin/blob/master/resources/%E5%B1%8F%E5%B9%95%E5%BD%95%E5%88%B62026-03-09161012.gif?raw=true" alt="效果gif"></p>
+</div>
+        </div>
+        
+            <div class="kratos-copyright text-center clearfix">
+                <span itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</span>
+            </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+            
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/VisualStudio%E6%89%A9%E5%B1%95/" rel="tag">VisualStudio扩展</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2026-04-20T12:45:52.620Z" itemprop="dateModified">最后编辑：2026-04-20</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" 项目管理十大知识领域-04项目成本管理" href="/posts/project-management-project-cost/"><i class="fa fa-angle-left"></i> 上一篇</a>
+            </div>
+            
+            
+            <div class="nav-next clearfix">
+                <a title=" 项目管理十大知识领域-05项目质量管理" href="/posts/project-management-project-quality/">下一篇 <i class="fa fa-angle-right"></i></a>
+            </div>
+            
+        </nav>
+    
+    
+        <div class="comment-post">
+            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/fishpivsext/" data-path-hash="81f0e0c2f20e2b227decc6b83bbb60b6"></div>
+        </div>
+    
+</article>
+
+        
+
+            </section>
+
+            
+                
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/assets/OIP (8).jpg" alt="probie" loading="lazy" decoding="auto" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">probie</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                文章
+            </span>
+            <span class="count">
+                22
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                分类
+            </span>
+            <span class="count">
+                3
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                标签
+            </span>
+            <span class="count">
+                10
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>分类列表</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/">编程技术</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a><span class="category-list-count">9</span></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
+      <div class="tag-clouds">
+        <a href="/tags/C/" style="font-size: 0.8em;">C#</a> <a href="/tags/DDD/" style="font-size: 0.7em;">DDD</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/Git/" style="font-size: 0.6em;">Git</a> <a href="/tags/Hexo/" style="font-size: 0.7em;">Hexo</a> <a href="/tags/LINQ/" style="font-size: 0.7em;">LINQ</a> <a href="/tags/Redis/" style="font-size: 0.6em;">Redis</a> <a href="/tags/Seo/" style="font-size: 0.6em;">Seo</a> <a href="/tags/VisualStudio%E6%89%A9%E5%B1%95/" style="font-size: 0.6em;">VisualStudio扩展</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 0.6em;">游戏</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>最新文章</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-project-stakeholder/"><i class="fa fa-book"></i> 项目管理十大知识领域-08项目干系人管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-project-communication/"><i class="fa fa-book"></i> 项目管理十大知识领域-07项目沟通管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-project-resource/"><i class="fa fa-book"></i> 项目管理十大知识领域-06项目资源管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-project-quality/"><i class="fa fa-book"></i> 项目管理十大知识领域-05项目质量管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/fishpivsext/"><i class="fa fa-book"></i> 摸鱼派聊天室VisualStudio扩展</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+            
+
+        
+
+                </div>
+    </div>
+</div>
+
+<footer>
+    <div id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                            <li>
+                                <a href="https://github.com/probieLuo" target="_blank" rel="nofollow">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a href="/atom.xml" target="_blank" rel="nofollow">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2026 probie's blog 版权所有.</li>
+                            <li>本站已在风雨中飘摇<span id="kr-since">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>自豪地使用 <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a> 主题</li>
+                            <li>站点由 <a href="https://github.com/probieLuo" target="_blank">probie</a> 用 <i class="fa fa-heart" style="color:#d43f57"></i> 搭建</li>
+                        </div>
+                        <!-- 额外的追加注入项 -->
+                        
+                            <div>
+                                
+                                    <li>由 <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a> 强力驱动</li>
+                                
+                                    <li>在 <a href="https://github.io" target="_blank">Github Pages</a> 暖心托管</li>
+                                
+                            </div>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                <div class="box theme-box" id="theme-toggle">
+                    <span class="fa fa-adjust"></span>
+                </div>
+            </div>
+            <div id="gotop-box" class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+
+
+
+
+<!-- 额外的追加注入项 -->
+
+
+        <script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+
+  <script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+
+
+
+  <script defer src="/vendors/viewerjs@1.11.6/dist/viewer.min.js"></script>
+
+
+<script defer src="/js/kr-core.min.js"></script>
+
+
+  <script defer src="/js/kr-pjax.min.js"></script>
+
+
+<!-- 额外的追加注入项 -->
+
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/comments/gitalk.js"></script>
+<script src="/others/random-post-cover.js"></script>
+<script src="/effects/cursor-effects.js"></script>
+
+
+
+    </body>
+</html>
