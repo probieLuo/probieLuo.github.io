@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  
+    <link rel="icon" href="/assets/github-mark.svg">
+  
+  
+  <title>表达式树 | probie&#39;s blog</title>
+  <link rel="canonical" href="https://probieluo.github.io/posts/expression-trees-00/">
+  <meta name="author" content="probie" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="C#, LINQ" />
+  
+  <meta name="description" content="在 .NET 开发中，表达式树是一个强大但容易被忽视的特性。如果你使用过 Entity Framework 或 LINQ to SQL，其实你已经在间接使用表达式树了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="表达式树">
+<meta property="og:url" content="https://probieluo.github.io/posts/expression-trees-00/index.html">
+<meta property="og:site_name" content="probie&#39;s blog">
+<meta property="og:description" content="在 .NET 开发中，表达式树是一个强大但容易被忽视的特性。如果你使用过 Entity Framework 或 LINQ to SQL，其实你已经在间接使用表达式树了。">
+<meta property="og:locale">
+<meta property="og:image" content="https://probieluo.github.io/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-11-24%20221604.png">
+<meta property="og:image" content="https://probieluo.github.io/images/image%20copy.png">
+<meta property="og:image" content="https://probieluo.github.io/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-11-24%20224959.png">
+<meta property="article:published_time" content="2025-11-23T14:45:42.000Z">
+<meta property="article:modified_time" content="2026-04-22T12:38:06.081Z">
+<meta property="article:author" content="probie">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="LINQ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://probieluo.github.io/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-11-24%20221604.png">
+  
+    <link rel="alternate" href="/atom.xml" title="probie's blog" type="application/atom+xml">
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kr-core.min.css" media="all"></link>
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/highlight.js/night-blue.min.css" media="all"></link>
+  
+  <link rel="stylesheet" id="theme-light-css" href="/css/kr-theme/light.min.css" media="all"></link>
+  <link rel="stylesheet" id="theme-dark-css" href="/css/kr-theme/dark.min.css" media="(prefers-color-scheme: dark)"></link>
+  <script src="/js/kr-theme.min.js"></script>
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></link>
+  
+    <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></link>
+  
+  
+    <link rel="stylesheet" href="/vendors/viewerjs@1.11.6/dist/viewer.min.css"></link>
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  
+  <!-- 自定义站点横幅和背景 -->
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('https://w.wallhaven.cc/full/21/wallhaven-2195d6.jpg');
+      }
+      html[data-theme="dark"] .kratos-cover.kratos-cover-2 {
+        background-image: url('https://w.wallhaven.cc/full/d8/wallhaven-d8ey2m.png');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('https://dev.krt.moe/demo-assets/bg.webp');
+        }
+        html[data-theme="dark"] body.custom-background {
+          background-image: url('https://dev.krt.moe/demo-assets/bg.webp');
+        }
+      }
+    
+    
+      .widget-kratos-about .photo-background {
+        background-image: url('/images/default.webp');
+      }
+      html[data-theme="dark"] .widget-kratos-about .photo-background {
+        background-image: url('/images/default.webp');
+      }
+    
+  </style>
+
+  <!-- 额外的追加注入项 -->
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<link rel="stylesheet" href="/comments/gitalk.css" />
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    <li>
+                                        
+                                            <a href="/">
+                                        
+                                            
+                                                <i class="fa fa-home"></i>
+                                            
+                                            首页
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/archives/">
+                                        
+                                            
+                                                <i class="fa fa-file"></i>
+                                            
+                                            归档
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a>
+                                        
+                                            
+                                                <i class="fa fa-link"></i>
+                                            
+                                            外链
+                                        </a>
+                                        
+                                            <ul class="sub-menu">
+                                                
+                                                    <li>
+                                                        <a target="_blank" rel="noopener" href="https://github.com/probieLuo/">
+                                                            
+                                                                <i class="fa fa-code"></i>
+                                                            
+                                                            GitHub
+                                                        </a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/aboutme/">
+                                        
+                                            
+                                                <i class="fa fa-heart"></i>
+                                            
+                                            About
+                                        </a>
+                                        
+                                    </li>
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">probie&#39;s blog</a></div>
+                    <div id="kratos-nav-toggle-wrapper" class="nav-toggle">
+                        <a id="kratos-nav-toggle" class="kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>probie&#39;s blog</h2> <br />
+                        <span>会一点.NET, 这里记录一些学习笔记和生活琐事</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+
+
+        
+
+            
+
+            <section class="kr-main-col col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/expression-trees-00/">
+    <div class="kratos-hentry kratos-page-inner clearfix">
+        <header class="kratos-page-header">
+            
+                <h1 class="kratos-page-title text-center" itemprop="name headline">表达式树</h1>
+            
+            <ul class="kratos-page-meta text-center">
+                <li><time datetime="2025-11-23T14:45:42.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2025-11-23</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">probie</span>
+                </li>
+                
+                    <li>
+                        <i class="fa fa-edit"></i> 
+                        
+                        
+                            ~19.44K
+                        
+                        字
+                    </li>
+                
+                
+                
+            </ul>
+        </header>
+        <div class="kratos-page-content kr-post">
+            
+            
+            
+                <div class="kratos-post-inner-toc toc-div-class" >
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是表达式树？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E4%BF%97%E7%90%86%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">通俗理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="toc-number">1.2.</span> <span class="toc-text">一个简单的例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">为什么需要表达式树？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Expression-%E5%92%8C-Func-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.</span> <span class="toc-text">Expression 和 Func 的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Func-%E5%A7%94%E6%89%98"><span class="toc-number">2.1.</span> <span class="toc-text">Func&lt;T&gt; - 委托</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expression-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-number">2.2.</span> <span class="toc-text">Expression&lt;Func&lt;T&gt;&gt; - 表达式树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94%E8%A1%A8%E6%A0%BC"><span class="toc-number">2.3.</span> <span class="toc-text">对比表格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E5%AF%B9%E6%AF%94"><span class="toc-number">2.4.</span> <span class="toc-text">实际应用场景对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.5.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">查看表达式树的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Visual-Studio%E9%80%9A%E8%BF%87%E8%87%AA%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9F%A5%E7%9C%8B"><span class="toc-number">3.1.</span> <span class="toc-text">Visual Studio通过自动窗口查看</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E6%9F%A5%E7%9C%8B%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-number">3.2.</span> <span class="toc-text">代码查看表达式树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-number">3.3.</span> <span class="toc-text">递归遍历表达式树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%A6%81%E7%82%B9"><span class="toc-number">4.1.</span> <span class="toc-text">关键要点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="toc-number">4.2.</span> <span class="toc-text">推荐阅读</span></a></li></ol></li></ol>
+                </div>
+            
+            <hr />
+            <div itemprop="articleBody"><p>在 .NET 开发中，表达式树是一个强大但容易被忽视的特性。如果你使用过 Entity Framework 或 LINQ to SQL，其实你已经在间接使用表达式树了。</p>
+<span id="more"></span>
+
+<hr>
+<h2 id="什么是表达式树？"><a href="#什么是表达式树？" class="headerlink" title="什么是表达式树？"></a>什么是表达式树？</h2><p><strong>表达式树（Expression Tree）</strong> 是用树形数据结构来表示代码逻辑运算的技术，它让我们可以在运行时访问逻辑运算结构。表达式树在.net中对应<code>Expression&lt;TDelegate&gt;</code>类型。</p>
+<h3 id="通俗理解"><a href="#通俗理解" class="headerlink" title="通俗理解"></a>通俗理解</h3><ul>
+<li><strong>普通委托</strong>：是一段可执行的代码</li>
+<li><strong>表达式树</strong>：是描述代码结构的数据，可以被分析、修改、翻译成其他形式（如 SQL）</li>
+</ul>
+<h3 id="一个简单的例子"><a href="#一个简单的例子" class="headerlink" title="一个简单的例子"></a>一个简单的例子</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通委托：直接执行</span></span><br><span class="line">Func&lt;<span class="built_in">int</span>, <span class="built_in">bool</span>&gt; func = x =&gt; x &gt; <span class="number">5</span>;</span><br><span class="line"><span class="built_in">bool</span> result = func(<span class="number">10</span>); <span class="comment">// 直接执行，返回 true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 表达式树：代码的数据表示</span></span><br><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">bool</span>&gt;&gt; expr = x =&gt; x &gt; <span class="number">5</span>;</span><br><span class="line"><span class="comment">// expr 不是可执行代码，而是一个树形结构，描述了&quot;x &gt; 5&quot;这个表达式</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="为什么需要表达式树？"><a href="#为什么需要表达式树？" class="headerlink" title="为什么需要表达式树？"></a>为什么需要表达式树？</h3><p>表达式树的主要用途是<strong>将 C# 代码翻译成其他形式</strong>：</p>
+<ol>
+<li><strong>LINQ to SQL &#x2F; Entity Framework</strong>：将 C# 查询翻译成 SQL 语句</li>
+<li><strong>动态查询构建</strong>：根据用户输入动态生成查询条件</li>
+<li><strong>代码分析</strong>：检查代码结构、提取元数据</li>
+<li><strong>序列化&#x2F;反序列化</strong>：将代码逻辑保存或传输</li>
+</ol>
+<hr>
+<h2 id="Expression-和-Func-的区别"><a href="#Expression-和-Func-的区别" class="headerlink" title="Expression 和 Func 的区别"></a>Expression 和 Func 的区别</h2><h3 id="Func-委托"><a href="#Func-委托" class="headerlink" title="Func&lt;T&gt; - 委托"></a><code>Func&lt;T&gt;</code> - 委托</h3><p><code>Func&lt;T&gt;</code> 是一个委托类型，代表<strong>可执行的代码</strong>。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>, <span class="built_in">int</span>&gt; <span class="keyword">add</span> = (a, b) =&gt; a + b;</span><br><span class="line"><span class="built_in">int</span> result = <span class="keyword">add</span>(<span class="number">3</span>, <span class="number">5</span>); <span class="comment">// 执行代码，返回 8</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>特点</strong>：</p>
+<ul>
+<li>编译后直接生成 IL 代码</li>
+<li>可以直接调用执行</li>
+<li>无法查看内部结构</li>
+</ul>
+<h3 id="Expression-表达式树"><a href="#Expression-表达式树" class="headerlink" title="Expression&lt;Func&lt;T&gt;&gt; - 表达式树"></a><code>Expression&lt;Func&lt;T&gt;&gt;</code> - 表达式树</h3><p><code>Expression&lt;Func&lt;T&gt;&gt;</code> 是一个表达式树类型，代表<strong>代码的数据结构</strong>。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>, <span class="built_in">int</span>&gt;&gt; addExpr = (a, b) =&gt; a + b;</span><br><span class="line"><span class="comment">// addExpr 是一个树形结构，不能直接执行</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>特点</strong>：</p>
+<ul>
+<li>编译后生成表达式树对象（包含 Body、Parameters 等属性）</li>
+<li>不能直接调用，需要先编译成委托</li>
+<li>可以分析、修改、翻译</li>
+</ul>
+<h3 id="对比表格"><a href="#对比表格" class="headerlink" title="对比表格"></a>对比表格</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Func<T></th>
+<th>Expression&lt;Func<T>&gt;</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本质</td>
+<td>委托（可执行代码）</td>
+<td>表达式树（代码的数据结构）</td>
+</tr>
+<tr>
+<td>是否可执行</td>
+<td>✅ 直接执行</td>
+<td>❌ 需要先编译成委托</td>
+</tr>
+<tr>
+<td>是否可分析</td>
+<td>❌ 无法查看内部结构</td>
+<td>✅ 可以访问树形结构</td>
+</tr>
+<tr>
+<td>典型用途</td>
+<td>LINQ to Objects、回调函数</td>
+<td>LINQ to SQL、动态查询</td>
+</tr>
+</tbody></table>
+<h3 id="实际应用场景对比"><a href="#实际应用场景对比" class="headerlink" title="实际应用场景对比"></a>实际应用场景对比</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LINQ to Objects：使用 Func（在内存中执行）</span></span><br><span class="line">List&lt;<span class="built_in">int</span>&gt; numbers = <span class="keyword">new</span> List&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> result1 = numbers.Where(x =&gt; x &gt; <span class="number">3</span>); <span class="comment">// 直接在内存中过滤</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// LINQ to Entities：使用 Expression（翻译成 SQL）</span></span><br><span class="line">DbSet&lt;User&gt; users = dbContext.Users;</span><br><span class="line"><span class="keyword">var</span> result2 = users.Where(x =&gt; x.Age &gt; <span class="number">18</span>); <span class="comment">// 翻译成 SQL: SELECT * FROM Users WHERE Age &gt; 18</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Expression类似于源代码，Func类似编译后的二进制程序。</p>
+<hr>
+<h2 id="查看表达式树的结构"><a href="#查看表达式树的结构" class="headerlink" title="查看表达式树的结构"></a>查看表达式树的结构</h2><p>表达式树是一个树形结构，可以通过其属性查看内部组成。</p>
+<h3 id="Visual-Studio通过自动窗口查看"><a href="#Visual-Studio通过自动窗口查看" class="headerlink" title="Visual Studio通过自动窗口查看"></a>Visual Studio通过自动窗口查看</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">bool</span>&gt;&gt; expr = x =&gt; x &gt; <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-11-24%20221604.png"></p>
+<p>可以看到expr NodeType是Lambda，Body下面有Left {x}和Right {5} ，Body的 NodeType 是 GreaterThan，它是 二元运算符节点类型 BinaryExpression ，GreaterThan表示大于</p>
+<h3 id="代码查看表达式树"><a href="#代码查看表达式树" class="headerlink" title="代码查看表达式树"></a>代码查看表达式树</h3><p>使用包ExpressionTreeToString</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>,<span class="built_in">bool</span>&gt;&gt; expr = x =&gt; x &gt; <span class="number">5</span>;</span><br><span class="line">Console.WriteLine(expr);</span><br><span class="line">Console.WriteLine(expr.Body);</span><br><span class="line"></span><br><span class="line">Console.WriteLine(expr.ToString(<span class="string">&quot;Object notation&quot;</span>,<span class="string">&quot;C#&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/image%20copy.png"></p>
+<p>可以看到，表达式树不同类型的节点对应不同类型，这些类型直接间接继承Expression。如上面Body就是二元运算符节点类型 BinaryExpression、Lambda 表达式 LambdaExpression（如 x &#x3D;&gt; x &gt; 10）、方法调用 MethodCallExpression（如 obj.ToString()）、成员访问 MemberExpression （如 obj.Name、x.Age）、常量 ConstantExpression 、参数 ParameterExpression。</p>
+<p>而NodeType表示标识当前表达式节点的类型，是ExpressionType枚举值。</p>
+<div class="collapse-box-control">
+    <div class="collapse-box-header"><div class="collapse-box-icon"><i class="fa fa-plus"></i></div><span>ExpressionType</span></div>
+    <div class="collapse-box-content"><div class="inner">
+        <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">region</span> 程序集 System.Linq.Expressions, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</span></span><br><span class="line"><span class="comment">// C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\10.0.0\ref\net10.0\System.Linq.Expressions.dll</span></span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">System.Linq.Expressions</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// 摘要:</span></span><br><span class="line">	<span class="comment">//     Describes the node types for the nodes of an expression tree.</span></span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">enum</span> ExpressionType</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An addition operation, such as a + b, without overflow checking, for numeric</span></span><br><span class="line">		<span class="comment">//     operands.</span></span><br><span class="line">		Add = <span class="number">0</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An addition operation, such as (a + b), with overflow checking, for numeric operands.</span></span><br><span class="line">		AddChecked = <span class="number">1</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise or logical AND operation, such as (a &amp; b) in C# and (a And b) in Visual</span></span><br><span class="line">		<span class="comment">//     Basic.</span></span><br><span class="line">		And = <span class="number">2</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A conditional AND operation that evaluates the second operand only if the first</span></span><br><span class="line">		<span class="comment">//     operand evaluates to true. It corresponds to (a &amp;&amp; b) in C# and (a AndAlso b)</span></span><br><span class="line">		<span class="comment">//     in Visual Basic.</span></span><br><span class="line">		AndAlso = <span class="number">3</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An operation that obtains the length of a one-dimensional array, such as array.Length.</span></span><br><span class="line">		ArrayLength = <span class="number">4</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An indexing operation in a one-dimensional array, such as array[index] in C#</span></span><br><span class="line">		<span class="comment">//     or array(index) in Visual Basic.</span></span><br><span class="line">		ArrayIndex = <span class="number">5</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A method call, such as in the obj.sampleMethod() expression.</span></span><br><span class="line">		Call = <span class="number">6</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A node that represents a null coalescing operation, such as (a ?? b) in C# or</span></span><br><span class="line">		<span class="comment">//     If(a, b) in Visual Basic.</span></span><br><span class="line">		Coalesce = <span class="number">7</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A conditional operation, such as a &gt; b ? a : b in C# or If(a &gt; b, a, b) in Visual</span></span><br><span class="line">		<span class="comment">//     Basic.</span></span><br><span class="line">		Conditional = <span class="number">8</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A constant value.</span></span><br><span class="line">		Constant = <span class="number">9</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A cast or conversion operation, such as (SampleType)obj in C#or CType(obj, SampleType)</span></span><br><span class="line">		<span class="comment">//     in Visual Basic. For a numeric conversion, if the converted value is too large</span></span><br><span class="line">		<span class="comment">//     for the destination type, no exception is thrown.</span></span><br><span class="line">		Convert = <span class="number">10</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A cast or conversion operation, such as (SampleType)obj in C#or CType(obj, SampleType)</span></span><br><span class="line">		<span class="comment">//     in Visual Basic. For a numeric conversion, if the converted value does not fit</span></span><br><span class="line">		<span class="comment">//     the destination type, an exception is thrown.</span></span><br><span class="line">		ConvertChecked = <span class="number">11</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A division operation, such as (a / b), for numeric operands.</span></span><br><span class="line">		Divide = <span class="number">12</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A node that represents an equality comparison, such as (a == b) in C# or (a =</span></span><br><span class="line">		<span class="comment">//     b) in Visual Basic.</span></span><br><span class="line">		Equal = <span class="number">13</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise or logical XOR operation, such as (a ^ b) in C# or (a Xor b) in Visual</span></span><br><span class="line">		<span class="comment">//     Basic.</span></span><br><span class="line">		ExclusiveOr = <span class="number">14</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A &quot;greater than&quot; comparison, such as (a &gt; b).</span></span><br><span class="line">		GreaterThan = <span class="number">15</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A &quot;greater than or equal to&quot; comparison, such as (a &gt;= b).</span></span><br><span class="line">		GreaterThanOrEqual = <span class="number">16</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An operation that invokes a delegate or lambda expression, such as sampleDelegate.Invoke().</span></span><br><span class="line">		Invoke = <span class="number">17</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A lambda expression, such as a =&gt; a + a in C# or Function(a) a + a in Visual</span></span><br><span class="line">		<span class="comment">//     Basic.</span></span><br><span class="line">		Lambda = <span class="number">18</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise left-shift operation, such as (a &lt;&lt; b).</span></span><br><span class="line">		LeftShift = <span class="number">19</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A &quot;less than&quot; comparison, such as (a &lt; b).</span></span><br><span class="line">		LessThan = <span class="number">20</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A &quot;less than or equal to&quot; comparison, such as (a &lt;= b).</span></span><br><span class="line">		LessThanOrEqual = <span class="number">21</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An operation that creates a new System.Collections.IEnumerable object and initializes</span></span><br><span class="line">		<span class="comment">//     it from a list of elements, such as new List&lt;SampleType&gt;()&#123; a, b, c &#125; in C# or</span></span><br><span class="line">		<span class="comment">//     Dim sampleList = &#123; a, b, c &#125; in Visual Basic.</span></span><br><span class="line">		ListInit = <span class="number">22</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An operation that reads from a field or property, such as obj.SampleProperty.</span></span><br><span class="line">		MemberAccess = <span class="number">23</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An operation that creates a new object and initializes one or more of its members,</span></span><br><span class="line">		<span class="comment">//     such as new Point &#123; X = 1, Y = 2 &#125; in C# or New Point With &#123;.X = 1, .Y = 2&#125; in</span></span><br><span class="line">		<span class="comment">//     Visual Basic.</span></span><br><span class="line">		MemberInit = <span class="number">24</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An arithmetic remainder operation, such as (a % b) in C# or (a Mod b) in Visual</span></span><br><span class="line">		<span class="comment">//     Basic.</span></span><br><span class="line">		Modulo = <span class="number">25</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A multiplication operation, such as (a * b), without overflow checking, for numeric</span></span><br><span class="line">		<span class="comment">//     operands.</span></span><br><span class="line">		Multiply = <span class="number">26</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An multiplication operation, such as (a * b), that has overflow checking, for</span></span><br><span class="line">		<span class="comment">//     numeric operands.</span></span><br><span class="line">		MultiplyChecked = <span class="number">27</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An arithmetic negation operation, such as (-a). The object a should not be modified</span></span><br><span class="line">		<span class="comment">//     in place.</span></span><br><span class="line">		Negate = <span class="number">28</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A unary plus operation, such as (+a). The result of a predefined unary plus operation</span></span><br><span class="line">		<span class="comment">//     is the value of the operand, but user-defined implementations might have unusual</span></span><br><span class="line">		<span class="comment">//     results.</span></span><br><span class="line">		UnaryPlus = <span class="number">29</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An arithmetic negation operation, such as (-a), that has overflow checking. The</span></span><br><span class="line">		<span class="comment">//     object a should not be modified in place.</span></span><br><span class="line">		NegateChecked = <span class="number">30</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An operation that calls a constructor to create a new object, such as new SampleType().</span></span><br><span class="line">		New = <span class="number">31</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An operation that creates a new one-dimensional array and initializes it from</span></span><br><span class="line">		<span class="comment">//     a list of elements, such as new SampleType[]&#123;a, b, c&#125; in C# or New SampleType()&#123;a,</span></span><br><span class="line">		<span class="comment">//     b, c&#125; in Visual Basic.</span></span><br><span class="line">		NewArrayInit = <span class="number">32</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An operation that creates a new array, in which the bounds for each dimension</span></span><br><span class="line">		<span class="comment">//     are specified, such as new SampleType[dim1, dim2] in C# or New SampleType(dim1,</span></span><br><span class="line">		<span class="comment">//     dim2) in Visual Basic.</span></span><br><span class="line">		NewArrayBounds = <span class="number">33</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise complement or logical negation operation. In C#, it is equivalent to</span></span><br><span class="line">		<span class="comment">//     (~a) for integral types and to (!a) for Boolean values. In Visual Basic, it is</span></span><br><span class="line">		<span class="comment">//     equivalent to (Not a). The object a should not be modified in place.</span></span><br><span class="line">		Not = <span class="number">34</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An inequality comparison, such as (a != b) in C# or (a &lt;&gt; b) in Visual Basic.</span></span><br><span class="line">		NotEqual = <span class="number">35</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise or logical OR operation, such as (a | b) in C# or (a Or b) in Visual</span></span><br><span class="line">		<span class="comment">//     Basic.</span></span><br><span class="line">		Or = <span class="number">36</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A short-circuiting conditional OR operation, such as (a || b) in C# or (a OrElse</span></span><br><span class="line">		<span class="comment">//     b) in Visual Basic.</span></span><br><span class="line">		OrElse = <span class="number">37</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A reference to a parameter or variable that is defined in the context of the</span></span><br><span class="line">		<span class="comment">//     expression. For more information, see System.Linq.Expressions.ParameterExpression.</span></span><br><span class="line">		Parameter = <span class="number">38</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A mathematical operation that raises a number to a power, such as (a ^ b) in</span></span><br><span class="line">		<span class="comment">//     Visual Basic.</span></span><br><span class="line">		Power = <span class="number">39</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An expression that has a constant value of type System.Linq.Expressions.Expression.</span></span><br><span class="line">		<span class="comment">//     A System.Linq.Expressions.ExpressionType.Quote node can contain references to</span></span><br><span class="line">		<span class="comment">//     parameters that are defined in the context of the expression it represents.</span></span><br><span class="line">		Quote = <span class="number">40</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise right-shift operation, such as (a &gt;&gt; b).</span></span><br><span class="line">		RightShift = <span class="number">41</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A subtraction operation, such as (a - b), without overflow checking, for numeric</span></span><br><span class="line">		<span class="comment">//     operands.</span></span><br><span class="line">		Subtract = <span class="number">42</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An arithmetic subtraction operation, such as (a - b), that has overflow checking,</span></span><br><span class="line">		<span class="comment">//     for numeric operands.</span></span><br><span class="line">		SubtractChecked = <span class="number">43</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An explicit reference or boxing conversion in which null is supplied if the conversion</span></span><br><span class="line">		<span class="comment">//     fails, such as (obj as SampleType) in C# or TryCast(obj, SampleType) in Visual</span></span><br><span class="line">		<span class="comment">//     Basic.</span></span><br><span class="line">		TypeAs = <span class="number">44</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A type test, such as obj is SampleType in C# or TypeOf obj is SampleType in Visual</span></span><br><span class="line">		<span class="comment">//     Basic.</span></span><br><span class="line">		TypeIs = <span class="number">45</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An assignment operation, such as (a = b).</span></span><br><span class="line">		Assign = <span class="number">46</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A block of expressions.</span></span><br><span class="line">		Block = <span class="number">47</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     Debugging information.</span></span><br><span class="line">		DebugInfo = <span class="number">48</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A unary decrement operation, such as (a - 1) in C# and Visual Basic. The object</span></span><br><span class="line">		<span class="comment">//     a should not be modified in place.</span></span><br><span class="line">		Decrement = <span class="number">49</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A dynamic operation.</span></span><br><span class="line">		Dynamic = <span class="number">50</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A default value.</span></span><br><span class="line">		Default = <span class="number">51</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An extension expression.</span></span><br><span class="line">		Extension = <span class="number">52</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A &quot;go to&quot; expression, such as goto Label in C# or GoTo Label in Visual Basic.</span></span><br><span class="line">		Goto = <span class="number">53</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A unary increment operation, such as (a + 1) in C# and Visual Basic. The object</span></span><br><span class="line">		<span class="comment">//     a should not be modified in place.</span></span><br><span class="line">		Increment = <span class="number">54</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An index operation or an operation that accesses a property that takes arguments.</span></span><br><span class="line">		Index = <span class="number">55</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A label.</span></span><br><span class="line">		Label = <span class="number">56</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A list of run-time variables. For more information, see System.Linq.Expressions.RuntimeVariablesExpression.</span></span><br><span class="line">		RuntimeVariables = <span class="number">57</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A loop, such as for or while.</span></span><br><span class="line">		Loop = <span class="number">58</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A switch operation, such as switch in C# or Select Case in Visual Basic.</span></span><br><span class="line">		Switch = <span class="number">59</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An operation that throws an exception, such as throw new Exception().</span></span><br><span class="line">		Throw = <span class="number">60</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A try-catch expression.</span></span><br><span class="line">		Try = <span class="number">61</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An unbox value type operation, such as unbox and unbox.any instructions in MSIL.</span></span><br><span class="line">		Unbox = <span class="number">62</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An addition compound assignment operation, such as (a += b), without overflow</span></span><br><span class="line">		<span class="comment">//     checking, for numeric operands.</span></span><br><span class="line">		AddAssign = <span class="number">63</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise or logical AND compound assignment operation, such as (a &amp;= b) in C#.</span></span><br><span class="line">		AndAssign = <span class="number">64</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An division compound assignment operation, such as (a /= b), for numeric operands.</span></span><br><span class="line">		DivideAssign = <span class="number">65</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise or logical XOR compound assignment operation, such as (a ^= b) in C#.</span></span><br><span class="line">		ExclusiveOrAssign = <span class="number">66</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise left-shift compound assignment, such as (a &lt;&lt;= b).</span></span><br><span class="line">		LeftShiftAssign = <span class="number">67</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An arithmetic remainder compound assignment operation, such as (a %= b) in C#.</span></span><br><span class="line">		ModuloAssign = <span class="number">68</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A multiplication compound assignment operation, such as (a *= b), without overflow</span></span><br><span class="line">		<span class="comment">//     checking, for numeric operands.</span></span><br><span class="line">		MultiplyAssign = <span class="number">69</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise or logical OR compound assignment, such as (a |= b) in C#.</span></span><br><span class="line">		OrAssign = <span class="number">70</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A compound assignment operation that raises a number to a power, such as (a ^=</span></span><br><span class="line">		<span class="comment">//     b) in Visual Basic.</span></span><br><span class="line">		PowerAssign = <span class="number">71</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A bitwise right-shift compound assignment operation, such as (a &gt;&gt;= b).</span></span><br><span class="line">		RightShiftAssign = <span class="number">72</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A subtraction compound assignment operation, such as (a -= b), without overflow</span></span><br><span class="line">		<span class="comment">//     checking, for numeric operands.</span></span><br><span class="line">		SubtractAssign = <span class="number">73</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An addition compound assignment operation, such as (a += b), with overflow checking,</span></span><br><span class="line">		<span class="comment">//     for numeric operands.</span></span><br><span class="line">		AddAssignChecked = <span class="number">74</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A multiplication compound assignment operation, such as (a *= b), that has overflow</span></span><br><span class="line">		<span class="comment">//     checking, for numeric operands.</span></span><br><span class="line">		MultiplyAssignChecked = <span class="number">75</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A subtraction compound assignment operation, such as (a -= b), that has overflow</span></span><br><span class="line">		<span class="comment">//     checking, for numeric operands.</span></span><br><span class="line">		SubtractAssignChecked = <span class="number">76</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A unary prefix increment, such as (++a). The object a should be modified in place.</span></span><br><span class="line">		PreIncrementAssign = <span class="number">77</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A unary prefix decrement, such as (--a). The object a should be modified in place.</span></span><br><span class="line">		PreDecrementAssign = <span class="number">78</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A unary postfix increment, such as (a++). The object a should be modified in</span></span><br><span class="line">		<span class="comment">//     place.</span></span><br><span class="line">		PostIncrementAssign = <span class="number">79</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A unary postfix decrement, such as (a--). The object a should be modified in</span></span><br><span class="line">		<span class="comment">//     place.</span></span><br><span class="line">		PostDecrementAssign = <span class="number">80</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     An exact type test.</span></span><br><span class="line">		TypeEqual = <span class="number">81</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A ones complement operation, such as (~a) in C#.</span></span><br><span class="line">		OnesComplement = <span class="number">82</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A true condition value.</span></span><br><span class="line">		IsTrue = <span class="number">83</span>,</span><br><span class="line">		<span class="comment">//</span></span><br><span class="line">		<span class="comment">// 摘要:</span></span><br><span class="line">		<span class="comment">//     A false condition value.</span></span><br><span class="line">		IsFalse = <span class="number">84</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ 
+    </div></div>
+    </div>
+
+<h3 id="递归遍历表达式树"><a href="#递归遍历表达式树" class="headerlink" title="递归遍历表达式树"></a>递归遍历表达式树</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Linq.Expressions;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">ExpressionTreeDemo</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] <span class="keyword">args</span></span>)</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// 构建示例表达式树：p =&gt; p.Age &gt; 18 &amp;&amp; p.Salary &gt;= 10000m</span></span><br><span class="line">			Expression&lt;Func&lt;Person, <span class="built_in">bool</span>&gt;&gt; expr = p =&gt; p.Age &gt; <span class="number">18</span> &amp;&amp; p.Salary &gt;= <span class="number">10000</span>m;</span><br><span class="line"></span><br><span class="line">			Console.WriteLine(<span class="string">&quot;=== 递归遍历表达式树 ===&quot;</span>);</span><br><span class="line">			TraverseExpression(expr, depth: <span class="number">0</span>); <span class="comment">// depth 用于缩进，直观显示层级</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">		<span class="comment"><span class="doctag">///</span> 递归遍历表达式树，打印所有节点信息</span></span><br><span class="line">		<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">		<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;node&quot;&gt;</span>当前要遍历的节点<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">		<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;depth&quot;&gt;</span>当前节点的层级（用于缩进）<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">		<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">TraverseExpression</span>(<span class="params">Expression node, <span class="built_in">int</span> depth</span>)</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (node == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 缩进：层级越深，缩进越多（直观显示树形结构）</span></span><br><span class="line">			<span class="built_in">string</span> indent = <span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">&#x27; &#x27;</span>, depth * <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">			<span class="built_in">string</span> nodeInfo = GetNodeInfo(node);</span><br><span class="line">			Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;indent&#125;</span>[<span class="subst">&#123;depth&#125;</span>] <span class="subst">&#123;node.NodeType&#125;</span> → <span class="subst">&#123;nodeInfo&#125;</span>&quot;</span>);</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 根据节点类型，递归处理子节点</span></span><br><span class="line">			<span class="keyword">switch</span> (node)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="comment">// 1. 二元表达式（如 GreaterThan、AndAlso、OrElse）</span></span><br><span class="line">				<span class="keyword">case</span> BinaryExpression binaryExpr:</span><br><span class="line">					TraverseExpression(binaryExpr.Left, depth + <span class="number">1</span>);   <span class="comment">// 递归左子节点</span></span><br><span class="line">					TraverseExpression(binaryExpr.Right, depth + <span class="number">1</span>);  <span class="comment">// 递归右子节点</span></span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">				<span class="comment">// 2. 属性访问表达式（如 p.Age、p.Salary）</span></span><br><span class="line">				<span class="keyword">case</span> MemberExpression memberExpr:</span><br><span class="line">					TraverseExpression(memberExpr.Expression, depth + <span class="number">1</span>);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">				<span class="comment">// 3. Lambda 表达式</span></span><br><span class="line">				<span class="keyword">case</span> LambdaExpression lambdaExpr:</span><br><span class="line">					<span class="keyword">foreach</span> (<span class="keyword">var</span> param <span class="keyword">in</span> lambdaExpr.Parameters)</span><br><span class="line">					&#123;</span><br><span class="line">						TraverseExpression(param, depth + <span class="number">1</span>); <span class="comment">// 递归参数</span></span><br><span class="line">					&#125;</span><br><span class="line">					TraverseExpression(lambdaExpr.Body, depth + <span class="number">1</span>); <span class="comment">// 递归表达式体</span></span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">				<span class="comment">// 4. 方法调用表达式</span></span><br><span class="line">				<span class="keyword">case</span> MethodCallExpression methodExpr:</span><br><span class="line">					TraverseExpression(methodExpr.Object, depth + <span class="number">1</span>); <span class="comment">// 递归调用对象（静态方法为 null）</span></span><br><span class="line">					<span class="keyword">foreach</span> (<span class="keyword">var</span> arg <span class="keyword">in</span> methodExpr.Arguments)</span><br><span class="line">					&#123;</span><br><span class="line">						TraverseExpression(arg, depth + <span class="number">1</span>); <span class="comment">// 递归所有参数</span></span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">				<span class="comment">// 5. 常量表达式</span></span><br><span class="line">				<span class="keyword">case</span> ConstantExpression _:</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">				<span class="comment">// 6. 参数表达式</span></span><br><span class="line">				<span class="keyword">case</span> ParameterExpression _:</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">				<span class="comment">// 其他节点类型（如 UnaryExpression、NewExpression ）</span></span><br><span class="line">				<span class="literal">default</span>:</span><br><span class="line">					Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;indent&#125;</span>[<span class="subst">&#123;depth&#125;</span>] 未处理的节点类型：<span class="subst">&#123;node.GetType().Name&#125;</span>&quot;</span>);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">		<span class="comment"><span class="doctag">///</span> 获取节点的关键信息</span></span><br><span class="line">		<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">		<span class="function"><span class="keyword">static</span> <span class="built_in">string</span> <span class="title">GetNodeInfo</span>(<span class="params">Expression node</span>)</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> node <span class="keyword">switch</span></span><br><span class="line">			&#123;</span><br><span class="line">				ParameterExpression param =&gt; <span class="string">$&quot;参数：<span class="subst">&#123;param.Name&#125;</span>（类型：<span class="subst">&#123;param.Type.Name&#125;</span>）&quot;</span>,</span><br><span class="line">				ConstantExpression constant =&gt; <span class="string">$&quot;常量：<span class="subst">&#123;constant.Value&#125;</span>（类型：<span class="subst">&#123;constant.Type.Name&#125;</span>）&quot;</span>,</span><br><span class="line">				MemberExpression member =&gt; <span class="string">$&quot;属性：<span class="subst">&#123;member.Member.Name&#125;</span>（所属类型：<span class="subst">&#123;member.Member.DeclaringType.Name&#125;</span>）&quot;</span>,</span><br><span class="line">				BinaryExpression binary =&gt; <span class="string">$&quot;二元运算：<span class="subst">&#123;binary.NodeType&#125;</span>（返回类型：<span class="subst">&#123;binary.Type.Name&#125;</span>）&quot;</span>,</span><br><span class="line">				LambdaExpression lambda =&gt; <span class="string">$&quot;Lambda 表达式（参数数：<span class="subst">&#123;lambda.Parameters.Count&#125;</span>，返回类型：<span class="subst">&#123;lambda.ReturnType.Name&#125;</span>）&quot;</span>,</span><br><span class="line">				MethodCallExpression method =&gt; <span class="string">$&quot;方法调用：<span class="subst">&#123;method.Method.Name&#125;</span>（参数数：<span class="subst">&#123;method.Arguments.Count&#125;</span>）&quot;</span>,</span><br><span class="line">				_ =&gt; <span class="string">$&quot;类型：<span class="subst">&#123;node.GetType().Name&#125;</span>&quot;</span></span><br><span class="line">			&#125;;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">class</span> <span class="title">Person</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">		<span class="keyword">public</span> <span class="built_in">int</span> Age &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">		<span class="keyword">public</span> <span class="built_in">decimal</span> Salary &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-11-24%20224959.png"></p>
+<hr>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>表达式树</strong></td>
+<td>代码的树形数据结构，可以被分析和翻译</td>
+</tr>
+<tr>
+<td><strong>Func<T></strong></td>
+<td>可执行的委托，用于 LINQ to Objects</td>
+</tr>
+<tr>
+<td><strong>Expression&lt;Func<T>&gt;</strong></td>
+<td>表达式树，用于 LINQ to SQL&#x2F;EF</td>
+</tr>
+</tbody></table>
+<h3 id="关键要点"><a href="#关键要点" class="headerlink" title="关键要点"></a>关键要点</h3><ol>
+<li>表达式树是”代码的数据”，不是”可执行代码”</li>
+<li><code>Expression&lt;Func&lt;T&gt;&gt;</code> 可以被翻译成 SQL 或其他语言</li>
+<li>手动构建表达式树适用于动态场景，但不要过度使用</li>
+<li>优先使用 Lambda 表达式，保持代码简洁</li>
+</ol>
+<h3 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/dotnet/csharp/programming-guide/concepts/expression-trees/">Microsoft 官方文档：表达式树</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/ef/core/">Entity Framework 如何工作</a></li>
+</ul>
+<hr>
+</div>
+        </div>
+        
+            <div class="kratos-copyright text-center clearfix">
+                <span itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</span>
+            </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+            
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/C/" rel="tag">C#</a>, <a class="tag-none-link" href="/tags/LINQ/" rel="tag">LINQ</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2026-04-22T12:38:06.081Z" itemprop="dateModified">最后编辑：2026-04-22</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" DDD贫血模型和充血模型" href="/posts/ddd-concepts-01/"><i class="fa fa-angle-left"></i> 上一篇</a>
+            </div>
+            
+            
+            <div class="nav-next clearfix">
+                <a title=" 表达式树-动态构建表达式树" href="/posts/expression-trees-01/">下一篇 <i class="fa fa-angle-right"></i></a>
+            </div>
+            
+        </nav>
+    
+    
+        <div class="comment-post">
+            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/expression-trees-00/" data-path-hash="f49e0645f9a2710aa34eb99a0e673dd8"></div>
+        </div>
+    
+</article>
+
+        
+
+            </section>
+
+            
+                
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/assets/OIP (8).jpg" alt="probie" loading="lazy" decoding="auto" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">probie</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                文章
+            </span>
+            <span class="count">
+                22
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                分类
+            </span>
+            <span class="count">
+                3
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                标签
+            </span>
+            <span class="count">
+                10
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        文章目录
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%EF%BC%9F"><span class="toc-text">什么是表达式树？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E4%BF%97%E7%90%86%E8%A7%A3"><span class="toc-text">通俗理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="toc-text">一个简单的例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%EF%BC%9F"><span class="toc-text">为什么需要表达式树？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Expression-%E5%92%8C-Func-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">Expression 和 Func 的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Func-%E5%A7%94%E6%89%98"><span class="toc-text">Func&lt;T&gt; - 委托</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expression-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-text">Expression&lt;Func&lt;T&gt;&gt; - 表达式树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94%E8%A1%A8%E6%A0%BC"><span class="toc-text">对比表格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E5%AF%B9%E6%AF%94"><span class="toc-text">实际应用场景对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">查看表达式树的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Visual-Studio%E9%80%9A%E8%BF%87%E8%87%AA%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9F%A5%E7%9C%8B"><span class="toc-text">Visual Studio通过自动窗口查看</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E6%9F%A5%E7%9C%8B%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-text">代码查看表达式树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="toc-text">递归遍历表达式树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%A6%81%E7%82%B9"><span class="toc-text">关键要点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="toc-text">推荐阅读</span></a></li></ol></li></ol>
+    </div>
+</aside>
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>分类列表</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/">编程技术</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a><span class="category-list-count">9</span></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
+      <div class="tag-clouds">
+        <a href="/tags/C/" style="font-size: 0.8em;">C#</a> <a href="/tags/DDD/" style="font-size: 0.7em;">DDD</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/Git/" style="font-size: 0.6em;">Git</a> <a href="/tags/Hexo/" style="font-size: 0.7em;">Hexo</a> <a href="/tags/LINQ/" style="font-size: 0.7em;">LINQ</a> <a href="/tags/Redis/" style="font-size: 0.6em;">Redis</a> <a href="/tags/Seo/" style="font-size: 0.6em;">Seo</a> <a href="/tags/VisualStudio%E6%89%A9%E5%B1%95/" style="font-size: 0.6em;">VisualStudio扩展</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 0.6em;">游戏</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>最新文章</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-07-project-communication-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-07项目沟通管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-08-project-stakeholder-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-08项目干系人管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-06-project-resource-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-06项目资源管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-05-project-quality-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-05项目质量管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/visualstudio-extension-fishpi/"><i class="fa fa-book"></i> 摸鱼派聊天室VisualStudio扩展</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+            
+
+        
+
+                </div>
+    </div>
+</div>
+
+<footer>
+    <div id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                            <li>
+                                <a href="https://github.com/probieLuo" target="_blank" rel="nofollow">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a href="/atom.xml" target="_blank" rel="nofollow">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2026 probie's blog 版权所有.</li>
+                            <li>本站已在风雨中飘摇<span id="kr-since">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>自豪地使用 <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a> 主题</li>
+                            <li>站点由 <a href="https://github.com/probieLuo" target="_blank">probie</a> 用 <i class="fa fa-heart" style="color:#d43f57"></i> 搭建</li>
+                        </div>
+                        <!-- 额外的追加注入项 -->
+                        
+                            <div>
+                                
+                                    <li>由 <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a> 强力驱动</li>
+                                
+                                    <li>在 <a href="https://github.io" target="_blank">Github Pages</a> 暖心托管</li>
+                                
+                            </div>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                <div class="box theme-box" id="theme-toggle">
+                    <span class="fa fa-adjust"></span>
+                </div>
+            </div>
+            <div id="gotop-box" class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+
+
+
+
+<!-- 额外的追加注入项 -->
+
+
+        <script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+
+  <script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+
+
+
+  <script defer src="/vendors/viewerjs@1.11.6/dist/viewer.min.js"></script>
+
+
+<script defer src="/js/kr-core.min.js"></script>
+
+
+  <script defer src="/js/kr-pjax.min.js"></script>
+
+
+<!-- 额外的追加注入项 -->
+
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/comments/gitalk.js"></script>
+<script src="/others/random-post-cover.js"></script>
+<script src="/effects/cursor-effects.js"></script>
+
+
+
+    </body>
+</html>

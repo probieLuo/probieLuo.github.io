@@ -8,7 +8,7 @@
   
   
   <title>WPF弹窗限流 | probie&#39;s blog</title>
-  <link rel="canonical" href="https://probieluo.github.io/posts/Throttling-WPF-Notifications/">
+  <link rel="canonical" href="https://probieluo.github.io/posts/throttling-wpf-notifications/">
   <meta name="author" content="probie" />
   <meta http-equiv="Cache-Control" content="no-transform" />
   <meta http-equiv="Cache-Control" content="no-siteapp" />
@@ -22,17 +22,17 @@
   <meta name="description" content="在wpf开发中我们经常会通过弹窗给用户推送信息，有时候我们一些信息非常频繁，会出现弹窗轰炸的效果。 这时候我们可以把信息写到log里面，但通知到用户也是必要的，我们可以给相同的信息设置冷却时间和标识避免弹窗频繁弹出。 核心逻辑 给信息定义标识 记录此标识上一次弹窗时间 若在冷却时间内不弹窗，仅记录次数  这里我们的弹窗用的是Notification.Wpf，这个库是fork的，但更新得比较好，推荐">
 <meta property="og:type" content="article">
 <meta property="og:title" content="WPF弹窗限流">
-<meta property="og:url" content="https://probieluo.github.io/posts/Throttling-WPF-Notifications/index.html">
+<meta property="og:url" content="https://probieluo.github.io/posts/throttling-wpf-notifications/index.html">
 <meta property="og:site_name" content="probie&#39;s blog">
 <meta property="og:description" content="在wpf开发中我们经常会通过弹窗给用户推送信息，有时候我们一些信息非常频繁，会出现弹窗轰炸的效果。 这时候我们可以把信息写到log里面，但通知到用户也是必要的，我们可以给相同的信息设置冷却时间和标识避免弹窗频繁弹出。 核心逻辑 给信息定义标识 记录此标识上一次弹窗时间 若在冷却时间内不弹窗，仅记录次数  这里我们的弹窗用的是Notification.Wpf，这个库是fork的，但更新得比较好，推荐">
 <meta property="og:locale">
-<meta property="og:image" content="https://probieluo.github.io/posts/Throttling-WPF-Notifications/assets/thumb_18.webp">
+<meta property="og:image" content="https://probieluo.github.io/posts/throttling-wpf-notifications/assets/thumb_18.webp">
 <meta property="article:published_time" content="2025-11-13T13:45:34.000Z">
 <meta property="article:modified_time" content="2026-04-15T12:15:27.477Z">
 <meta property="article:author" content="probie">
 <meta property="article:tag" content="C#">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://probieluo.github.io/posts/Throttling-WPF-Notifications/assets/thumb_18.webp">
+<meta name="twitter:image" content="https://probieluo.github.io/posts/throttling-wpf-notifications/assets/thumb_18.webp">
   
     <link rel="alternate" href="/atom.xml" title="probie's blog" type="application/atom+xml">
   
@@ -57,10 +57,10 @@
   <style>
     
       .kratos-cover.kratos-cover-2 {
-        background-image: url('https://dev.krt.moe/demo-assets/banner.webp');
+        background-image: url('https://w.wallhaven.cc/full/21/wallhaven-2195d6.jpg');
       }
       html[data-theme="dark"] .kratos-cover.kratos-cover-2 {
-        background-image: url('https://dev.krt.moe/demo-assets/banner_dark.webp');
+        background-image: url('https://w.wallhaven.cc/full/d8/wallhaven-d8ey2m.png');
       }
     
     
@@ -204,7 +204,7 @@
         
 
             <article itemscope itemtype="https://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/Throttling-WPF-Notifications/">
+    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/throttling-wpf-notifications/">
     <div class="kratos-hentry kratos-page-inner clearfix">
         <header class="kratos-page-header">
             
@@ -297,19 +297,19 @@
         <nav class="navigation post-navigation clearfix" role="navigation">
             
             <div class="nav-previous clearfix">
-                <a title=" Docker基本使用" href="/posts/Docker-Usage/"><i class="fa fa-angle-left"></i> 上一篇</a>
+                <a title=" DockerUsage" href="/posts/docker-usage/"><i class="fa fa-angle-left"></i> 上一篇</a>
             </div>
             
             
             <div class="nav-next clearfix">
-                <a title=" HexoUsage" href="/posts/HexoUsage/">下一篇 <i class="fa fa-angle-right"></i></a>
+                <a title=" HexoUsage" href="/posts/hexo-usage/">下一篇 <i class="fa fa-angle-right"></i></a>
             </div>
             
         </nav>
     
     
         <div class="comment-post">
-            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/Throttling-WPF-Notifications/" data-path-hash="16ba7a572585517f2f10fc0867a94587"></div>
+            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/throttling-wpf-notifications/" data-path-hash="18c43bae80a9233a1fee45cdb6934e3f"></div>
         </div>
     
 </article>
@@ -403,31 +403,31 @@
         
           
           
-            <a class="list-group-item" href="/posts/project-management-project-stakeholder/"><i class="fa fa-book"></i> 项目管理十大知识领域-08项目干系人管理</a>
+            <a class="list-group-item" href="/posts/project-management-07-project-communication-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-07项目沟通管理</a>
             
           
         
           
           
-            <a class="list-group-item" href="/posts/project-management-project-communication/"><i class="fa fa-book"></i> 项目管理十大知识领域-07项目沟通管理</a>
+            <a class="list-group-item" href="/posts/project-management-08-project-stakeholder-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-08项目干系人管理</a>
             
           
         
           
           
-            <a class="list-group-item" href="/posts/project-management-project-resource/"><i class="fa fa-book"></i> 项目管理十大知识领域-06项目资源管理</a>
+            <a class="list-group-item" href="/posts/project-management-06-project-resource-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-06项目资源管理</a>
             
           
         
           
           
-            <a class="list-group-item" href="/posts/project-management-project-quality/"><i class="fa fa-book"></i> 项目管理十大知识领域-05项目质量管理</a>
+            <a class="list-group-item" href="/posts/project-management-05-project-quality-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-05项目质量管理</a>
             
           
         
           
           
-            <a class="list-group-item" href="/posts/fishpivsext/"><i class="fa fa-book"></i> 摸鱼派聊天室VisualStudio扩展</a>
+            <a class="list-group-item" href="/posts/visualstudio-extension-fishpi/"><i class="fa fa-book"></i> 摸鱼派聊天室VisualStudio扩展</a>
             
           
         

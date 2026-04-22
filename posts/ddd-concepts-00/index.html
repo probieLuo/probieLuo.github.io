@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  
+    <link rel="icon" href="/assets/github-mark.svg">
+  
+  
+  <title>领域驱动设计(DDD) | probie&#39;s blog</title>
+  <link rel="canonical" href="https://probieluo.github.io/posts/ddd-concepts-00/">
+  <meta name="author" content="probie" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="DDD" />
+  
+  <meta name="description" content="在软件开发中,我们常常面临这样的困境:系统随着需求迭代逐渐变得臃肿、难以维护,最终沦为”屎山代码”。业务逻辑散落各处、模块边界模糊,修改一处牵一发而动全身——这就是软件退化(Software Erosion)。 如何在业务快速变化中保持架构的灵活性,防止系统走向混乱?领域驱动设计(Domain-Driven Design, DDD)正是为此而生。 DDD 是一种演进式架构思想,通过通用语言、界限上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="领域驱动设计(DDD)">
+<meta property="og:url" content="https://probieluo.github.io/posts/ddd-concepts-00/index.html">
+<meta property="og:site_name" content="probie&#39;s blog">
+<meta property="og:description" content="在软件开发中,我们常常面临这样的困境:系统随着需求迭代逐渐变得臃肿、难以维护,最终沦为”屎山代码”。业务逻辑散落各处、模块边界模糊,修改一处牵一发而动全身——这就是软件退化(Software Erosion)。 如何在业务快速变化中保持架构的灵活性,防止系统走向混乱?领域驱动设计(Domain-Driven Design, DDD)正是为此而生。 DDD 是一种演进式架构思想,通过通用语言、界限上">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-11-18T15:51:53.000Z">
+<meta property="article:modified_time" content="2026-04-22T12:38:06.080Z">
+<meta property="article:author" content="probie">
+<meta property="article:tag" content="DDD">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="probie's blog" type="application/atom+xml">
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kr-core.min.css" media="all"></link>
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/highlight.js/night-blue.min.css" media="all"></link>
+  
+  <link rel="stylesheet" id="theme-light-css" href="/css/kr-theme/light.min.css" media="all"></link>
+  <link rel="stylesheet" id="theme-dark-css" href="/css/kr-theme/dark.min.css" media="(prefers-color-scheme: dark)"></link>
+  <script src="/js/kr-theme.min.js"></script>
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></link>
+  
+    <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></link>
+  
+  
+    <link rel="stylesheet" href="/vendors/viewerjs@1.11.6/dist/viewer.min.css"></link>
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  
+  <!-- 自定义站点横幅和背景 -->
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('https://w.wallhaven.cc/full/21/wallhaven-2195d6.jpg');
+      }
+      html[data-theme="dark"] .kratos-cover.kratos-cover-2 {
+        background-image: url('https://w.wallhaven.cc/full/d8/wallhaven-d8ey2m.png');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('https://dev.krt.moe/demo-assets/bg.webp');
+        }
+        html[data-theme="dark"] body.custom-background {
+          background-image: url('https://dev.krt.moe/demo-assets/bg.webp');
+        }
+      }
+    
+    
+      .widget-kratos-about .photo-background {
+        background-image: url('/images/default.webp');
+      }
+      html[data-theme="dark"] .widget-kratos-about .photo-background {
+        background-image: url('/images/default.webp');
+      }
+    
+  </style>
+
+  <!-- 额外的追加注入项 -->
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<link rel="stylesheet" href="/comments/gitalk.css" />
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    <li>
+                                        
+                                            <a href="/">
+                                        
+                                            
+                                                <i class="fa fa-home"></i>
+                                            
+                                            首页
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/archives/">
+                                        
+                                            
+                                                <i class="fa fa-file"></i>
+                                            
+                                            归档
+                                        </a>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a>
+                                        
+                                            
+                                                <i class="fa fa-link"></i>
+                                            
+                                            外链
+                                        </a>
+                                        
+                                            <ul class="sub-menu">
+                                                
+                                                    <li>
+                                                        <a target="_blank" rel="noopener" href="https://github.com/probieLuo/">
+                                                            
+                                                                <i class="fa fa-code"></i>
+                                                            
+                                                            GitHub
+                                                        </a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        
+                                    </li>
+                                
+                                    <li>
+                                        
+                                            <a href="/aboutme/">
+                                        
+                                            
+                                                <i class="fa fa-heart"></i>
+                                            
+                                            About
+                                        </a>
+                                        
+                                    </li>
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">probie&#39;s blog</a></div>
+                    <div id="kratos-nav-toggle-wrapper" class="nav-toggle">
+                        <a id="kratos-nav-toggle" class="kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>probie&#39;s blog</h2> <br />
+                        <span>会一点.NET, 这里记录一些学习笔记和生活琐事</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+
+
+        
+
+            
+
+            <section class="kr-main-col col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://probieluo.github.io/posts/ddd-concepts-00/">
+    <div class="kratos-hentry kratos-page-inner clearfix">
+        <header class="kratos-page-header">
+            
+                <h1 class="kratos-page-title text-center" itemprop="name headline">领域驱动设计(DDD)</h1>
+            
+            <ul class="kratos-page-meta text-center">
+                <li><time datetime="2025-11-18T15:51:53.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2025-11-18</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">probie</span>
+                </li>
+                
+                    <li>
+                        <i class="fa fa-edit"></i> 
+                        
+                        
+                            ~4.01K
+                        
+                        字
+                    </li>
+                
+                
+                
+            </ul>
+        </header>
+        <div class="kratos-page-content kr-post">
+            
+            
+            
+                <div class="kratos-post-inner-toc toc-div-class" >
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.</span> <span class="toc-text">什么是微服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DDD-%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.</span> <span class="toc-text">DDD 与微服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E4%B8%8E%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B"><span class="toc-number">3.</span> <span class="toc-text">领域与领域模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%95%8C%E9%99%90%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">4.</span> <span class="toc-text">通用语言与界限上下文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BD%93%E7%B1%BB%E4%B8%8E%E5%80%BC%E5%AF%B9%E8%B1%A1"><span class="toc-number">5.</span> <span class="toc-text">实体类与值对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E4%B8%8E%E8%81%9A%E5%90%88%E6%A0%B9"><span class="toc-number">6.</span> <span class="toc-text">聚合与聚合根</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%9C%8D%E5%8A%A1%E4%B8%8E%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1"><span class="toc-number">7.</span> <span class="toc-text">领域服务与应用服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E4%BA%8B%E4%BB%B6%E4%B8%8E%E9%9B%86%E6%88%90%E4%BA%8B%E4%BB%B6"><span class="toc-number">8.</span> <span class="toc-text">领域事件与集成事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E4%B9%A6%E7%B1%8D"><span class="toc-number">9.</span> <span class="toc-text">推荐书籍</span></a></li></ol>
+                </div>
+            
+            <hr />
+            <div itemprop="articleBody"><p>在软件开发中,我们常常面临这样的困境:系统随着需求迭代逐渐变得臃肿、难以维护,最终沦为”屎山代码”。业务逻辑散落各处、模块边界模糊,修改一处牵一发而动全身——这就是软件退化(Software Erosion)。</p>
+<p>如何在业务快速变化中保持架构的灵活性,防止系统走向混乱?领域驱动设计(Domain-Driven Design, DDD)正是为此而生。</p>
+<p>DDD 是一种<strong>演进式架构</strong>思想,通过通用语言、界限上下文、聚合等核心概念,让代码结构与业务领域保持一致。它不仅是微服务架构设计的指导思想,更是构建可演进、可维护系统的有效方法论。</p>
+<h3 id="什么是微服务"><a href="#什么是微服务" class="headerlink" title="什么是微服务"></a>什么是微服务</h3><p>传统软件项目大多采用单体架构，所有功能模块集成在一个应用程序中。单体结构有结构简单、部署简单等优点，但有如下缺点：</p>
+<ul>
+<li>代码间耦合严重，模块间相互依赖，牵一发而动全身。</li>
+<li>项目只能采用单一语言和技术栈</li>
+<li>扩展性差，只能对整体进行服务器扩容，无法对单一模块进行服务器扩容</li>
+<li>任何改动都需要重新部署整个应用</li>
+</ul>
+<p>微服务架构把项目拆分多个应用程序，每个服务独立开发、部署和运行。</p>
+<p>微服务架构有如下优点</p>
+<ul>
+<li>高内聚低耦合，业务逻辑清晰，对其他微服务依赖低</li>
+<li>不同微服务可用不同语言和技术栈</li>
+<li>一个微服务运行不会影响其他微服务</li>
+<li>一个服务出错不会导致整个系统崩溃</li>
+<li>可针对高负载服务单独扩容</li>
+</ul>
+<p>缺点</p>
+<ul>
+<li>运维工作带来更大挑战，需要管理多个服务的部署、监控和日志</li>
+<li>需要处理服务间通信、容错、负载均衡等问题</li>
+<li>跨服务的事务处理和数据一致性难以保证</li>
+</ul>
+<p>…</p>
+<p>微服务架构误区</p>
+<p>设计不好的微服务架构中，微服务之间调用关系非常复杂，一个请求经过七八层微服务调用，这样的设计不仅导致系统间耦合严重，还使服务器端处理效率地下。</p>
+<p>微服务架构应该是进化而来的。在进行系统架构设计时，我们应该认真思考“这个项目真的需要微服务架构吗”。</p>
+<h3 id="DDD-与微服务"><a href="#DDD-与微服务" class="headerlink" title="DDD 与微服务"></a>DDD 与微服务</h3><p>DDD 为微服务拆分提供了理论指导：</p>
+<ul>
+<li>限界上下文用于划分服务边界</li>
+<li>聚合用于设计服务粒度</li>
+<li>领域事件用于服务间解耦通信</li>
+</ul>
+<p>通过 DDD 的指导，微服务拆分变得有章可循，避免服务划分过细或过粗的问题。</p>
+<h3 id="领域与领域模型"><a href="#领域与领域模型" class="headerlink" title="领域与领域模型"></a>领域与领域模型</h3><p>领域(Domain) 是指一个组织所从事的业务范围和内容。例如电商领域包括商品管理、订单处理、支付结算、物流配送等业务。</p>
+<p>领域模型(Domain Model) 是领域确定后，从领域内对象建模抽象出模型的概念。建模是DDD中非常核心的事情，一旦定义出领域模型，我们就可以用领域模型驱动项目开发。</p>
+<p>DDD 将系统划分为四层：</p>
+<ul>
+<li>用户接口层(User Interface)(表现层)：<ul>
+<li>负责处理所有外部流量的入口，包括用户界面（如Web前端）、API接口（如REST、gRPC）以及消息队列等。</li>
+<li>主要职责是接收用户请求和展示数据，并将数据转换为应用层能处理的格式。</li>
+</ul>
+</li>
+<li>应用层(Application Layer)：协调领域对象完成用户任务，不包含领域逻辑</li>
+<li>领域层(Domain Layer)：包含核心业务逻辑和数据模型，是系统的核心</li>
+<li>基础设施层(Infrastructure Layer)：为其他层提供技术支持，如数据持久化、消息队列、外部服务调用等</li>
+</ul>
+<p>领域层是 DDD 的核心，所有业务规则都应该在领域层实现，而不是散落在应用层或基础设施层。</p>
+<h3 id="通用语言与界限上下文"><a href="#通用语言与界限上下文" class="headerlink" title="通用语言与界限上下文"></a>通用语言与界限上下文</h3><p>通用语言是指团队中所有人（包括开发人员、产品经理、业务专家）都使用相同的术语来描述业务概念。通用语言应该体现在代码、文档、对话中。</p>
+<p>例如，在电商系统中：</p>
+<ul>
+<li>不要用 <code>User</code> 来指代买家，应该明确使用 <code>Customer</code>（客户）或 <code>Buyer</code>（买家）</li>
+<li>不要用 <code>Order</code> 的状态字段 <code>status=5</code> 表示已完成，应该使用 <code>OrderStatus.Completed</code></li>
+</ul>
+<p>通用语言的好处：</p>
+<ul>
+<li>减少沟通成本和理解偏差</li>
+<li>让代码更具可读性和可维护性</li>
+<li>业务变化时，代码能够快速响应</li>
+</ul>
+<p>界限上下文是对业务领域的明确边界划分。在不同的界限上下文中，同一个术语可能有不同的含义。</p>
+<p>例如，”商品”在不同上下文中的含义：</p>
+<ul>
+<li>商品目录上下文：商品包含名称、描述、分类、图片等信息</li>
+<li>库存上下文：商品只关注 SKU、库存数量、仓库位置</li>
+<li>订单上下文：商品包含价格、购买数量、优惠信息</li>
+</ul>
+<p>界限上下文帮助我们：</p>
+<ul>
+<li>明确服务边界，为微服务拆分提供依据</li>
+<li>避免统一大模型导致的复杂性</li>
+<li>让不同团队可以独立开发各自的上下文</li>
+</ul>
+<h3 id="实体类与值对象"><a href="#实体类与值对象" class="headerlink" title="实体类与值对象"></a>实体类与值对象</h3><p>在领域模型中，实体（Entity）和值对象（Value Object）是构成领域模型的基本元素，二者的核心区别在于是否具有唯一标识。</p>
+<p>实体是具有唯一标识的领域对象，其生命周期中标识保持不变，即使属性发生变化，也依然是同一个实体，业务上有独立存在意义。</p>
+<p>例如：Order（订单）、Customer（客户）</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Order</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> Guid OrderId &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> DateTime CreatedTime &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="comment">// 其它业务属性...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>值对象是通过属性值来定义的对象，没有唯一标识，属性完全相同则视为同一个对象，一般生命周期短。</p>
+<p>例如：Address（地址）</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Address</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> City &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Street &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    <span class="comment">// 值对象只关心内容，通常设计为不可变</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实体和值对象的区分有助于合理建模、简化业务逻辑。</p>
+<h3 id="聚合与聚合根"><a href="#聚合与聚合根" class="headerlink" title="聚合与聚合根"></a>聚合与聚合根</h3><p>当领域模型中的实体和值对象数量增多时，如何保证它们之间的一致性？DDD 通过聚合（Aggregate） 和聚合根（Aggregate Root） 解决这一问题。</p>
+<p>聚合是一组紧密关联的实体和值对象的集合，它们作为一个整体负责维护业务规则（不变量），确保数据一致性。</p>
+<p>特征：</p>
+<ul>
+<li>一组相关对象（实体和值对象）的集合，作为数据的一致性边界</li>
+<li>聚合内部对象只通过聚合根与外界交互</li>
+<li>聚合保证内部业务规则和事务一致性</li>
+</ul>
+<p>该聚合的不变量是 “订单总金额 &#x3D; 所有订单项金额之和”，无论添加、删除订单项，这一规则必须始终成立。</p>
+<p>聚合根是聚合的 “入口点”，是聚合中唯一允许外部直接访问的实体，负责协调聚合内的对象，维护聚合的完整性。</p>
+<p>特征：</p>
+<ul>
+<li>是聚合中唯一具有全局唯一标识的实体</li>
+<li>外部对象只能通过聚合根的 ID 引用聚合，不能直接访问聚合内的其他实体或值对象</li>
+<li>聚合根负责聚合内对象的生命周期管理（创建、修改、删除）</li>
+</ul>
+<p>示例:<br>订单聚合(<code>Order</code>为聚合根) ≈ Order（订单）+ OrderItems（订单行项）+ ShippingAddress（收货地址）。</p>
+<p>聚合设计原则：</p>
+<ul>
+<li>单个聚合尽量小，只解决核心业务一致性</li>
+<li>跨聚合一致性用最终一致性、领域事件等解决</li>
+</ul>
+<h3 id="领域服务与应用服务"><a href="#领域服务与应用服务" class="headerlink" title="领域服务与应用服务"></a>领域服务与应用服务</h3><p>在 DDD 的分层架构中，领域层和应用层分别通过领域服务和应用服务处理业务逻辑，但二者的职责有明确区分。</p>
+<p>领域服务是领域层的组件，用于封装不属于单个实体或值对象的领域逻辑。当一个业务操作涉及多个实体 &#x2F; 值对象协作时，适合用领域服务。</p>
+<p>特征：</p>
+<ul>
+<li>包含纯领域逻辑，与技术实现无关</li>
+<li>通常以动词命名（如CalculateOrderDiscount、SettleAccount）</li>
+<li>输入和输出多为领域对象（实体、值对象、聚合根）</li>
+</ul>
+<p>应用服务是应用层的组件，负责协调领域对象完成用户任务，不包含领域逻辑，主要承担流程编排的角色。</p>
+<p>特征：</p>
+<ul>
+<li>面向用户用例（如 “创建订单”“取消支付”），以用例命名（如CreateOrderService）</li>
+<li>调用领域层（实体、聚合根、领域服务）完成业务，自身不处理具体业务规则</li>
+<li>处理跨切面关注点（如事务管理、权限校验、日志记录）</li>
+<li>负责数据转换（将用户接口层的 DTO 转换为领域对象，再将领域对象转换为 DTO 返回）</li>
+</ul>
+<p>二者的区别在于领域服务处理 “如何做”（业务规则），属于领域核心，应用服务处理 “做什么”（流程步骤），属于协调层。</p>
+<h3 id="领域事件与集成事件"><a href="#领域事件与集成事件" class="headerlink" title="领域事件与集成事件"></a>领域事件与集成事件</h3><p>在复杂领域中，对象间的协作往往需要 “事件驱动” 来解耦。DDD 通过领域事件和集成事件实现不同范围的事件通信。</p>
+<p>领域事件用于表达领域模型中某个有意义的事件刚刚发生，解耦了聚合间、模块间的强依赖关系。</p>
+<p>特征：</p>
+<ul>
+<li>属于领域层，由聚合根在状态发生关键变化时发布（如订单创建、支付完成）</li>
+<li>命名格式通常为 “[实体][动作] Event”（如OrderCreatedEvent、PaymentCompletedEvent）</li>
+<li>包含事件发生的时间、相关实体 ID 等关键信息</li>
+<li>上下文内的其他组件（如领域服务、聚合根）可订阅事件并作出响应</li>
+</ul>
+<p>集成事件是跨限界上下文（微服务） 的事件，用于实现不同上下文间的异步通信，解决服务间的耦合问题。</p>
+<p>特征：</p>
+<ul>
+<li>属于基础设施层或应用层，由应用服务将领域事件转换而来</li>
+<li>包含跨服务通信所需的最小信息（避免传递领域对象细节）</li>
+<li>通过消息队列（如 RabbitMQ、Kafka）等中间件传递，保证可靠性</li>
+<li>用于触发其他上下文的业务操作（如订单支付后通知物流服务发货）</li>
+</ul>
+<p>领域事件是集成事件的源头，集成事件是领域事件的 “跨域版本”。通过这种分层设计，既保证了限界上下文内的高内聚，又实现了跨上下文的低耦合协作。</p>
+<h3 id="推荐书籍"><a href="#推荐书籍" class="headerlink" title="推荐书籍"></a>推荐书籍</h3><ul>
+<li>《ASP.NET Core 技术内幕与项目实战》-杨中科</li>
+<li>《领域驱动设计：软件核心复杂性应对之道》-Eric Evans，「领域驱动设计之父」</li>
+<li>《实现领域驱动设计》-Vaughn Vernon</li>
+</ul>
+</div>
+        </div>
+        
+            <div class="kratos-copyright text-center clearfix">
+                <span itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</span>
+            </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+            
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/DDD/" rel="tag">DDD</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2026-04-22T12:38:06.080Z" itemprop="dateModified">最后编辑：2026-04-22</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" HexoUsage" href="/posts/hexo-usage/"><i class="fa fa-angle-left"></i> 上一篇</a>
+            </div>
+            
+            
+            <div class="nav-next clearfix">
+                <a title=" SEO向搜索引擎提交你的网站" href="/posts/seo-submit-yoursite/">下一篇 <i class="fa fa-angle-right"></i></a>
+            </div>
+            
+        </nav>
+    
+    
+        <div class="comment-post">
+            <div id="gitalk-container" class="kr-comments lazy-load" data-path="/posts/ddd-concepts-00/" data-path-hash="431b92c72d9e0dea5c1c611f820dfda8"></div>
+        </div>
+    
+</article>
+
+        
+
+            </section>
+
+            
+                
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/assets/OIP (8).jpg" alt="probie" loading="lazy" decoding="auto" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center">probie</p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                文章
+            </span>
+            <span class="count">
+                22
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                分类
+            </span>
+            <span class="count">
+                3
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                标签
+            </span>
+            <span class="count">
+                10
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        文章目录
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-text">什么是微服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DDD-%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-text">DDD 与微服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E4%B8%8E%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B"><span class="toc-text">领域与领域模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%95%8C%E9%99%90%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-text">通用语言与界限上下文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BD%93%E7%B1%BB%E4%B8%8E%E5%80%BC%E5%AF%B9%E8%B1%A1"><span class="toc-text">实体类与值对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E4%B8%8E%E8%81%9A%E5%90%88%E6%A0%B9"><span class="toc-text">聚合与聚合根</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%9C%8D%E5%8A%A1%E4%B8%8E%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1"><span class="toc-text">领域服务与应用服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E4%BA%8B%E4%BB%B6%E4%B8%8E%E9%9B%86%E6%88%90%E4%BA%8B%E4%BB%B6"><span class="toc-text">领域事件与集成事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E4%B9%A6%E7%B1%8D"><span class="toc-text">推荐书籍</span></a></li></ol>
+    </div>
+</aside>
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>分类列表</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/">编程技术</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a><span class="category-list-count">9</span></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
+      <div class="tag-clouds">
+        <a href="/tags/C/" style="font-size: 0.8em;">C#</a> <a href="/tags/DDD/" style="font-size: 0.7em;">DDD</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/Git/" style="font-size: 0.6em;">Git</a> <a href="/tags/Hexo/" style="font-size: 0.7em;">Hexo</a> <a href="/tags/LINQ/" style="font-size: 0.7em;">LINQ</a> <a href="/tags/Redis/" style="font-size: 0.6em;">Redis</a> <a href="/tags/Seo/" style="font-size: 0.6em;">Seo</a> <a href="/tags/VisualStudio%E6%89%A9%E5%B1%95/" style="font-size: 0.6em;">VisualStudio扩展</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 0.6em;">游戏</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>最新文章</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-07-project-communication-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-07项目沟通管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-08-project-stakeholder-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-08项目干系人管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-06-project-resource-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-06项目资源管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/project-management-05-project-quality-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-05项目质量管理</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/visualstudio-extension-fishpi/"><i class="fa fa-book"></i> 摸鱼派聊天室VisualStudio扩展</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+            
+
+        
+
+                </div>
+    </div>
+</div>
+
+<footer>
+    <div id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                            <li>
+                                <a href="https://github.com/probieLuo" target="_blank" rel="nofollow">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a href="/atom.xml" target="_blank" rel="nofollow">
+                                    <i class="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2026 probie's blog 版权所有.</li>
+                            <li>本站已在风雨中飘摇<span id="kr-since">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>自豪地使用 <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a> 主题</li>
+                            <li>站点由 <a href="https://github.com/probieLuo" target="_blank">probie</a> 用 <i class="fa fa-heart" style="color:#d43f57"></i> 搭建</li>
+                        </div>
+                        <!-- 额外的追加注入项 -->
+                        
+                            <div>
+                                
+                                    <li>由 <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a> 强力驱动</li>
+                                
+                                    <li>在 <a href="https://github.io" target="_blank">Github Pages</a> 暖心托管</li>
+                                
+                            </div>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                <div class="box theme-box" id="theme-toggle">
+                    <span class="fa fa-adjust"></span>
+                </div>
+            </div>
+            <div id="gotop-box" class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+
+
+
+
+<!-- 额外的追加注入项 -->
+
+
+        <script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+
+  <script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+
+
+
+  <script defer src="/vendors/viewerjs@1.11.6/dist/viewer.min.js"></script>
+
+
+<script defer src="/js/kr-core.min.js"></script>
+
+
+  <script defer src="/js/kr-pjax.min.js"></script>
+
+
+<!-- 额外的追加注入项 -->
+
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/comments/gitalk.js"></script>
+<script src="/others/random-post-cover.js"></script>
+<script src="/effects/cursor-effects.js"></script>
+
+
+
+    </body>
+</html>
