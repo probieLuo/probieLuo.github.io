@@ -26,12 +26,14 @@
 <meta property="og:site_name" content="probie&#39;s blog">
 <meta property="og:description" content="在最近在开发中遇到个很有意思的问题，我在一个命令里面使用了一些sql执行操作，虽然这些sql执行都使用了await等待sql耗时操作，但ui还是阻塞了，百思不得其解，思考了半天问了我们组长，组长说在await执行完成后还是会回到ui线程，最好把这些与ui无关代码的用task.run包起来，放在后台线程。 虽然问题成功得到了解决，但对await阻塞了ui线程这个问题还是不解，我们知道await让出了">
 <meta property="og:locale">
+<meta property="og:image" content="https://probieluo.github.io/posts/wpf-command-await-block-ui/assets/avatar-sydney.png">
 <meta property="article:published_time" content="2026-04-30T05:48:34.000Z">
-<meta property="article:modified_time" content="2026-04-30T08:18:48.333Z">
+<meta property="article:modified_time" content="2026-04-30T08:45:45.572Z">
 <meta property="article:author" content="probie">
 <meta property="article:tag" content="asynchronous-programming">
 <meta property="article:tag" content="wpf">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://probieluo.github.io/posts/wpf-command-await-block-ui/assets/avatar-sydney.png">
   
     <link rel="alternate" href="/atom.xml" title="probie's blog" type="application/atom+xml">
   
@@ -183,7 +185,7 @@
                 <div class="desc desc2 animate-box">
                     <a href="/">
                         <h2>probie&#39;s blog</h2> <br />
-                        <span>会一点.NET, 这里记录一些学习笔记和生活琐事</span>
+                        <span>记录学习和生活的平凡</span>
                     </a>
                 </div>
             </div>
@@ -219,7 +221,7 @@
                         <i class="fa fa-edit"></i> 
                         
                         
-                            ~22.99K
+                            ~23.18K
                         
                         字
                     </li>
@@ -243,8 +245,9 @@
     </div></div>
     </div>
 
-<p>里面很多代码其实是在ui线程跑的，如代码里面很多for循环、逻辑计算、对象创建、ORM 解析… 都是cpu代码，不会自动切换线程的，只有到底层io调用时，如 <em>fsql.Ado.ExecuteScalarAsync(“”)</em> 才会释放ui线程<br>并非只要带async、只要加 await，就不在ui线程，async只是提供「io等待时可以让出线程」的能力，但方法开头的一堆前置cpu逻辑，依旧原地阻塞当前线程。</p>
-<p>所以，把这些循环、计算、对象创建放到task.run里面吧！</p>
+<p>里面很多代码其实是在ui线程跑的，如代码里面很多for循环、逻辑计算、对象创建、ORM 解析… 都是cpu代码，不会自动切换线程的，只有到底层io调用时，如 fsql.Ado.ExecuteScalarAsync 才会释放ui线程，而fsql.Ado.ExecuteScalarAsync里面也并不会全程在后台线程执行，如sqlite的官方异步方法它里面根本就没有真正的异步io，因为它是嵌入式数据库，读写本地文件，而Windows底层限制，读写磁盘文件不支持异步操作，里面实际上是同步方法。</p>
+<p>并非只要带async、只要加 await，就不在ui线程，async只是提供「io等待时可以让出线程」的能力，但方法开头的一堆前置cpu逻辑，依旧原地阻塞当前线程。</p>
+<p>所以，把这些循环、计算、对象创建放到task.run里面吧！当然也可以用ConfigureAwait(false)让await完成后要不要切回原线程，但管不了await之前的前置cpu逻辑。</p>
 </div>
         </div>
         
@@ -262,7 +265,7 @@
                     <a class="tag-none-link" href="/tags/asynchronous-programming/" rel="tag">asynchronous-programming</a>, <a class="tag-none-link" href="/tags/wpf/" rel="tag">wpf</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2026-04-30T08:18:48.333Z" itemprop="dateModified">最后编辑：2026-04-30</time>
+                    <time datetime="2026-04-30T08:45:45.572Z" itemprop="dateModified">最后编辑：2026-04-30</time>
                 </div>
             </div>
         </footer>
@@ -299,7 +302,7 @@
     <div class="photo-background"></div>
     <div class="photo-wrapper clearfix">
         <div class="photo-wrapper-tip text-center">
-            <img class="about-photo" src="/assets/OIP (8).jpg" alt="probie" loading="lazy" decoding="auto" />
+            <img class="about-photo" src="/assets/avatar-dll.png" alt="probie" loading="lazy" decoding="auto" />
         </div>
     </div>
     <div class="textwidget">
