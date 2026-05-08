@@ -7,7 +7,7 @@
     <link rel="icon" href="/assets/github-mark.svg">
   
   
-  <title>在wpf命令里使用了await为什么还会阻塞ui | probie&#39;s blog</title>
+  <title>wpf命令里使用了await为什么还会阻塞ui | probie&#39;s blog</title>
   <link rel="canonical" href="https://probieluo.github.io/posts/wpf-command-await-block-ui/">
   <meta name="author" content="probie" />
   <meta http-equiv="Cache-Control" content="no-transform" />
@@ -21,14 +21,14 @@
   
   <meta name="description" content="在最近在开发中遇到个很有意思的问题，我在一个命令里面使用了一些sql执行操作，虽然这些sql执行都使用了await等待sql耗时操作，但ui还是阻塞了，百思不得其解，思考了半天问了我们组长，组长说在await执行完成后还是会回到ui线程，最好把这些与ui无关代码的用task.run包起来，放在后台线程。 虽然问题成功得到了解决，但对await阻塞了ui线程这个问题还是不解，我们知道await让出了">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在wpf命令里使用了await为什么还会阻塞ui">
+<meta property="og:title" content="wpf命令里使用了await为什么还会阻塞ui">
 <meta property="og:url" content="https://probieluo.github.io/posts/wpf-command-await-block-ui/index.html">
 <meta property="og:site_name" content="probie&#39;s blog">
 <meta property="og:description" content="在最近在开发中遇到个很有意思的问题，我在一个命令里面使用了一些sql执行操作，虽然这些sql执行都使用了await等待sql耗时操作，但ui还是阻塞了，百思不得其解，思考了半天问了我们组长，组长说在await执行完成后还是会回到ui线程，最好把这些与ui无关代码的用task.run包起来，放在后台线程。 虽然问题成功得到了解决，但对await阻塞了ui线程这个问题还是不解，我们知道await让出了">
 <meta property="og:locale">
 <meta property="og:image" content="https://probieluo.github.io/posts/wpf-command-await-block-ui/assets/avatar-sydney.png">
 <meta property="article:published_time" content="2026-04-30T05:48:34.000Z">
-<meta property="article:modified_time" content="2026-04-30T08:45:45.572Z">
+<meta property="article:modified_time" content="2026-05-08T09:06:34.428Z">
 <meta property="article:author" content="probie">
 <meta property="article:tag" content="asynchronous-programming">
 <meta property="article:tag" content="wpf">
@@ -209,7 +209,7 @@
     <div class="kratos-hentry kratos-page-inner clearfix">
         <header class="kratos-page-header">
             
-                <h1 class="kratos-page-title text-center" itemprop="name headline">在wpf命令里使用了await为什么还会阻塞ui</h1>
+                <h1 class="kratos-page-title text-center" itemprop="name headline">wpf命令里使用了await为什么还会阻塞ui</h1>
             
             <ul class="kratos-page-meta text-center">
                 <li><time datetime="2026-04-30T05:48:34.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2026-04-30</time></li>
@@ -265,7 +265,7 @@
                     <a class="tag-none-link" href="/tags/asynchronous-programming/" rel="tag">asynchronous-programming</a>, <a class="tag-none-link" href="/tags/wpf/" rel="tag">wpf</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2026-04-30T08:45:45.572Z" itemprop="dateModified">最后编辑：2026-04-30</time>
+                    <time datetime="2026-05-08T09:06:34.428Z" itemprop="dateModified">最后编辑：2026-05-08</time>
                 </div>
             </div>
         </footer>
@@ -279,7 +279,7 @@
             
             
             <div class="nav-next clearfix">
-                <a title=" 踩坑日记-wpf多值转换器错用导致ui阻塞" href="/posts/wpf-converter-block-ui/">下一篇 <i class="fa fa-angle-right"></i></a>
+                <a title=" wpf多值转换器错用导致ui阻塞" href="/posts/wpf-converter-block-ui/">下一篇 <i class="fa fa-angle-right"></i></a>
             </div>
             
         </nav>
@@ -318,7 +318,7 @@
                 文章
             </span>
             <span class="count">
-                26
+                28
             </span>
         </a>
         <a class="meta-item" href="/categories/">
@@ -345,7 +345,7 @@
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
     <h4 class="widget-title"><i class="fa fa-folder"></i>分类列表</h4>
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/">编程技术</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a><span class="category-list-count">11</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/">编程技术</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a><span class="category-list-count">11</span></li></ul>
   </aside>
 
 
@@ -354,7 +354,7 @@
   <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
     <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
       <div class="tag-clouds">
-        <a href="/tags/C/" style="font-size: 0.8em;">C#</a> <a href="/tags/DDD/" style="font-size: 0.7em;">DDD</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/Git/" style="font-size: 0.6em;">Git</a> <a href="/tags/Hexo/" style="font-size: 0.7em;">Hexo</a> <a href="/tags/LINQ/" style="font-size: 0.7em;">LINQ</a> <a href="/tags/Redis/" style="font-size: 0.6em;">Redis</a> <a href="/tags/Seo/" style="font-size: 0.6em;">Seo</a> <a href="/tags/VisualStudio%E6%89%A9%E5%B1%95/" style="font-size: 0.6em;">VisualStudio扩展</a> <a href="/tags/asynchronous-programming/" style="font-size: 0.6em;">asynchronous-programming</a> <a href="/tags/wpf/" style="font-size: 0.7em;">wpf</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 0.6em;">游戏</a>
+        <a href="/tags/C/" style="font-size: 0.8em;">C#</a> <a href="/tags/DDD/" style="font-size: 0.67em;">DDD</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/Git/" style="font-size: 0.6em;">Git</a> <a href="/tags/Hexo/" style="font-size: 0.67em;">Hexo</a> <a href="/tags/LINQ/" style="font-size: 0.67em;">LINQ</a> <a href="/tags/Redis/" style="font-size: 0.6em;">Redis</a> <a href="/tags/Seo/" style="font-size: 0.6em;">Seo</a> <a href="/tags/VisualStudio%E6%89%A9%E5%B1%95/" style="font-size: 0.6em;">VisualStudio扩展</a> <a href="/tags/asynchronous-programming/" style="font-size: 0.6em;">asynchronous-programming</a> <a href="/tags/wpf/" style="font-size: 0.73em;">wpf</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 0.6em;">游戏</a>
       </div>
   </aside>
 
@@ -368,13 +368,25 @@
         
           
           
-            <a class="list-group-item" href="/posts/wpf-converter-block-ui/"><i class="fa fa-book"></i> 踩坑日记-wpf多值转换器错用导致ui阻塞</a>
+            <a class="list-group-item" href="/posts/wpf-border-hittest/"><i class="fa fa-book"></i> wpf border空白区域无法点击</a>
             
           
         
           
           
-            <a class="list-group-item" href="/posts/wpf-command-await-block-ui/"><i class="fa fa-book"></i> 在wpf命令里使用了await为什么还会阻塞ui</a>
+            <a class="list-group-item" href="/posts/pindou-diary/"><i class="fa fa-book"></i> 拼豆日记</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/wpf-converter-block-ui/"><i class="fa fa-book"></i> wpf多值转换器错用导致ui阻塞</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/posts/wpf-command-await-block-ui/"><i class="fa fa-book"></i> wpf命令里使用了await为什么还会阻塞ui</a>
             
           
         
@@ -385,17 +397,9 @@
           
         
           
-          
-            <a class="list-group-item" href="/posts/project-management-09-project-risk-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-09项目风险管理</a>
             
           
-        
-          
-          
-            <a class="list-group-item" href="/posts/project-management-08-project-stakeholder-management/"><i class="fa fa-book"></i> 项目管理十大知识领域-08项目干系人管理</a>
             
-          
-        
           
             
           
