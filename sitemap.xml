@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://probieluo.github.io/posts/producer-consumer-pattern/</loc>
+    
+    <lastmod>2026-08-06T09:34:56.889Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://probieluo.github.io/posts/eldenring-passage-sharing/</loc>
+    
+    <lastmod>2026-06-12T06:36:24.470Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://probieluo.github.io/posts/wpf-border-hittest/</loc>
     
     <lastmod>2026-05-08T09:17:42.067Z</lastmod>
@@ -152,13 +166,6 @@
     <loc>https://probieluo.github.io/posts/docker-usage/</loc>
     
     <lastmod>2026-04-22T09:11:33.562Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://probieluo.github.io/posts/eldenring-passage-sharing/</loc>
-    
-    <lastmod>2026-04-22T09:10:27.183Z</lastmod>
     
   </url>
   
