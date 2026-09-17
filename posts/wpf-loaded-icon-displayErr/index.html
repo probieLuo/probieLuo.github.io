@@ -26,14 +26,14 @@
 <meta property="og:site_name" content="probie&#39;s blog">
 <meta property="og:description" content="不久前遇到个问题，明明为wpf程序设置了图标，但就是不正常显示。   经排查，问题出在Loaded里面，原始代码 1234567891011121314LoadedCommand &#x3D; new DelegateCommand(OnLoaded);private async void OnLoaded()&#123;    using AppDbContext db &#x3D; new();    var h">
 <meta property="og:locale">
-<meta property="og:image" content="https://github.com/probieLuo/pic01/blob/main/2026/09/16/df8bc981-4202-4ea6-bfcd-077333e7654d.png?raw=true">
-<meta property="og:image" content="https://github.com/probieLuo/pic01/blob/main/2026/09/16/2fa825cf-cfea-47f5-b7b6-7577578a6d18.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/probieluo/pic01/main/2026%2F09%2F17%2Fdf8bc981-4202-4ea6-bfcd-077333e7654d.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/probieluo/pic01/main/2026%2F09%2F17%2F2fa825cf-cfea-47f5-b7b6-7577578a6d18.png">
 <meta property="article:published_time" content="2026-09-10T02:01:14.000Z">
-<meta property="article:modified_time" content="2026-09-16T06:19:59.429Z">
+<meta property="article:modified_time" content="2026-09-17T06:56:12.012Z">
 <meta property="article:author" content="probie">
 <meta property="article:tag" content="wpf">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://github.com/probieLuo/pic01/blob/main/2026/09/16/df8bc981-4202-4ea6-bfcd-077333e7654d.png?raw=true">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/probieluo/pic01/main/2026%2F09%2F17%2Fdf8bc981-4202-4ea6-bfcd-077333e7654d.png">
   
     <link rel="alternate" href="/atom.xml" title="probie's blog" type="application/atom+xml">
   
@@ -160,7 +160,7 @@
                 <div class="desc desc2 animate-box">
                     <a href="/">
                         <h2>probie&#39;s blog</h2> <br />
-                        <span>记录学习和生活的平凡</span>
+                        <span></span>
                     </a>
                 </div>
             </div>
@@ -211,8 +211,8 @@
             
             <hr />
             <div itemprop="articleBody"><p>不久前遇到个问题，明明为wpf程序设置了图标，但就是不正常显示。</p>
-<p><img src="https://github.com/probieLuo/pic01/blob/main/2026/09/16/df8bc981-4202-4ea6-bfcd-077333e7654d.png?raw=true"></p>
-<p><img src="https://github.com/probieLuo/pic01/blob/main/2026/09/16/2fa825cf-cfea-47f5-b7b6-7577578a6d18.png?raw=true"></p>
+<p><img src="https://raw.githubusercontent.com/probieluo/pic01/main/2026%2F09%2F17%2Fdf8bc981-4202-4ea6-bfcd-077333e7654d.png"></p>
+<p><img src="https://raw.githubusercontent.com/probieluo/pic01/main/2026%2F09%2F17%2F2fa825cf-cfea-47f5-b7b6-7577578a6d18.png"></p>
 <p>经排查，问题出在Loaded里面，原始代码</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">LoadedCommand = <span class="keyword">new</span> DelegateCommand(OnLoaded);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">async</span> <span class="keyword">void</span> <span class="title">OnLoaded</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">using</span> AppDbContext db = <span class="keyword">new</span>();</span><br><span class="line">    <span class="keyword">var</span> hisItems = <span class="keyword">await</span> db.UploadHistorys.Select(i =&gt; <span class="keyword">new</span> HisItem</span><br><span class="line">    &#123;</span><br><span class="line">	    Url = i.Url,</span><br><span class="line">	    FileName = i.FileName,</span><br><span class="line">	    UploadTime = i.UploadTime,</span><br><span class="line">	    FileSize = i.FileSize</span><br><span class="line">    &#125;).OrderByDescending(h =&gt; h.UploadTime).Take(<span class="number">100</span>).ToListAsync();</span><br><span class="line">    HisItems = <span class="keyword">new</span> ObservableCollection&lt;HisItem&gt;(hisItems);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -243,7 +243,7 @@
                     <a class="tag-none-link" href="/tags/wpf/" rel="tag">wpf</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2026-09-16T06:19:59.429Z" itemprop="dateModified">最后编辑：2026-09-16</time>
+                    <time datetime="2026-09-17T06:56:12.012Z" itemprop="dateModified">最后编辑：2026-09-17</time>
                 </div>
             </div>
         </footer>
@@ -296,7 +296,7 @@
                 文章
             </span>
             <span class="count">
-                32
+                33
             </span>
         </a>
         <a class="meta-item" href="/categories/">
@@ -312,7 +312,7 @@
                 标签
             </span>
             <span class="count">
-                14
+                15
             </span>
         </a>
     </div>
@@ -323,7 +323,7 @@
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
     <h4 class="widget-title"><i class="fa fa-folder"></i>分类列表</h4>
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/">编程技术</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a><span class="category-list-count">11</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/">编程技术</a><span class="category-list-count">20</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a><span class="category-list-count">11</span></li></ul>
   </aside>
 
 
@@ -332,7 +332,7 @@
   <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
     <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
       <div class="tag-clouds">
-        <a href="/tags/C/" style="font-size: 0.73em;">C#</a> <a href="/tags/DDD/" style="font-size: 0.67em;">DDD</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/Git/" style="font-size: 0.6em;">Git</a> <a href="/tags/Hexo/" style="font-size: 0.67em;">Hexo</a> <a href="/tags/LINQ/" style="font-size: 0.67em;">LINQ</a> <a href="/tags/Redis/" style="font-size: 0.6em;">Redis</a> <a href="/tags/Seo/" style="font-size: 0.6em;">Seo</a> <a href="/tags/VisualStudio%E6%89%A9%E5%B1%95/" style="font-size: 0.6em;">VisualStudio扩展</a> <a href="/tags/asynchronous-programming/" style="font-size: 0.6em;">asynchronous-programming</a> <a href="/tags/csharp/" style="font-size: 0.67em;">csharp</a> <a href="/tags/wpf/" style="font-size: 0.8em;">wpf</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 0.6em;">多线程</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 0.6em;">游戏</a>
+        <a href="/tags/C/" style="font-size: 0.73em;">C#</a> <a href="/tags/DDD/" style="font-size: 0.67em;">DDD</a> <a href="/tags/Docker/" style="font-size: 0.6em;">Docker</a> <a href="/tags/Git/" style="font-size: 0.6em;">Git</a> <a href="/tags/Hexo/" style="font-size: 0.67em;">Hexo</a> <a href="/tags/LINQ/" style="font-size: 0.67em;">LINQ</a> <a href="/tags/Redis/" style="font-size: 0.6em;">Redis</a> <a href="/tags/Seo/" style="font-size: 0.6em;">Seo</a> <a href="/tags/VisualStudio%E6%89%A9%E5%B1%95/" style="font-size: 0.6em;">VisualStudio扩展</a> <a href="/tags/asynchronous-programming/" style="font-size: 0.6em;">asynchronous-programming</a> <a href="/tags/csharp/" style="font-size: 0.67em;">csharp</a> <a href="/tags/visual-studio/" style="font-size: 0.6em;">visual studio</a> <a href="/tags/wpf/" style="font-size: 0.8em;">wpf</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 0.6em;">多线程</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 0.6em;">游戏</a>
       </div>
   </aside>
 
@@ -343,6 +343,12 @@
   <div class="tab-content">
       <ul class="list-group">
         
+        
+          
+          
+            <a class="list-group-item" href="/posts/visual-studio-tips/"><i class="fa fa-book"></i> visual-studio tips</a>
+            
+          
         
           
           
@@ -369,11 +375,7 @@
           
         
           
-          
-            <a class="list-group-item" href="/posts/wpf-border-hittest/"><i class="fa fa-book"></i> wpf border空白区域无法点击</a>
             
-          
-        
           
             
           
