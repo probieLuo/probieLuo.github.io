@@ -6,7 +6,7 @@
   <link href="https://probieluo.github.io/atom.xml" rel="self"/>
   
   <link href="https://probieluo.github.io/"/>
-  <updated>2026-09-16T06:30:29.524Z</updated>
+  <updated>2026-09-16T06:58:53.186Z</updated>
   <id>https://probieluo.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://probieluo.github.io/posts/pic-repo-app/"/>
     <id>https://probieluo.github.io/posts/pic-repo-app/</id>
     <published>2026-09-16T06:26:36.000Z</published>
-    <updated>2026-09-16T06:30:29.524Z</updated>
+    <updated>2026-09-16T06:58:53.186Z</updated>
     
     <content type="html"><![CDATA[<p>PicRepo 是一个轻量、实用的桌面端图片上传工具，适合需要高频上传图片并快速复制链接的场景。</p><p><a href="https://github.com/probieLuo/PicRepo">项目地址</a></p><h2 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h2><ol><li><p>图片上传</p><ul><li>支持拖拽图片到主窗口</li><li>支持通过“点击上传”选择本地图片</li><li>支持剪切板上传（截图、文件、url、文件地址）</li><li>自动检测默认图床配置，上传到对应仓库</li></ul></li><li><p>图床支持</p><ul><li>GitHub 仓库</li><li>Gitee 仓库</li><li>可配置多个图床，设置某个为默认图床</li></ul></li><li><p>复制格式</p><ul><li>纯 URL</li><li>Markdown：<code>![](...)</code></li><li>HTML：<code>&lt;img src=&quot;...&quot; /&gt;</code></li><li>可在设置中统一指定默认复制格式</li></ul></li><li><p>上传历史</p><ul><li>保存上传历史记录</li><li>可按文件名搜索</li><li>可从历史记录中复制 URL &#x2F; Markdown &#x2F; HTML</li><li>可查看图片预览</li></ul></li><li><p>托盘与界面</p><ul><li>最小化&#x2F;关闭时支持托盘运行</li><li>可切换浅色&#x2F;深色&#x2F;跟随系统主题</li><li>可打开迷你窗口模式</li></ul></li></ol><h3 id="界面截图"><a href="#界面截图" class="headerlink" title="界面截图"></a>界面截图</h3><p><img src="https://github.com/probieLuo/PicRepo/blob/master/resources/%E4%B8%BB%E7%AA%97%E5%8F%A3.png?raw=true"><br><img src="https://github.com/probieLuo/PicRepo/blob/master/resources/%E5%8F%B3%E9%94%AE%E6%89%93%E5%BC%80%E8%8F%9C%E5%8D%95.png?raw=true"><br><img src="https://github.com/probieLuo/PicRepo/blob/master/resources/%E6%9F%A5%E7%9C%8B%E5%A4%A7%E5%9B%BE.png?raw=true"><br><img src="https://github.com/probieLuo/PicRepo/blob/master/resources/%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95.png?raw=true"><br><img src="https://github.com/probieLuo/PicRepo/blob/master/resources/Mini%E7%AA%97%E5%8F%A3.png?raw=true"></p>]]></content>
     
